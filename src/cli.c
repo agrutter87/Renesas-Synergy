@@ -103,7 +103,7 @@ void cli_init_callback(sf_console_callback_args_t * p_args)
     if (*(p_args->p_remaining_string))
     {
         g_sf_console.p_api->parse (p_ctrl, &g_sf_console_init_menu, p_args->p_remaining_string,
-                                   strlen (p_args->p_remaining_string));
+                                   strlen ((char *)p_args->p_remaining_string));
     }
     else
     {

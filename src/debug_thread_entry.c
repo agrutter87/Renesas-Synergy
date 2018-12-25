@@ -62,7 +62,9 @@ void debug_thread_entry(void)
     uint8_t debug_message[SF_CONSOLE_MAX_WRITE_LENGTH] = {0};
     uint32_t flags_state = 0;
 
-    /* Set event flag to allow debug thread to process debug messages */
+    /* Get event flag to determine whether debug thread can process debug messages.
+     * This will put the thread to sleep indefinitely if the CLI is never enabled.
+     * This method doesn't support being unplugged during use */
     tx_status = tx_event_flags_get(&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_CLI_ENABLED, TX_OR, &flags_state, TX_WAIT_FOREVER);
 
     while(1)
@@ -75,7 +77,7 @@ void debug_thread_entry(void)
         }
 
         /* Write debug message to console */
-        ssp_err = g_sf_debug_comms.p_api->write(g_sf_debug_comms.p_ctrl, (uint8_t *)debug_message, strlen(debug_message), 1);
+        ssp_err = g_sf_debug_comms.p_api->write(g_sf_debug_comms.p_ctrl, (uint8_t *)debug_message, strlen((char *)debug_message), 1);
         if(ssp_err)
         {
             // TODO: Error handling

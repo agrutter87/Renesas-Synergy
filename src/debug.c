@@ -58,8 +58,9 @@ UINT debug_print(uint8_t * debug_message)
 {
     UINT tx_err = TX_SUCCESS;
 
-    /* Write the debug message to the debug queue */
-    /* TODO: Consider making it wait for the queue to have room */
+    /* Write the debug message to the debug queue. If the CLI is disabled,
+     * this will eventually return error TX_QUEUE_FULL. This will only matter
+     * if the error code is checked by the function calling debug_print */
     tx_err = tx_queue_send(&g_debug_queue, debug_message, 1);
 
     return tx_err;
