@@ -7,3 +7,4 @@ src/synergy_gen/*
 synergy/*
 synergy_cfg/*
 
+/Debug/

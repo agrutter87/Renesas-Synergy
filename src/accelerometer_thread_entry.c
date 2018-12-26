@@ -64,10 +64,10 @@ void accelerometer_thread_entry(void)
     if (ssp_err)
     {
         // TODO: Error handling
-        debug_print ((uint8_t *) "\r\nError at accelerometer_thread_entry::g_sci_spi8.p_api->open\r\n");
+        debug_print ("\r\nError at accelerometer_thread_entry::g_sci_spi8.p_api->open\r\n");
     }
 
     /* Set flag to allow threads which need the SCI_SPI8 to run after common drivers are initialized */
     tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
-    debug_print ((uint8_t *) "\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
+    debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_%s_ENABLED\r\n", "SPI8");
 }

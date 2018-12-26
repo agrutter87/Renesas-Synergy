@@ -84,7 +84,7 @@ void sci_spi8_callback(spi_callback_args_t *p_args)
         break;
         default:
             // TODO: Error handling
-            debug_print ((uint8_t *) "\r\nError at sci_spi8_callback\r\n");
+            debug_print ("\r\nError at sci_spi8_callback\r\n");
         break;
     }
 }

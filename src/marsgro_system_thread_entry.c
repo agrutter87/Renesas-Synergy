@@ -65,7 +65,7 @@ void marsgro_system_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at marsgro_system_thread_entry::g_adc0.p_api->open\r\n");
+        debug_print("\r\nError at marsgro_system_thread_entry::g_adc0.p_api->open\r\n");
     }
 
     /* Configure ADC */
@@ -73,10 +73,10 @@ void marsgro_system_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at marsgro_system_thread_entry::g_adc0.p_api->scanCfg\r\n");
+        debug_print("\r\nError at marsgro_system_thread_entry::g_adc0.p_api->scanCfg\r\n");
     }
 
     /* Set flag to allow threads which need the ADC to run after common drivers are initialized */
     tx_event_flags_set(&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_ADC_ENABLED, TX_OR);
-    debug_print((uint8_t *)"\r\nMARSGRO_SYSTEM_EVENT_ADC_ENABLED\r\n");
+    debug_print("\r\nMARSGRO_SYSTEM_EVENT_ADC_ENABLED\r\n");
 }

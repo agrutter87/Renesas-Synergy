@@ -184,7 +184,7 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
                     adc_cfg_temp.unit = 0;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid unit entered\r\n");
+                    debug_print ("\r\nInvalid unit entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -210,7 +210,7 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
                     adc_cfg_temp.scan_end_b_ipl = BSP_IRQ_DISABLED;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid mode entered\r\n");
+                    debug_print ("\r\nInvalid mode entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -231,7 +231,7 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
                     adc_cfg_temp.resolution = arg_data;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid resolution entered\r\n");
+                    debug_print ("\r\nInvalid resolution entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -244,34 +244,34 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
             p_adc = &g_adc0;
         }
 
-        debug_print ((uint8_t *) "\r\nReconfiguring ADC...\r\n");
+        debug_print ("\r\nReconfiguring ADC...\r\n");
 
         tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_ADC_ENABLED, TX_AND);
-        debug_print ((uint8_t *) "\r\nMARSGRO_SYSTEM_EVENT_ADC_DISABLED\r\n");
+        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_ADC_DISABLED\r\n");
 
         ssp_err = p_adc->p_api->close(p_adc->p_ctrl);
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at cli_init_adc_callback::p_adc->p_api->close\r\n");
+            debug_print("\r\nError at cli_init_adc_callback::p_adc->p_api->close\r\n");
         }
 
         ssp_err = p_adc->p_api->open(p_adc->p_ctrl, &adc_cfg_temp);
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at cli_init_adc_callback::p_adc->p_api->open\r\n");
+            debug_print("\r\nError at cli_init_adc_callback::p_adc->p_api->open\r\n");
         }
 
         ssp_err = p_adc->p_api->scanCfg(p_adc->p_ctrl, &adc_channel_cfg_temp);
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at cli_init_adc_callback::p_adc->p_api->scanCfg\r\n");
+            debug_print("\r\nError at cli_init_adc_callback::p_adc->p_api->scanCfg\r\n");
         }
 
         tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_ADC_ENABLED, TX_OR);
-        debug_print ((uint8_t *) "\r\nMARSGRO_SYSTEM_EVENT_ADC_ENABLED\r\n");
+        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_ADC_ENABLED\r\n");
     }
 
 }
@@ -332,7 +332,7 @@ void cli_init_sci_spi_callback(sf_console_callback_args_t * p_args)
                     spi_cfg_temp.p_extend = &g_sci_spi8_cfg_extend;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid channel entered\r\n");
+                    debug_print ("\r\nInvalid channel entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -347,7 +347,7 @@ void cli_init_sci_spi_callback(sf_console_callback_args_t * p_args)
                     spi_cfg_temp.clk_phase = arg_data;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid clk_phase entered\r\n");
+                    debug_print ("\r\nInvalid clk_phase entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -363,7 +363,7 @@ void cli_init_sci_spi_callback(sf_console_callback_args_t * p_args)
                     spi_cfg_temp.clk_polarity = arg_data;
                     break;
                 default:
-                    debug_print ((uint8_t *) "\r\nInvalid clk_polarity entered\r\n");
+                    debug_print ("\r\nInvalid clk_polarity entered\r\n");
                     invalid_arg = true;
             }
         }
@@ -376,27 +376,27 @@ void cli_init_sci_spi_callback(sf_console_callback_args_t * p_args)
             p_spi = &g_sci_spi8;
         }
 
-        debug_print ((uint8_t *) "\r\nReconfiguring SCI_SPI8...\r\n");
+        debug_print ("\r\nReconfiguring SCI_SPI8...\r\n");
 
         tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_AND);
-        debug_print ((uint8_t *) "\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
+        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
 
         ssp_err = p_spi->p_api->close(p_spi->p_ctrl);
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at cli_init_sci_spi_callback::p_spi->p_api->close\r\n");
+            debug_print("\r\nError at cli_init_sci_spi_callback::p_spi->p_api->close\r\n");
         }
 
         ssp_err = p_spi->p_api->open(p_spi->p_ctrl, &spi_cfg_temp);
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at cli_init_sci_spi_callback::p_spi->p_api->open\r\n");
+            debug_print("\r\nError at cli_init_sci_spi_callback::p_spi->p_api->open\r\n");
         }
 
         tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
-        debug_print ((uint8_t *) "\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
+        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
     }
 
 }

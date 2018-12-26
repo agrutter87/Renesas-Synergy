@@ -69,7 +69,7 @@ void gui_thread_entry(void)
     if(gx_status)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_system_initialize\r\n");
+        debug_print("\r\nError at gui_thread_entry::gx_system_initialize\r\n");
     }
 
     /* Initializes GUIX drivers. */
@@ -77,7 +77,7 @@ void gui_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_sf_el_gx.p_api->open\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_sf_el_gx.p_api->open\r\n");
     }
 
     gx_status = gx_studio_display_configure ( DISPLAY_1, g_sf_el_gx.p_api->setup, LANGUAGE_ENGLISH,
@@ -85,14 +85,14 @@ void gui_thread_entry(void)
     if(gx_status)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_studio_display_configure\r\n");
+        debug_print("\r\nError at gui_thread_entry::gx_studio_display_configure\r\n");
     }
 
     ssp_err = g_sf_el_gx.p_api->canvasInit (g_sf_el_gx.p_ctrl, p_window_root);
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_sf_el_gx.p_api->canvasInit\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_sf_el_gx.p_api->canvasInit\r\n");
     }
 
     // Create the widgets we have defined with the GUIX data structures and resources.
@@ -107,7 +107,7 @@ void gui_thread_entry(void)
             if(gx_status)
             {
                 // TODO: Error handling
-                debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
+                debug_print("\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
             }
         }
         else
@@ -116,7 +116,7 @@ void gui_thread_entry(void)
             if(gx_status)
             {
                 // TODO: Error handling
-                debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
+                debug_print("\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
             }
         }
         // Move to next top-level widget
@@ -128,7 +128,7 @@ void gui_thread_entry(void)
     if(gx_status)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_widget_show\r\n");
+        debug_print("\r\nError at gui_thread_entry::gx_widget_show\r\n");
     }
 
     /* Lets GUIX run. */
@@ -136,7 +136,7 @@ void gui_thread_entry(void)
     if(gx_status)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_system_start\r\n");
+        debug_print("\r\nError at gui_thread_entry::gx_system_start\r\n");
     }
 
 #if defined(BSP_BOARD_S7G2_SK)
@@ -145,7 +145,7 @@ void gui_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_spi_lcdc.p_api->open\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_spi_lcdc.p_api->open\r\n");
     }
 
     /** Setup the ILI9341V (SK-S7G2) **/
@@ -158,14 +158,14 @@ void gui_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
     }
 #elif defined(BSP_BOARD_S7G2_PE_HMI1)
     ssp_err = g_ioport.p_api->pinWrite(IOPORT_PORT_10_PIN_03, IOPORT_LEVEL_HIGH);
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
     }
 #endif
 
@@ -175,7 +175,7 @@ void gui_thread_entry(void)
     if(ssp_err)
     {
         // TODO: Error handling
-        debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_backlight_pwm.p_api->open\r\n");
+        debug_print("\r\nError at gui_thread_entry::g_backlight_pwm.p_api->open\r\n");
     }
 #endif
 
@@ -188,7 +188,7 @@ void gui_thread_entry(void)
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_sf_message0.p_api->pend\r\n");
+            debug_print("\r\nError at gui_thread_entry::g_sf_message0.p_api->pend\r\n");
         }
 
         switch (p_message->event_b.class_code)
@@ -217,7 +217,7 @@ void gui_thread_entry(void)
         if(ssp_err)
         {
             // TODO: Error handling
-            debug_print((uint8_t *)"\r\nError at gui_thread_entry::g_sf_message0.p_api->bufferRelease\r\n");
+            debug_print("\r\nError at gui_thread_entry::g_sf_message0.p_api->bufferRelease\r\n");
         }
 
         /** Post message. */
@@ -227,7 +227,7 @@ void gui_thread_entry(void)
             if(gx_status)
             {
                 // TODO: Error handling
-                debug_print((uint8_t *)"\r\nError at gui_thread_entry::gx_system_event_send\r\n");
+                debug_print("\r\nError at gui_thread_entry::gx_system_event_send\r\n");
             }
         }
     }

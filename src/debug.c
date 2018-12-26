@@ -25,6 +25,7 @@
  * Includes:
  *-------------------------------------------------------------------------*/
 #include <debug.h>
+#include <stdarg.h>
 
 /*-------------------------------------------------------------------------*
  * Constants:
@@ -54,14 +55,20 @@
  *  @endcode
  */
 /*---------------------------------------------------------------------------*/
-UINT debug_print(uint8_t * debug_message)
+UINT debug_print(char * message, ...)
 {
     UINT tx_err = TX_SUCCESS;
+    va_list args_list;
+    char message_buffer[SF_CONSOLE_MAX_WRITE_LENGTH];
+
+    va_start(args_list, message);
+    vsnprintf(message_buffer, sizeof(message_buffer), message, args_list);
+    va_end(args_list);
 
     /* Write the debug message to the debug queue. If the CLI is disabled,
      * this will eventually return error TX_QUEUE_FULL. This will only matter
      * if the error code is checked by the function calling debug_print */
-    tx_err = tx_queue_send(&g_debug_queue, debug_message, 1);
+    tx_err = tx_queue_send(&g_debug_queue, message_buffer, 1);
 
     return tx_err;
 }
