@@ -1,5 +1,5 @@
 <v1:pinSettings xmlns:v1="http://www.tasking.com/schema/pinsettings/v1.1">
-  <v1:pinMappingsRef version="2.03" file="platform:/plugin/com.tasking.pinmapper.input.renesas/etc/PinCfgR7FS7G27xxxxxxBD.xml"/>
+  <v1:pinMappingsRef version="2.03" file="pinmapping:/internal/projectgen/arm/1.6/pinmapping/PinCfgR7FS7G27xxxxxxBD.xml"/>
   <v1:deviceSetting id="renesas.s7g2_bd" pattern="R7FS7G27******BD">
     <v1:packageSetting id="renesas.224bga"/>
   </v1:deviceSetting>

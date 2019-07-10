@@ -37,6 +37,7 @@ Synergy Configuration
     Process stack size (bytes): 0
     Heap size (bytes) - A minimum of 4K (0x1000) is required if standard library functions are to be used.: 0x1000
     MCU Vcc (mV): 3300
+    MCU Analog Power Supply AVCC0 (mV): 3300
     Parameter checking: Enabled
     Assert Failures: Return SSP_ERR_ASSERTION
     Error Log: No Error Log
@@ -373,6 +374,8 @@ Synergy Configuration
     Parameter Checking: Default (BSP)
     
   Module "USBX Device Configuration"
+    Composite Device: Disable
+    
   Module "USBX on ux"
   Module "USBX Interface Configuration CDC-ACM"
   Module "USBX Port DCD on sf_el_ux for USBFS"
@@ -426,7 +429,7 @@ Synergy Configuration
       Mode: Single Scan
       Internal Calibration During Open(): Enabled
       Channel Scan Mask (channel availability varies by MCU): Select channels below
-          Channel 0: Unused
+          Channel 0: Use in Normal/Group A
           Channel 1: Unused
           Channel 2: Unused
           Channel 3: Unused
@@ -461,7 +464,7 @@ Synergy Configuration
       Group Priority (Valid only in Group Scan Mode): Group A cannot interrupt Group B
       Add/Average Count: Average four samples
       Addition/Averaging Mask (channel availability varies by MCU): Select channels to perform addition/averaging below
-          Channel 0: Disabled
+          Channel 0: Enabled
           Channel 1: Disabled
           Channel 2: Disabled
           Channel 3: Disabled
@@ -499,6 +502,8 @@ Synergy Configuration
       Callback: adc_callback
       Scan End Interrupt Priority: Priority 6
       Scan End Group B Interrupt Priority: Priority 6
+      Voltage reference(Only for S1JA): External VREFH0
+      Over current protection(Only for S1JA): Enabled
       
     Object "g_marsgro_system_event_flags Event Flags"
       Name: MarsGro System Event Flags
@@ -839,6 +844,7 @@ Synergy Configuration
         Rate: Fast-mode
         Slave Address: 0x38
         Address Mode: 7-Bit
+        SDA Output Delay (nano seconds): 0
         Timeout Mode: Short Mode
         Callback: NULL
         Receive Interrupt Priority: Priority 3
@@ -921,6 +927,40 @@ Synergy Configuration
       Transmit End Interrupt Priority: Priority 12
       Error Interrupt Priority: Priority 12
       
+      Instance "g_transfer2 Transfer Driver on r_dtc SCI8 TXI"
+        Name: g_transfer2
+        Mode: Normal
+        Transfer Size: 1 Byte
+        Destination Address Mode: Fixed
+        Source Address Mode: Incremented
+        Repeat Area (Unused in Normal Mode): Source
+        Interrupt Frequency: After all transfers have completed
+        Destination Pointer: NULL
+        Source Pointer: NULL
+        Number of Transfers: 0
+        Number of Blocks (Valid only in Block Mode): 0
+        Activation Source (Must enable IRQ): SCI8 TXI
+        Auto Enable: False
+        Callback (Only valid with Software start): NULL
+        ELC Software Event Interrupt Priority: Disabled
+        
+      Instance "g_transfer3 Transfer Driver on r_dtc SCI8 RXI"
+        Name: g_transfer3
+        Mode: Normal
+        Transfer Size: 1 Byte
+        Destination Address Mode: Incremented
+        Source Address Mode: Fixed
+        Repeat Area (Unused in Normal Mode): Destination
+        Interrupt Frequency: After all transfers have completed
+        Destination Pointer: NULL
+        Source Pointer: NULL
+        Number of Transfers: 0
+        Number of Blocks (Valid only in Block Mode): 0
+        Activation Source (Must enable IRQ): SCI8 RXI
+        Auto Enable: False
+        Callback (Only valid with Software start): NULL
+        ELC Software Event Interrupt Priority: Disabled
+        
     Object "g_sci_spi8_event_flags Event Flags"
       Name: SCI SPI8 Event Flags
       Symbol: g_sci_spi8_event_flags
