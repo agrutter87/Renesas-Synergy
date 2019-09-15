@@ -5,13 +5,13 @@
 /*  information please refer to the GUIX Studio user's guide, or visit our web */
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
-/*  GUIX Studio Revision 5.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 29. 3.2018   Time (hh:mm): 23:55                        */
+/*  GUIX Studio Revision 5.4.2.9                                               */
+/*  Date (dd.mm.yyyy): 15. 9.2019   Time (hh:mm): 16:46                        */
 /*******************************************************************************/
 
 
-#ifndef _MARSGRO_DISPLAY_1_RESOURCES_H_
-#define _MARSGRO_DISPLAY_1_RESOURCES_H_
+#ifndef _GUIX_DISPLAY_1_RESOURCES_H_
+#define _GUIX_DISPLAY_1_RESOURCES_H_
 
 #include "gx_api.h"
 
@@ -56,7 +56,11 @@
 #define GX_COLOR_ID_SLIDER_NEEDLE_FILL 22
 #define GX_COLOR_ID_SLIDER_NEEDLE_LINE1 23
 #define GX_COLOR_ID_SLIDER_NEEDLE_LINE2 24
-#define DISPLAY_1_COLOR_TABLE_SIZE 25
+#define GX_COLOR_ID_DISABLED_TEXT 25
+#define GX_COLOR_ID_DISABLED_FILL 26
+#define GX_COLOR_ID_READONLY_TEXT 27
+#define GX_COLOR_ID_READONLY_FILL 28
+#define DISPLAY_1_COLOR_TABLE_SIZE 29
 
 /* Font ID definitions                                                         */
 

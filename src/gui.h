@@ -23,9 +23,9 @@
  * Includes:
  *-------------------------------------------------------------------------*/
 #include <gui_thread.h>
-#include <guix_gen/marsgro_resources.h>
-#include <guix_gen/marsgro_specifications.h>
-#include <marsgro_system.h>
+#include <guix_gen/guix_resources.h>
+#include <guix_gen/guix_specifications.h>
+#include <main_system.h>
 
 #if defined(BSP_BOARD_S7G2_SK)
 #include <lcd/ILI9341V/lcd.h>
@@ -35,7 +35,7 @@
  * Constants:
  *-------------------------------------------------------------------------*/
 extern GX_WINDOW_ROOT * p_window_root;
-extern GX_CONST GX_STUDIO_WIDGET *marsgro_widget_table[];
+extern GX_CONST GX_STUDIO_WIDGET *guix_widget_table[];
 
 /*-------------------------------------------------------------------------*
  * Types:

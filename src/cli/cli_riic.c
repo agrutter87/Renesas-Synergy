@@ -129,8 +129,8 @@ void cli_init_riic_callback(sf_console_callback_args_t * p_args)
 
         debug_print ("\r\nReconfiguring SCI_SPI8...\r\n");
 
-        tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_AND);
-        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
+        tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_AND);
+        debug_print ("\r\nMAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
 
         ssp_err = p_spi->p_api->close(p_spi->p_ctrl);
         if(ssp_err)
@@ -146,8 +146,8 @@ void cli_init_riic_callback(sf_console_callback_args_t * p_args)
             debug_print("\r\nError at cli_init_sci_spi_callback::p_spi->p_api->open\r\n");
         }
 
-        tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
-        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
+        tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
+        debug_print ("\r\nMAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED\r\n");
     }
 #endif
 }

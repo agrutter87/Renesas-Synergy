@@ -68,6 +68,6 @@ void accelerometer_thread_entry(void)
     }
 
     /* Set flag to allow threads which need the SCI_SPI8 to run after common drivers are initialized */
-    tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
-    debug_print ("\r\nMARSGRO_SYSTEM_EVENT_SCI_%s_ENABLED\r\n", "SPI8");
+    tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED, TX_OR);
+    debug_print ("\r\nMAIN_SYSTEM_EVENT_SCI_%s_ENABLED\r\n", "SPI8");
 }

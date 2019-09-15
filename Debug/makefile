@@ -65,33 +65,33 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-MarsGro_System_Controller.srec \
+Renesas_Synergy.srec \
 
 SECONDARY_SIZE += \
-MarsGro_System_Controller.siz \
+Renesas_Synergy.siz \
 
 
 # All Target
-all: MarsGro_System_Controller.elf secondary-outputs
+all: Renesas_Synergy.elf secondary-outputs
 
 # Tool invocations
-MarsGro_System_Controller.elf: $(OBJS) $(USER_OBJS)
+Renesas_Synergy.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C Linker'
-	$(file > MarsGro_System_Controller.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g3 -T "D:\\Synergy Workspace\\MarsGro_System_Controller\\script/s7g2.ld" -Xlinker --gc-sections -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux_device_class_cdc_acm\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"MarsGro_System_Controller.map" --specs=nano.specs --specs=rdimon.specs -o "MarsGro_System_Controller.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
-	arm-none-eabi-gcc @"MarsGro_System_Controller.elf.in"
+	$(file > Renesas_Synergy.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g3 -T "D:\\Github\\Renesas-Synergy\\script/s7g2.ld" -Xlinker --gc-sections -L "D:\\Github\\Renesas-Synergy\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "D:\\Github\\Renesas-Synergy\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "D:\\Github\\Renesas-Synergy\\synergy\\ssp\\src\\framework\\el\\ux\\cm4_gcc" -L "D:\\Github\\Renesas-Synergy\\synergy\\ssp\\src\\framework\\el\\ux_device_class_cdc_acm\\cm4_gcc" -L "D:\\Github\\Renesas-Synergy\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"Renesas_Synergy.map" --specs=nano.specs --specs=rdimon.specs -o "Renesas_Synergy.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
+	arm-none-eabi-gcc @"Renesas_Synergy.elf.in"
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-MarsGro_System_Controller.srec: MarsGro_System_Controller.elf
+Renesas_Synergy.srec: Renesas_Synergy.elf
 	@echo 'Invoking: Cross ARM GNU Create Flash Image'
-	arm-none-eabi-objcopy -O srec "MarsGro_System_Controller.elf"  "MarsGro_System_Controller.srec"
+	arm-none-eabi-objcopy -O srec "Renesas_Synergy.elf"  "Renesas_Synergy.srec"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-MarsGro_System_Controller.siz: MarsGro_System_Controller.elf
+Renesas_Synergy.siz: Renesas_Synergy.elf
 	@echo 'Invoking: Cross ARM GNU Print Size'
-	arm-none-eabi-size --format=berkeley "MarsGro_System_Controller.elf"
+	arm-none-eabi-size --format=berkeley "Renesas_Synergy.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -132,7 +132,7 @@ ifneq ($(strip $(C_DEPS)),)
 	-@ xargs -s 6000 -t -a clean_C_DEPS.tmp $(RM)
 	-@$(RM) clean_C_DEPS.tmp
 endif
-	-$(RM)  MarsGro_System_Controller.elf
+	-$(RM)  Renesas_Synergy.elf
 	-@echo ' '
 
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_SIZE)

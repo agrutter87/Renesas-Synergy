@@ -160,8 +160,8 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
 
         debug_print ("\r\nReconfiguring ADC...\r\n");
 
-        tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_ADC_ENABLED, TX_AND);
-        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_ADC_DISABLED\r\n");
+        tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_ADC_ENABLED, TX_AND);
+        debug_print ("\r\nMAIN_SYSTEM_EVENT_ADC_DISABLED\r\n");
 
         ssp_err = p_adc->p_api->close(p_adc->p_ctrl);
         if(ssp_err)
@@ -184,8 +184,8 @@ void cli_init_adc_callback(sf_console_callback_args_t * p_args)
             debug_print("\r\nError at cli_init_adc_callback::p_adc->p_api->scanCfg\r\n");
         }
 
-        tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_ADC_ENABLED, TX_OR);
-        debug_print ("\r\nMARSGRO_SYSTEM_EVENT_ADC_ENABLED\r\n");
+        tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_ADC_ENABLED, TX_OR);
+        debug_print ("\r\nMAIN_SYSTEM_EVENT_ADC_ENABLED\r\n");
     }
 
 }

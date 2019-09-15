@@ -23,7 +23,7 @@
  * Includes:
  *-------------------------------------------------------------------------*/
 #include <accelerometer_thread.h>
-#include <marsgro_system.h>
+#include <main_system.h>
 
 /*-------------------------------------------------------------------------*
  * Constants:

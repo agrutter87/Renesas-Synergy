@@ -1,17 +1,17 @@
 /*-------------------------------------------------------------------------*
- * File:  marsgro_system.h
+ * File:  main_system.h
  *-------------------------------------------------------------------------*
  * Description:
  */
  /**
- *	@file 	marsgro_system.h
+ *	@file 	main_system.h
  *  @brief 	TODO: Short description
  *
  *	TODO: Description of file
  */
 /*-------------------------------------------------------------------------*/
-#ifndef MARSGRO_SYSTEM_H_
-#define MARSGRO_SYSTEM_H_
+#ifndef MAIN_SYSTEM_H_
+#define MAIN_SYSTEM_H_
 
 /*--------------------------------------------------------------------------
  * Created by: Alex Grutter
@@ -22,12 +22,11 @@
 /*-------------------------------------------------------------------------*
  * Includes:
  *-------------------------------------------------------------------------*/
-#include <marsgro_system_thread.h>
-
 #include <accelerometer.h>
 #include <cli.h>
 #include <debug.h>
 #include <gui.h>
+#include <main_system_thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,11 +35,11 @@ extern "C" {
 /*-------------------------------------------------------------------------*
  * Constants:
  *-------------------------------------------------------------------------*/
-/* MarsGro System Event Flags Definitions */
-#define MARSGRO_SYSTEM_EVENT_ADC_ENABLED        (1 << 0)
-#define MARSGRO_SYSTEM_EVENT_CLI_ENABLED        (1 << 1)
-#define MARSGRO_SYSTEM_EVENT_IIC0_ENABLED       (1 << 2)
-#define MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED   (1 << 3)
+/* Main System Event Flags Definitions */
+#define MAIN_SYSTEM_EVENT_ADC_ENABLED        (1 << 0)
+#define MAIN_SYSTEM_EVENT_CLI_ENABLED        (1 << 1)
+#define MAIN_SYSTEM_EVENT_IIC0_ENABLED       (1 << 2)
+#define MAIN_SYSTEM_EVENT_SCI_SPI8_ENABLED   (1 << 3)
 
 /*-------------------------------------------------------------------------*
  * Types:
@@ -61,7 +60,7 @@ extern "C" {
 }
 #endif
 
-#endif // MARSGRO_SYSTEM_H_
+#endif // MAIN_SYSTEM_H_
 /*-------------------------------------------------------------------------*
- * End of File:  marsgro_system.h
+ * End of File:  main_system.h
  *-------------------------------------------------------------------------*/

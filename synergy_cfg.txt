@@ -416,9 +416,9 @@ Synergy Configuration
       Callback: NULL
       Overflow Interrupt Priority: Disabled
       
-  Thread "MarsGro System Thread"
-    Symbol: marsgro_system_thread
-    Name: MarsGro System Thread
+  Thread "Main System Thread"
+    Symbol: main_system_thread
+    Name: Main System Thread
     Stack size (bytes): 1024
     Priority: 7
     Auto start: Enabled
@@ -509,9 +509,9 @@ Synergy Configuration
       Voltage reference(Only for S1JA): External VREFH0
       Over current protection(Only for S1JA): Enabled
       
-    Object "g_marsgro_system_event_flags Event Flags"
-      Name: MarsGro System Event Flags
-      Symbol: g_marsgro_system_event_flags
+    Object "g_main_system_event_flags Event Flags"
+      Name: Main System Event Flags
+      Symbol: g_main_system_event_flags
       
   Thread "Debug Thread"
     Symbol: debug_thread

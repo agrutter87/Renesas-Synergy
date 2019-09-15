@@ -54,7 +54,7 @@
  *  @endcode
  */
 /*---------------------------------------------------------------------------*/
-/* MarsGro System Thread entry function */
+/* USB Thread entry function */
 void usb_thread_entry(void)
 {
     /* TODO: add your own code here */

@@ -5,13 +5,13 @@
 /*  refer to the GUIX Studio user's guide, or visit our web site at            */
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
-/*  GUIX Studio Revision 5.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 29. 3.2018   Time (hh:mm): 23:55                        */
+/*  GUIX Studio Revision 5.4.2.9                                               */
+/*  Date (dd.mm.yyyy): 15. 9.2019   Time (hh:mm): 16:46                        */
 /*******************************************************************************/
 
 
-#ifndef _MARSGRO_SPECIFICATIONS_H_
-#define _MARSGRO_SPECIFICATIONS_H_
+#ifndef _GUIX_SPECIFICATIONS_H_
+#define _GUIX_SPECIFICATIONS_H_
 
 #include "gx_api.h"
 
@@ -27,6 +27,16 @@ extern   "C" {
 #define ID_BUTTONENABLER 3
 #define ID_INSTRUCTIONS 4
 #define ID_WINDOW1_TEXT 5
+
+
+/* Define animation ids                                                        */
+
+#define GX_NEXT_ANIMATION_ID 1
+
+
+/* Define user event ids                                                       */
+
+#define GX_NEXT_USER_EVENT_ID GX_FIRST_USER_EVENT
 
 
 /* Declare properties structures for each utilized widget type                 */
@@ -140,7 +150,7 @@ VOID _gx_dave2d_aliased_line(GX_DRAW_CONTEXT *context, INT xstart, INT ystart, I
 VOID _gx_dave2d_aliased_wide_line(GX_DRAW_CONTEXT *context, INT xstart,
                                         INT ystart, INT xend, INT yend);
 VOID _gx_dave2d_pixelmap_draw(GX_DRAW_CONTEXT *context, INT xpos, INT ypos, GX_PIXELMAP *pixelmap);
-VOID _gx_dave2d_horizontal_pixelmap_line_draw(GX_DRAW_CONTEXT *context, INT xpos, INT ypos, INT xstart, INT xend, INT y, GX_FILL_PIXELMAP_INFO *info);
+VOID _gx_dave2d_horizontal_pixelmap_line_draw(GX_DRAW_CONTEXT *context, INT xpos, INT ypos, INT xstart, INT xend, INT y, GX_PIXELMAP *pixelmap);
 VOID _gx_dave2d_pixelmap_blend(GX_DRAW_CONTEXT *context, INT xpos, INT ypos,
                                       GX_PIXELMAP *pixelmap, GX_UBYTE alpha);
 VOID _gx_dave2d_polygon_draw(GX_DRAW_CONTEXT *context, GX_POINT *vertex, INT num);
@@ -184,8 +194,8 @@ typedef struct GX_STUDIO_DISPLAY_INFO_STRUCT
     GX_CONST GX_CHAR *canvas_name;
     GX_CONST GX_THEME **theme_table;
     GX_CONST GX_CHAR ***language_table;
-    UINT     theme_table_size;
-    UINT     language_table_size;
+    USHORT   theme_table_size;
+    USHORT   language_table_size;
     UINT     string_table_size;
     UINT     x_resolution;
     UINT     y_resolution;

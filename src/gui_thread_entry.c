@@ -62,7 +62,7 @@ void gui_thread_entry(void)
 
     static GX_EVENT g_gx_event;
     UINT gx_status = GX_SUCCESS;
-    GX_CONST GX_STUDIO_WIDGET ** pp_studio_widget = &marsgro_widget_table[0];
+    GX_CONST GX_STUDIO_WIDGET ** pp_studio_widget = &guix_widget_table[0];
 
     /* Initializes GUIX. */
     gx_status = gx_system_initialize ();

@@ -5,13 +5,13 @@
 /*  information please refer to the GUIX Studio user's guide, or visit our web */
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
-/*  GUIX Studio Revision 5.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 29. 3.2018   Time (hh:mm): 23:55                        */
+/*  GUIX Studio Revision 5.4.2.9                                               */
+/*  Date (dd.mm.yyyy): 15. 9.2019   Time (hh:mm): 16:46                        */
 /*******************************************************************************/
 
 
 #include "gx_api.h"
-#include "marsgro_resources.h"
+#include "guix_resources.h"
 
 /* Color Table                                                                 */
 
@@ -41,7 +41,11 @@ GX_CONST GX_COLOR display_1_theme_1_color_table[] =
     0x00000000,
     0x00008410,
     0x0000c618,
-    0x0000e60c
+    0x0000e60c,
+    0x0000a514,
+    0x00007bef,
+    0x0000ffff,
+    0x00007bef
 };
 
 
@@ -377,7 +381,7 @@ GX_THEME display_1_theme_1 =
     },
     GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_END_BUTTONS|GX_SCROLLBAR_VERTICAL,
     GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_END_BUTTONS|GX_SCROLLBAR_HORIZONTAL,
-    25,                                      /* color table size               */
+    29,                                      /* color table size               */
     4,                                       /* font table size                */
     5,                                       /* pixelmap table size            */
     0                                        /* palette size                   */

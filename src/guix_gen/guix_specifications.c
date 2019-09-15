@@ -5,23 +5,21 @@
 /*  refer to the GUIX Studio user's guide, or visit our web site at            */
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
-/*  GUIX Studio Revision 5.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 29. 3.2018   Time (hh:mm): 23:55                        */
+/*  GUIX Studio Revision 5.4.2.9                                               */
+/*  Date (dd.mm.yyyy): 15. 9.2019   Time (hh:mm): 16:46                        */
 /*******************************************************************************/
 
 
 #define GUIX_STUDIO_GENERATED_FILE
 #include <stddef.h>
-#include "marsgro_resources.h"
-#include "marsgro_specifications.h"
+#include "guix_resources.h"
+#include "guix_specifications.h"
 
-INIT_WINDOW_CONTROL_BLOCK init_window;
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
-
-
+INIT_WINDOW_CONTROL_BLOCK init_window;
 GX_DISPLAY display_1_control_block;
-GX_CANVAS  display_1_canvas_control_block;
 GX_WINDOW_ROOT display_1_root_window;
+GX_CANVAS  display_1_canvas_control_block;
 
 UINT gx_studio_text_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
 {
@@ -234,7 +232,7 @@ GX_CONST GX_STUDIO_WIDGET init_window_define =
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(INIT_WINDOW_CONTROL_BLOCK),       /* control block size             */
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) init_window_handler, /* event function override */
@@ -244,7 +242,7 @@ GX_CONST GX_STUDIO_WIDGET init_window_define =
     0,                                       /* control block                  */
     (void *) &init_window_properties         /* extended properties            */
 };
-GX_CONST GX_STUDIO_WIDGET_ENTRY marsgro_widget_table[] =
+GX_CONST GX_STUDIO_WIDGET_ENTRY guix_widget_table[] =
 {
     { &init_window_define, (GX_WIDGET *) &init_window },
     {GX_NULL, GX_NULL}
@@ -329,7 +327,7 @@ GX_WIDGET *gx_studio_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget)
 {
     UINT status = GX_FAILURE;
-    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = marsgro_widget_table;
+    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = guix_widget_table;
     GX_WIDGET *widget = GX_NULL;
 
     while(entry->widget_information)
@@ -356,7 +354,7 @@ UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **ne
 extern GX_CONST GX_THEME *display_1_theme_table[];
 extern GX_CONST GX_CHAR **display_1_language_table[];
 
-GX_STUDIO_DISPLAY_INFO marsgro_display_table[1] =
+GX_STUDIO_DISPLAY_INFO guix_display_table[1] =
 {
     {
     "display_1",
@@ -382,7 +380,7 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
     GX_CONST GX_THEME *theme_ptr;
     GX_RECTANGLE size;
 
-    GX_STUDIO_DISPLAY_INFO *display_info = &marsgro_display_table[display];
+    GX_STUDIO_DISPLAY_INFO *display_info = &guix_display_table[display];
 
 
 /* create the requested display                                                */
@@ -396,22 +394,28 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
 
 /* install the request theme                                                   */
 
-    theme_ptr = marsgro_display_table[display].theme_table[theme];
-    gx_display_color_table_set(display_info->display, theme_ptr->theme_color_table, theme_ptr->theme_color_table_size);
-    
-/* install the color palette if required                                       */
-    if (display_info->display->gx_display_driver_palette_set &&
-        theme_ptr->theme_palette != NULL)
+    if(display_info->theme_table)
     {
-        display_info->display->gx_display_driver_palette_set(display_info->display, theme_ptr->theme_palette, theme_ptr->theme_palette_size);
-    }
+        theme_ptr = display_info->theme_table[theme];
+        if(theme_ptr)
+        {
+            gx_display_color_table_set(display_info->display, theme_ptr->theme_color_table, theme_ptr->theme_color_table_size);
+            
+/* install the color palette if required                                       */
+            if (display_info->display->gx_display_driver_palette_set &&
+                theme_ptr->theme_palette != NULL)
+            {
+                display_info->display->gx_display_driver_palette_set(display_info->display, theme_ptr->theme_palette, theme_ptr->theme_palette_size);
+            }
 
-    gx_display_font_table_set(display_info->display, theme_ptr->theme_font_table, theme_ptr->theme_font_table_size);
-    gx_display_pixelmap_table_set(display_info->display, theme_ptr->theme_pixelmap_table, theme_ptr->theme_pixelmap_table_size);
-    gx_system_scroll_appearance_set(theme_ptr->theme_vertical_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_vertical_scrollbar_appearance);
-    gx_system_scroll_appearance_set(theme_ptr->theme_horizontal_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_horizontal_scrollbar_appearance);
-    gx_system_language_table_set((GX_CHAR ***) display_info->language_table, display_info->language_table_size, display_info->string_table_size);
-    gx_system_active_language_set(language);
+            gx_display_font_table_set(display_info->display, theme_ptr->theme_font_table, theme_ptr->theme_font_table_size);
+            gx_display_pixelmap_table_set(display_info->display, theme_ptr->theme_pixelmap_table, theme_ptr->theme_pixelmap_table_size);
+            gx_system_scroll_appearance_set(theme_ptr->theme_vertical_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_vertical_scrollbar_appearance);
+            gx_system_scroll_appearance_set(theme_ptr->theme_horizontal_scroll_style, (GX_SCROLLBAR_APPEARANCE *) &theme_ptr->theme_horizontal_scrollbar_appearance);
+            gx_system_language_table_set((GX_CHAR ***) display_info->language_table, display_info->language_table_size, display_info->string_table_size);
+            gx_system_active_language_set(language);
+        }
+    }
 
 
 /* create the canvas for this display                                          */

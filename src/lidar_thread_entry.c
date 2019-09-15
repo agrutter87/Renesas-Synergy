@@ -1,5 +1,5 @@
+#include <main_system.h>
 #include "lidar_thread.h"
-#include "marsgro_system.h"
 #include "lidar.h"
 
 /* LiDAR Thread entry function */
@@ -23,8 +23,8 @@ void lidar_thread_entry(void)
     }
 
     /* Set flag to allow threads which need the IIC0 to run after common drivers are initialized */
-    tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_IIC0_ENABLED, TX_OR);
-    debug_print ("\r\nMARSGRO_SYSTEM_EVENT_%s_ENABLED\r\n", "IIC0");
+    tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_IIC0_ENABLED, TX_OR);
+    debug_print ("\r\nMAIN_SYSTEM_EVENT_%s_ENABLED\r\n", "IIC0");
 
     debug_print ("TFMini I2C Test\r\n");
 

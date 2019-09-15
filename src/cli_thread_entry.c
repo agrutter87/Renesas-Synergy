@@ -65,7 +65,7 @@ void cli_thread_entry(void)
     if(!g_cli_init_error)
     {
         /* Set event flag to allow debug thread to process debug messages */
-        tx_event_flags_set (&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_CLI_ENABLED, TX_OR);
+        tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_CLI_ENABLED, TX_OR);
 
         while (1)
         {

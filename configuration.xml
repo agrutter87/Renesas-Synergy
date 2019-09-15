@@ -832,16 +832,16 @@
       <stack module="module.driver.timer_on_gpt.1475282313"/>
     </context>
     <context id="rtos.threadx.thread.544121660">
-      <property id="_symbol" value="marsgro_system_thread"/>
-      <property id="rtos.threadx.thread.name" value="MarsGro System Thread"/>
+      <property id="_symbol" value="main_system_thread"/>
+      <property id="rtos.threadx.thread.name" value="Main System Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="7"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.driver.adc_on_adc.1859735559"/>
       <object id="rtos.threadx.object.flags.1959669500">
-        <property id="rtos.threadx.object.flags.name" value="MarsGro System Event Flags"/>
-        <property id="rtos.threadx.object.flags.symbol" value="g_marsgro_system_event_flags"/>
+        <property id="rtos.threadx.object.flags.name" value="Main System Event Flags"/>
+        <property id="rtos.threadx.object.flags.symbol" value="g_main_system_event_flags"/>
       </object>
     </context>
     <context id="rtos.threadx.thread.45302969">

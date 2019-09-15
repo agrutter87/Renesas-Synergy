@@ -65,7 +65,7 @@ void debug_thread_entry(void)
     /* Get event flag to determine whether debug thread can process debug messages.
      * This will put the thread to sleep indefinitely if the CLI is never enabled.
      * This method doesn't support being unplugged during use */
-    tx_status = tx_event_flags_get(&g_marsgro_system_event_flags, MARSGRO_SYSTEM_EVENT_CLI_ENABLED, TX_OR, &flags_state, TX_WAIT_FOREVER);
+    tx_status = tx_event_flags_get(&g_main_system_event_flags, MAIN_SYSTEM_EVENT_CLI_ENABLED, TX_OR, &flags_state, TX_WAIT_FOREVER);
 
     while(1)
     {
