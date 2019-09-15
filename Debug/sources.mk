@@ -4,10 +4,13 @@
 
 ELF_SRCS := 
 OBJ_SRCS := 
+SX_SRCS := 
+LINKER_SCRIPT := 
 ASM_SRCS := 
 C_SRCS := 
 S_UPPER_SRCS := 
 O_SRCS := 
+SX_DEPS := 
 OBJS := 
 SECONDARY_FLASH := 
 SECONDARY_SIZE := 
@@ -18,6 +21,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src \
+src/cli \
 src/guix_gen \
 src/synergy_gen \
 synergy/board/s7g2_pe_hmi1 \
@@ -25,7 +29,6 @@ synergy/ssp/src/bsp/cmsis/Device/RENESAS/S7G2/Source \
 synergy/ssp/src/bsp/mcu/all \
 synergy/ssp/src/bsp/mcu/s7g2 \
 synergy/ssp/src/driver/r_adc \
-synergy/ssp/src/driver/r_cgc/hw \
 synergy/ssp/src/driver/r_cgc \
 synergy/ssp/src/driver/r_dtc \
 synergy/ssp/src/driver/r_elc \
@@ -43,6 +46,7 @@ synergy/ssp/src/framework/sf_el_gx \
 synergy/ssp/src/framework/sf_el_ux \
 synergy/ssp/src/framework/sf_el_ux_comms_v2 \
 synergy/ssp/src/framework/sf_external_irq \
+synergy/ssp/src/framework/sf_i2c \
 synergy/ssp/src/framework/sf_jpeg_decode \
 synergy/ssp/src/framework/sf_message \
 synergy/ssp/src/framework/sf_tes_2d_drw \

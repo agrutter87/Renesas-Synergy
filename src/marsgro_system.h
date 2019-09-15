@@ -39,7 +39,8 @@ extern "C" {
 /* MarsGro System Event Flags Definitions */
 #define MARSGRO_SYSTEM_EVENT_ADC_ENABLED        (1 << 0)
 #define MARSGRO_SYSTEM_EVENT_CLI_ENABLED        (1 << 1)
-#define MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED   (1 << 2)
+#define MARSGRO_SYSTEM_EVENT_IIC0_ENABLED       (1 << 2)
+#define MARSGRO_SYSTEM_EVENT_SCI_SPI8_ENABLED   (1 << 3)
 
 /*-------------------------------------------------------------------------*
  * Types:

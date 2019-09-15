@@ -16,6 +16,7 @@ RM := rm -rf
 -include synergy/ssp/src/framework/sf_tes_2d_drw/subdir.mk
 -include synergy/ssp/src/framework/sf_message/subdir.mk
 -include synergy/ssp/src/framework/sf_jpeg_decode/subdir.mk
+-include synergy/ssp/src/framework/sf_i2c/subdir.mk
 -include synergy/ssp/src/framework/sf_external_irq/subdir.mk
 -include synergy/ssp/src/framework/sf_el_ux_comms_v2/subdir.mk
 -include synergy/ssp/src/framework/sf_el_ux/subdir.mk
@@ -32,7 +33,6 @@ RM := rm -rf
 -include synergy/ssp/src/driver/r_fmi/subdir.mk
 -include synergy/ssp/src/driver/r_elc/subdir.mk
 -include synergy/ssp/src/driver/r_dtc/subdir.mk
--include synergy/ssp/src/driver/r_cgc/hw/subdir.mk
 -include synergy/ssp/src/driver/r_cgc/subdir.mk
 -include synergy/ssp/src/driver/r_adc/subdir.mk
 -include synergy/ssp/src/bsp/mcu/s7g2/subdir.mk
@@ -41,11 +41,15 @@ RM := rm -rf
 -include synergy/board/s7g2_pe_hmi1/subdir.mk
 -include src/synergy_gen/subdir.mk
 -include src/guix_gen/subdir.mk
+-include src/cli/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(SX_DEPS)),)
+-include $(SX_DEPS)
+endif
 ifneq ($(strip $(ASM_DEPS)),)
 -include $(ASM_DEPS)
 endif
@@ -74,7 +78,7 @@ all: MarsGro_System_Controller.elf secondary-outputs
 MarsGro_System_Controller.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C Linker'
-	$(file > MarsGro_System_Controller.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g3 -T "D:\\Synergy Workspace\\MarsGro_System_Controller\\script\\S7G2.ld" -Xlinker --gc-sections -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux_device_class_cdc_acm\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"MarsGro_System_Controller.map" --specs=nano.specs --specs=rdimon.specs -o "MarsGro_System_Controller.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
+	$(file > MarsGro_System_Controller.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g3 -T "D:\\Synergy Workspace\\MarsGro_System_Controller\\script/s7g2.ld" -Xlinker --gc-sections -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\ux_device_class_cdc_acm\\cm4_gcc" -L "D:\\Synergy Workspace\\MarsGro_System_Controller\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"MarsGro_System_Controller.map" --specs=nano.specs --specs=rdimon.specs -o "MarsGro_System_Controller.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
 	arm-none-eabi-gcc @"MarsGro_System_Controller.elf.in"
 	@echo 'Finished building target: $@'
 	@echo ' '
@@ -93,6 +97,11 @@ MarsGro_System_Controller.siz: MarsGro_System_Controller.elf
 
 # Other Targets
 clean:
+ifneq ($(strip $(SX_DEPS)),)
+	-$(file > clean_SX_DEPS.tmp, $(SX_DEPS))
+	-@ xargs -s 6000 -t -a clean_SX_DEPS.tmp $(RM)
+	-@$(RM) clean_SX_DEPS.tmp
+endif
 ifneq ($(strip $(OBJS)),)
 	-$(file > clean_OBJS.tmp, $(OBJS))
 	-@ xargs -s 6000 -t -a clean_OBJS.tmp $(RM)

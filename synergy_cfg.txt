@@ -124,9 +124,9 @@ Synergy Configuration
       P313 E10 GLCDC0_LCD_TCON2 GLCD_Controller__Pin_Option_B_LCD_TCON2_B High - "Peripheral mode" CMOS None "BUS0: A20; ETHERC0: ERXD3; GLCDC0: LCD_TCON2; SDHI0: DAT7" 
       P314 F9 GLCDC0_LCD_TCON1 GLCD_Controller__Pin_Option_B_LCD_TCON1_B High - "Peripheral mode" CMOS None "BUS0: A21; GLCDC0: LCD_TCON1" 
       P315 C11 GLCDC0_LCD_TCON0 GLCD_Controller__Pin_Option_B_LCD_TCON0_B High - "Peripheral mode" CMOS None "BUS0: A22; GLCDC0: LCD_TCON0" 
-      P400 N13 SCI7_SCK SCI7_SCK7 - None "Peripheral mode" CMOS None "ADC1: ADTRG; ETHERC1: TX_CLK; GPT6: GTIOCA; IIC0: SCL; IRQ0: IRQ00; SCI4: SCK; SCI7: SCK; SSI: AUDIO_CLK" 
-      P401 P15 SCI7_TXD_MOSI SCI7_TXD7_SDA7_MOSI7 - None "Peripheral mode" CMOS None "CAN0: CTX; ETHERC0: MDC; ETHERC0: MDC; GPT6: GTIOCB; IIC0: SDA; IRQ0: IRQ05; POEG0: GTETRG; SCI4: CTS_RTS_SS; SCI7: SDA; SCI7: TXD_MOSI" 
-      P402 N14 SCI7_RXD_MISO SCI7_RXD7_SCL7_MISO7 Medium None "Peripheral mode" CMOS None "AGT0: AGTIO; AGT1: AGTIO; CAN0: CRX; ETHERC0: MDIO; ETHERC0: MDIO; IRQ0: IRQ04; RTC0: RTCIC0; SCI7: RXD_MISO; SCI7: SCL" 
+      P400 N13 IIC0_SCL - - None "Peripheral mode" CMOS "input pull-up" "ADC1: ADTRG; ETHERC1: TX_CLK; GPT6: GTIOCA; IIC0: SCL; IRQ0: IRQ00; SCI4: SCK; SCI7: SCK; SSI: AUDIO_CLK" 
+      P401 P15 IIC0_SDA - - None "Peripheral mode" CMOS "input pull-up" "CAN0: CTX; ETHERC0: MDC; ETHERC0: MDC; GPT6: GTIOCB; IIC0: SDA; IRQ0: IRQ05; POEG0: GTETRG; SCI4: CTS_RTS_SS; SCI7: SDA; SCI7: TXD_MOSI" 
+      P402 N14 - - - - Disabled - - "AGT0: AGTIO; AGT1: AGTIO; CAN0: CRX; ETHERC0: MDIO; ETHERC0: MDIO; IRQ0: IRQ04; RTC0: RTCIC0; SCI7: RXD_MISO; SCI7: SCL" 
       P403 N15 RMII_MDC Ethernet_Controller_1_RMII_ET1_MDC Medium - "Peripheral mode" CMOS None "AGT0: AGTIO; AGT1: AGTIO; ETHERC1: MDC; ETHERC1: MDC; GPT3: GTIOCA; PDC0: PIXD7; RTC0: RTCIC1; SCI7: CTS_RTS_SS; SSI0: SSISCK" 
       P404 K10 RMII_MDIO Ethernet_Controller_1_RMII_ET1_MDIO Medium - "Peripheral mode" CMOS None "ETHERC1: MDIO; ETHERC1: MDIO; GPT3: GTIOCB; PDC0: PIXD6; RTC0: RTCIC2; SSI0: SSIWS" 
       P405 M13 RMII_TXD_EN Ethernet_Controller_1_RMII_RMII1_TXD_EN High - "Peripheral mode" CMOS None "ETHERC1: TX_EN; ETHERC1: TXD_EN; GPT1: GTIOCA; PDC0: PIXD5; SSI0: SSITXD" 
@@ -382,6 +382,10 @@ Synergy Configuration
     Full Speed Interrupt Priority: Priority 3
     LDO Regulator(Only for S3 and S1 part MCUs): Disable
     
+  Module "I2C Framework Device on sf_i2c"
+    Parameter Checking: Enabled
+    
+  Module "I2C Framework Shared Bus on sf_i2c"
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -838,8 +842,8 @@ Synergy Configuration
         Name of generated initialization function: sf_message_init0
         Auto Initialization: Enable
         
-      Instance "g_i2c0 I2C Master Driver on r_riic"
-        Name: g_i2c0
+      Instance "g_i2c1 I2C Master Driver on r_riic"
+        Name: g_i2c1
         Channel: 1
         Rate: Fast-mode
         Slave Address: 0x38
@@ -973,6 +977,70 @@ Synergy Configuration
     Auto start: Enabled
     Time slicing interval (ticks): 1
     
+  Thread "LiDAR Thread"
+    Symbol: lidar_thread
+    Name: LiDAR Thread
+    Stack size (bytes): 1024
+    Priority: 1
+    Auto start: Enabled
+    Time slicing interval (ticks): 1
+    
+    Instance "g_sf_i2c_device0 I2C Framework Device on sf_i2c"
+      Name: g_sf_i2c_device0
+      Slave Address : 0x10
+      Address Mode: 7-Bit
+      
+      Instance "g_sf_i2c_bus0 I2C Framework Shared Bus on sf_i2c"
+        Name: g_sf_i2c_bus0
+        
+        Instance "g_i2c0 I2C Master Driver on r_riic"
+          Name: g_i2c0
+          Channel: 0
+          Rate: Standard
+          Slave Address: 0
+          Address Mode: 7-Bit
+          SDA Output Delay (nano seconds): 300
+          Timeout Mode: Short Mode
+          Callback: NULL
+          Receive Interrupt Priority: Priority 12
+          Transmit Interrupt Priority: Priority 12
+          Transmit End Interrupt Priority: Priority 12
+          Error Interrupt Priority: Priority 12
+          
+          Instance "g_transfer4 Transfer Driver on r_dtc IIC0 TXI"
+            Name: g_transfer4
+            Mode: Normal
+            Transfer Size: 1 Byte
+            Destination Address Mode: Fixed
+            Source Address Mode: Incremented
+            Repeat Area (Unused in Normal Mode): Source
+            Interrupt Frequency: After all transfers have completed
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Block Mode): 0
+            Activation Source (Must enable IRQ): IIC0 TXI
+            Auto Enable: False
+            Callback (Only valid with Software start): NULL
+            ELC Software Event Interrupt Priority: Disabled
+            
+          Instance "g_transfer5 Transfer Driver on r_dtc IIC0 RXI"
+            Name: g_transfer5
+            Mode: Normal
+            Transfer Size: 1 Byte
+            Destination Address Mode: Incremented
+            Source Address Mode: Fixed
+            Repeat Area (Unused in Normal Mode): Destination
+            Interrupt Frequency: After all transfers have completed
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Block Mode): 0
+            Activation Source (Must enable IRQ): IIC0 RXI
+            Auto Enable: False
+            Callback (Only valid with Software start): NULL
+            ELC Software Event Interrupt Priority: Disabled
+            
   Messaging
     Subscriber "GUI Thread" 0 0
       Event Class "Touch"
