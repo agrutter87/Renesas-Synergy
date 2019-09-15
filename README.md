@@ -1,1 +1,1 @@
-# MarsGro_System_Controller
+# Renesas Synergy
