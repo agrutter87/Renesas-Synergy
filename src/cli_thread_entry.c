@@ -72,7 +72,7 @@ void cli_thread_entry(void)
             /* Prompt for user input */
             ssp_err = g_sf_console.p_api->prompt (g_sf_console.p_ctrl,
                                                   ((sf_console_instance_ctrl_t *) (g_sf_console.p_ctrl))->p_current_menu,
-                                                  TX_NO_WAIT);
+                                                  TX_WAIT_FOREVER);
             if (ssp_err)
             {
                 // TODO: Error handling
