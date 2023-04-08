@@ -2,46 +2,64 @@
 #include "lidar_thread.h"
 #include "lidar.h"
 
+static lidar_cfg_t g_lidar_cfg =
+{
+	.p_comms 						= NULL,
+	.output_data_format 			= LIDAR_OUTPUT_DATA_FORMAT_STANDARD,
+	.output_data_cycle_10ms_units 	= 100,
+	.output_distance_units			= LIDAR_OUTPUT_DATA_UNITS_CM,
+	.detection_pattern				= LIDAR_DETECTION_PATTERN_AUTO,
+	.distance_mode					= LIDAR_DISTANCE_MODE_0_to_2M,
+};
+
+/* Store readings from LiDAR in this */
+lidar_reading_t g_last_reading = {0};
+
 /* LiDAR Thread entry function */
 void lidar_thread_entry(void)
 {
     /* SSP error variable used for tracking the status of Synergy API functions */
     ssp_err_t ssp_err = SSP_SUCCESS;
 
-    /* Store readings from LiDAR in this */
-    lidar_reading_t reading = {0};
-
     /* ignore invalid ranging data */
     bool valid_data = false;
 
-    /* Configure IIC0 */
-    ssp_err = g_sf_i2c_device0.p_api->open (g_sf_i2c_device0.p_ctrl, g_sf_i2c_device0.p_cfg);
-    if (ssp_err)
-    {
-        // TODO: Error handling
-        debug_print ("\r\nError at accelerometer_thread_entry::g_i2c0.p_api->open\r\n");
-    }
-
     /* Set flag to allow threads which need the IIC0 to run after common drivers are initialized */
-    tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_IIC0_ENABLED, TX_OR);
-    debug_print ("\r\nMAIN_SYSTEM_EVENT_%s_ENABLED\r\n", "IIC0");
+    tx_event_flags_set (&g_main_system_event_flags, MAIN_SYSTEM_EVENT_SCI_UART7_ENABLED, TX_OR);
+    debug_print ("\r\nMAIN_SYSTEM_EVENT_%s_ENABLED\r\n", "UART7");
 
-    debug_print ("TFMini I2C Test\r\n");
+    debug_print ("TFMini UART Test\r\n");
+
+    uint8_t buffer[100] = {0};
+
+    lidar_init(&g_sf_uart7, &g_lidar_cfg);
 
     while(1)
     {
-        ssp_err = readDistance(&g_sf_i2c_device0, &reading);
+        ssp_err = lidar_distance_read(&g_sf_uart7, &g_last_reading);
         if (ssp_err == SSP_SUCCESS)
         {
-            if (valid_data == true)
-            {
-                debug_print("\tDist[%d]\tstrength[%d]\tmode[%d]\r\n",
-                            reading.distance, reading.strength, reading.mode);
-            }
-            else
-            {
-                //don't print invalid data
-            }
+        	switch(g_last_reading.state)
+        	{
+				case READY:
+					debug_print("Ready\r\n");
+					break;
+				case ERROR_SERIAL_BADCHECKSUM:
+					debug_print("Bad checksum\r\n");
+					break;
+				case ERROR_SERIAL_NOHEADER:
+					debug_print("No header\r\n");
+					break;
+				case ERROR_SERIAL_TOOMANYTRIES:
+					debug_print("Too many tries\r\n");
+					break;
+				case MEASUREMENT_OK:
+					debug_print("\tDist[%d]\tstrength[%d]\r\n", g_last_reading.distance, g_last_reading.strength);
+					break;
+				default:
+					break;
+        	}
+
         }
         else
         {
@@ -49,6 +67,7 @@ void lidar_thread_entry(void)
         }
 
         /* Delay 50 ms between readings */
-        tx_thread_sleep(5);
+        tx_thread_sleep(100);
     }
 }
+
