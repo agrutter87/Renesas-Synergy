@@ -22,7 +22,6 @@
 #include "application.h"
 
 void R_BSP_WarmStart(bsp_warm_start_event_t event);
-void tx_application_define_user(void *first_unused_memory);
 
 /*******************************************************************************************************************//**
  * This function is called at various points during the startup process.  This implementation uses the event that is
@@ -40,28 +39,5 @@ void R_BSP_WarmStart (bsp_warm_start_event_t event)
     if (BSP_WARM_START_POST_C == event)
     {
         /* C runtime environment and system clocks are setup. */
-    }
-}
-
-/******************************************************************************
- * FUNCTION: tx_application_define_user()
- *****************************************************************************/
-void tx_application_define_user(void *first_unused_memory)
-{
-    UINT tx_err = TX_SUCCESS;
-
-    /* Create a byte memory pool from which to allocate the thread stacks. */
-    tx_err = tx_byte_pool_create(&g_application.memory_byte_pool,
-                                 g_application.memory_byte_pool_name,
-                                 first_unused_memory,
-                                 g_application.memory_byte_pool_size);
-    if(TX_SUCCESS != tx_err)
-    {
-        SEGGER_RTT_printf(0, "Failed tx_application_define_user::tx_byte_pool_create, tx_err = %d\r\n", tx_err);
-    }
-
-    for(ULONG feature_num = 0; feature_num < g_application.feature_count; feature_num++)
-    {
-        g_application.p_features[feature_num].feature_define(&g_application.memory_byte_pool);
     }
 }

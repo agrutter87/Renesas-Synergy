@@ -24,11 +24,16 @@ static const feature_t g_features[] =
         .feature_get_status = application_get_status
     },
     {
-        .feature_name = "Console",
-        .feature_define = console_define,
+        .feature_name = "RTT Console",
+        .feature_define = console_rtt_define,
         .feature_get_status = console_get_status
     },
 #if 0
+    {
+        .feature_name = "USB Console",
+        .feature_define = console_usb_define,
+        .feature_get_status = console_get_status
+    },
     {
         .feature_name = "GUI - GUIX",
         .feature_define = gui_define,
@@ -66,12 +71,15 @@ application_t g_application =
 /******************************************************************************
  * PROTOTYPES
  *****************************************************************************/
+void tx_application_define_user(void *first_unused_memory);
 
 /******************************************************************************
  * FUNCTION: application_define
  *****************************************************************************/
-void application_define(TX_BYTE_POOL * p_memory_pool)
+void application_define(TX_BYTE_POOL * p_memory_pool, CHAR * p_feature_name)
 {
+	SSP_PARAMETER_NOT_USED(p_feature_name);
+
     UINT tx_err = TX_SUCCESS;
 
     SEGGER_RTT_printf(0, "Initializing application...\r\n");
@@ -143,3 +151,28 @@ void application_thread_entry(ULONG thread_input)
         tx_thread_sleep(APPLICATION_THREAD_PERIOD - elapsed_ticks);
     }
 }
+
+
+/******************************************************************************
+ * FUNCTION: tx_application_define_user()
+ *****************************************************************************/
+void tx_application_define_user(void *first_unused_memory)
+{
+    UINT tx_err = TX_SUCCESS;
+
+    /* Create a byte memory pool from which to allocate the thread stacks. */
+    tx_err = tx_byte_pool_create(&g_application.memory_byte_pool,
+                                 g_application.memory_byte_pool_name,
+                                 first_unused_memory,
+                                 g_application.memory_byte_pool_size);
+    if(TX_SUCCESS != tx_err)
+    {
+        SEGGER_RTT_printf(0, "Failed tx_application_define_user::tx_byte_pool_create, tx_err = %d\r\n", tx_err);
+    }
+
+    for(ULONG feature_num = 0; feature_num < g_application.feature_count; feature_num++)
+    {
+        g_application.p_features[feature_num].feature_define(&g_application.memory_byte_pool, g_application.p_features[feature_num].feature_name);
+    }
+}
+

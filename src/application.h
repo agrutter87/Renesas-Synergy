@@ -36,7 +36,7 @@ typedef struct st_feature
 
     /* Function to be called with tx_application_define.
      * - Allocates memory from p_memory_pool for everything */
-    void (*feature_define)(TX_BYTE_POOL * p_memory_pool);
+    void (*feature_define)(TX_BYTE_POOL * p_memory_pool, CHAR * p_feature_name);
 
     /* Function to be use by console (or other features in general?) to get the status
      * of the feature */
@@ -76,7 +76,7 @@ extern application_t g_application;
 /******************************************************************************
  * PROTOTYPES
  *****************************************************************************/
-void application_define(TX_BYTE_POOL * p_memory_pool);
+void application_define(TX_BYTE_POOL * p_memory_pool, CHAR * p_feature_name);
 void application_get_status(feature_status_t * p_status);
 void application_thread_entry(ULONG thread_input);
 

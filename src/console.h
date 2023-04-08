@@ -11,7 +11,7 @@
 /******************************************************************************
  * CONSTANTS
  *****************************************************************************/
-#define CONSOLE_THREAD_NAME                 ("Console Thread")
+#define CONSOLE_THREAD_NAME                 ("%s Thread")
 #define CONSOLE_THREAD_PRIORITY             (TX_MAX_PRIORITIES - 1)
 #define CONSOLE_THREAD_PREEMPT_THRESHOLD    (TX_MAX_PRIORITIES - 1)
 #define CONSOLE_THREAD_PERIOD               (TX_TIMER_TICKS_PER_SECOND)
@@ -59,7 +59,8 @@ typedef struct st_console
 /******************************************************************************
  * PROTOTYPES
  *****************************************************************************/
-void console_define(TX_BYTE_POOL * p_memory_pool);
+void console_rtt_define(TX_BYTE_POOL * p_memory_pool, CHAR * p_feature_name);
+void console_usb_define(TX_BYTE_POOL * p_memory_pool, CHAR * p_feature_name);
 void console_get_status(feature_status_t * p_status);
 void console_thread_entry(ULONG thread_input);
 
