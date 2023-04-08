@@ -394,6 +394,27 @@ Synergy Configuration
   Module "External IRQ Driver on r_icu"
     Parameter Checking: Default (BSP)
     
+  Module "FileX on USB Mass Storage"
+  Module "USBX Host Class Mass Storage"
+  Module "USBX Host Configuration"
+  Module "FileX Common on fx"
+  Module "USBX Port HCD on sf_el_ux for USBHS"
+    High Speed Interrupt Priority: Priority 3
+    FIFO size for Bulk/Isochronous Pipes: 512 bytes(default)
+    Number of Isochronous Pipes Reserved: 0(default)
+    VBUSEN pin Signal Logic: Active High
+    Enable High Speed: Enable
+    
+  Module "USBX Host Class HID"
+  Module "USBX Host Class HUB"
+  Module "USBX Host Class HUB Source"
+  Module "USBX Host Class HID Source"
+    HID Keyboard Thread Priority: 20
+    Memory size for HID Report Decompression: 4096
+    Number of Entries for HID Local Usage Item Table: 1024
+    Host HID Interrupt OUT Endpoint Support: Disabled (default)
+    HID report transfer timeout: 
+    
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -544,7 +565,7 @@ Synergy Configuration
     Name: CLI Thread
     Stack size (bytes): 1024
     Priority: 9
-    Auto start: Enabled
+    Auto start: Disabled
     Time slicing interval (ticks): 1
     
     Instance "g_sf_console Console Framework on sf_console"
@@ -596,8 +617,8 @@ Synergy Configuration
               
             Instance "USBX on ux"
               USBX Pool Memory Name: g_ux_pool_memory
-              USBX Pool Memory Size: 18432
-              User Callback for Host Event Notification(Only valid for USB Host): NULL
+              USBX Pool Memory Size: 81920
+              User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
               User Callback for Device Event Notification(Only valid for USB Device): NULL
               Name of generated initialization function: ux_common_init0
               Auto Initialization: Enable
@@ -987,16 +1008,93 @@ Synergy Configuration
   Thread "USB Thread"
     Symbol: usb_thread
     Name: USB Thread
-    Stack size (bytes): 1024
-    Priority: 9
-    Auto start: Disabled
-    Time slicing interval (ticks): 1
+    Stack size (bytes): 2048
+    Priority: 1
+    Auto start: Enabled
+    Time slicing interval (ticks): 10
     
+    Instance "g_fx_media0 FileX on USB Mass Storage"
+      Name: g_fx_media0
+      Name of FileX Media Control block initialization: fx_media_init_function0
+      Auto Media Initialization: Disable
+      Timeout ticks for Media Initialization (Specify 0 if no need of thread suspension): 0xffffffff
+      
+      Instance "g_ux_host_class_storage0 USBX Host Class Mass Storage"
+        Name: g_ux_host_class_storage0
+        
+        Instance "USBX Host Configuration g_ux_host_0"
+          Name: g_ux_host_0
+          Name of generated initialization function: ux_host_init0
+          Auto Initialization: Enable
+          
+          Instance "g_sf_el_ux_hcd_hs_0 USBX Port HCD on sf_el_ux for USBHS"
+            Name: g_sf_el_ux_hcd_hs_0
+            USB Controller Selection: USBHS
+            
+          Instance "USBX on ux"
+            USBX Pool Memory Name: g_ux_pool_memory
+            USBX Pool Memory Size: 81920
+            User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
+            User Callback for Device Event Notification(Only valid for USB Device): NULL
+            Name of generated initialization function: ux_common_init0
+            Auto Initialization: Enable
+            
+      Instance "FileX Common on fx"
+        Name of generated initialization function: fx_common_init0
+        Auto Initialization: Enable
+        
+    Instance "g_ux_host_class_hid0 USBX Host Class HID"
+      Name: g_ux_host_class_hid0
+      HID Client - Keyboard Support: Enable
+      HID Client - Mouse Support: Disable
+      HID Client - Remote Control Support: Disable
+      
+      Instance "USBX Host Class HID Source"
+        Show linkage warning: Disabled
+        
+      Instance "USBX Host Configuration g_ux_host_0"
+        Name: g_ux_host_0
+        Name of generated initialization function: ux_host_init0
+        Auto Initialization: Enable
+        
+        Instance "g_sf_el_ux_hcd_hs_0 USBX Port HCD on sf_el_ux for USBHS"
+          Name: g_sf_el_ux_hcd_hs_0
+          USB Controller Selection: USBHS
+          
+        Instance "USBX on ux"
+          USBX Pool Memory Name: g_ux_pool_memory
+          USBX Pool Memory Size: 81920
+          User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
+          User Callback for Device Event Notification(Only valid for USB Device): NULL
+          Name of generated initialization function: ux_common_init0
+          Auto Initialization: Enable
+          
+    Instance "USBX Host Class HUB"
+      Instance "USBX Host Class HUB Source"
+        Show linkage warning: Disabled
+        
+      Instance "USBX Host Configuration g_ux_host_0"
+        Name: g_ux_host_0
+        Name of generated initialization function: ux_host_init0
+        Auto Initialization: Enable
+        
+        Instance "g_sf_el_ux_hcd_hs_0 USBX Port HCD on sf_el_ux for USBHS"
+          Name: g_sf_el_ux_hcd_hs_0
+          USB Controller Selection: USBHS
+          
+        Instance "USBX on ux"
+          USBX Pool Memory Name: g_ux_pool_memory
+          USBX Pool Memory Size: 81920
+          User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
+          User Callback for Device Event Notification(Only valid for USB Device): NULL
+          Name of generated initialization function: ux_common_init0
+          Auto Initialization: Enable
+          
   Thread "LiDAR Thread"
     Symbol: lidar_thread
     Name: LiDAR Thread
     Stack size (bytes): 1024
-    Priority: 1
+    Priority: 9
     Auto start: Disabled
     Time slicing interval (ticks): 1
     

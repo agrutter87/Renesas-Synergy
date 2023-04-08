@@ -238,6 +238,30 @@
       <description>TOUCH_PANEL_CHIP_FT5X06 Drivers</description>
       <originalPack>Renesas.Synergy_touch_panel_chip_ft5x06.2.3.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="fx" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic FileX: Provides=[FileX] , Requires=[FileX I/O ,ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_hid" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class HID: Provides=[USBX Host Class HID] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_hid_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class HID: Provides=[USBX Host Class HID] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_hub" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Hub: Provides=[USBX Host Class Hub] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_hub_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Hub: Provides=[USBX Host Class Hub] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_storage" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Storage: Provides=[USBX Host Class Storage] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
   <synergyMessagingConfiguration>
@@ -685,8 +709,8 @@
     </module>
     <module id="module.el.ux_v2.1236169328">
       <property id="module.el.ux_v2.pool_memory_name" value="g_ux_pool_memory"/>
-      <property id="module.el.ux_v2.pool_memory_size" value="18432"/>
-      <property id="module.el.ux_v2.system_change_function" value="NULL"/>
+      <property id="module.el.ux_v2.pool_memory_size" value="81920"/>
+      <property id="module.el.ux_v2.system_change_function" value="ux_host_event_callback"/>
       <property id="module.el.ux_v2.slave_change_function" value="NULL"/>
       <property id="module.el.ux_v2.init_function" value="ux_common_init0"/>
       <property id="module.el.ux_v2.init" value="module.el.ux_v2.init.enable"/>
@@ -909,6 +933,41 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
+    <module id="module.framework.fx_usbmsc.727326386">
+      <property id="module.framework.fx.name" value="g_fx_media0"/>
+      <property id="module.framework.fx.init_function" value="fx_media_init_function0"/>
+      <property id="module.framework.fx_usbmsc.media_init" value="module.framework.fx_usbmsc.media_init.disable"/>
+      <property id="module.framework.fx_usbmsc.init_timeout" value="0xffffffff"/>
+    </module>
+    <module id="module.el.ux_host_class_storage.1554404982">
+      <property id="module.el.host_class.name" value="g_ux_host_class_storage0"/>
+    </module>
+    <module id="module.el.ux_host.898318957">
+      <property id="module.el.ux_host.name" value="g_ux_host_0"/>
+      <property id="module.el.ux_host.init_function" value="ux_host_init0"/>
+      <property id="module.el.ux_host.init" value="module.el.ux_host.init.enable"/>
+    </module>
+    <module id="module.el.fx_common.1102657128">
+      <property id="module.el.fx_common.init_function" value="fx_common_init0"/>
+      <property id="module.el.fx_common.init" value="module.el.fx_common.init.enable"/>
+    </module>
+    <module id="module.framework.sf_el_ux_hcd_hs.1681065023">
+      <property id="module.framework.sf_el_ux_hcd.name" value="g_sf_el_ux_hcd_hs_0"/>
+      <property id="module.framework.sf_el_ux_hcd.hw_address" value="module.framework.sf_el_ux_hcd.hw_address.hs"/>
+    </module>
+    <module id="module.el.ux_host_class_hid.829478025">
+      <property id="module.el.ux_host_class.name" value="g_ux_host_class_hid0"/>
+      <property id="module.el.ux_host_class.keyboard_support" value="module.el.ux_host_class.keyboard_support.enable"/>
+      <property id="module.el.ux_host_class.mouse_support" value="module.el.ux_host_class.mouse_support.disable"/>
+      <property id="module.el.ux_host_class.remote_control_support" value="module.el.ux_host_class.remote_control_support.disable"/>
+    </module>
+    <module id="module.el.ux_host_class_hub.1279551116"/>
+    <module id="module.el.ux_host_class_hub_src.197294882">
+      <property id="module.el.ux_host_class_hub_src.linkage_warning" value="module.el.ux_host_class_hub_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.el.ux_host_class_hid_src.897817433">
+      <property id="module.el.ux_host_class_hid_src.linkage_warning" value="module.el.ux_host_class_hid_src.linkage_warning.disabled"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
       <stack module="module.driver.cgc_on_cgc.0"/>
@@ -948,7 +1007,7 @@
       <property id="rtos.threadx.thread.name" value="CLI Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="9"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.framework.sf_console.373827169">
         <stack module="module.framework.sf_el_ux_comms_v2.452205228" requires="module.framework.sf_console.requires.sf_comms">
@@ -1017,16 +1076,39 @@
     <context id="rtos.threadx.thread.1391586422">
       <property id="_symbol" value="usb_thread"/>
       <property id="rtos.threadx.thread.name" value="USB Thread"/>
-      <property id="rtos.threadx.thread.stack" value="1024"/>
-      <property id="rtos.threadx.thread.priority" value="9"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
-      <property id="rtos.threadx.thread.timeslice" value="1"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
+      <property id="rtos.threadx.thread.priority" value="1"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="10"/>
+      <stack module="module.framework.fx_usbmsc.727326386">
+        <stack module="module.el.ux_host_class_storage.1554404982" requires="module.framework.fx_usbmsc.requires.ux_host_class_storage">
+          <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_storage.requires.ux_host">
+            <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+            <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+          </stack>
+        </stack>
+        <stack module="module.el.fx_common.1102657128" requires="module.framework.fx_usbmsc.requires.fx_common"/>
+      </stack>
+      <stack module="module.el.ux_host_class_hid.829478025">
+        <stack module="module.el.ux_host_class_hid_src.897817433" requires="module.el.ux_host_class_hid.requires.ux_host_class_hid_src"/>
+        <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class.requires.ux_host">
+          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+        </stack>
+      </stack>
+      <stack module="module.el.ux_host_class_hub.1279551116">
+        <stack module="module.el.ux_host_class_hub_src.197294882" requires="module.el.ux_host_class_hub.requires.ux_host_class_hub_src"/>
+        <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_hub.requires.ux_host">
+          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+        </stack>
+      </stack>
     </context>
     <context id="rtos.threadx.thread.1724881954">
       <property id="_symbol" value="lidar_thread"/>
       <property id="rtos.threadx.thread.name" value="LiDAR Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
-      <property id="rtos.threadx.thread.priority" value="1"/>
+      <property id="rtos.threadx.thread.priority" value="9"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.framework.sf_comms_on_sf_uart_comms.1105027220">
@@ -1042,6 +1124,7 @@
     <config id="config.el.ux_device">
       <property id="config.el.ux_device.composite" value="config.el.ux_device.composite.disable"/>
     </config>
+    <config id="config.el.ux_host_class_storage"/>
     <config id="config.driver.glcd">
       <property id="config.driver.glcd.param_checking_enable" value="config.driver.glcd.param_checking_enable.bsp"/>
     </config>
@@ -1069,6 +1152,13 @@
     <config id="config.driver.adc">
       <property id="config.driver.adc.param_checking_enable" value="config.driver.adc.param_checking_enable.enabled"/>
     </config>
+    <config id="config.el.ux_host_class_hid_src">
+      <property id="config.el.ux_host_class_hid_src.thread_priority_keyboard" value="20"/>
+      <property id="config.el.ux_host_class_hid_src.decompression_size" value="4096"/>
+      <property id="config.el.ux_host_class_hid_src.local_item_table" value="1024"/>
+      <property id="config.el.ux_host_class_hid_src.host_hid_interrupt_out_support" value="config.el.ux_host_class_hid_src.host_hid_interrupt_out_support.disabled"/>
+      <property id="config.el.ux_host_class_hid_src.hid_report_transfer_timeout" value=""/>
+    </config>
     <config id="config.driver.sci_uart">
       <property id="config.driver.sci_uart.external_rts_operation" value="config.driver.sci_uart.external_rts_operation.disabled"/>
       <property id="config.driver.sci_uart.uart_rx_enable" value="config.driver.sci_uart.uart_rx_enable.enabled"/>
@@ -1081,7 +1171,7 @@
       <property id="config.framework.sf_el_ux.fs_irq_ipl" value="board.icu.common.irq.disabled"/>
     </config>
     <config id="config.framework.sf_el_ux_hcd_hs">
-      <property id="config.framework.sf_el_ux_hcd_hs.irq_ipl" value="board.icu.common.irq.disabled"/>
+      <property id="config.framework.sf_el_ux_hcd_hs.irq_ipl" value="board.icu.common.irq.priority3"/>
       <property id="config.framework.sf_el_ux_hcd_hs.fifo_size" value="config.framework.sf_el_ux_hcd_hs.fifo_size.normal"/>
       <property id="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index" value="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index.pipe1"/>
       <property id="config.framework.sf_el_ux_hcd_hs.VBUSENpin_logic" value="config.framework.sf_el_ux_hcd_hs.VBUSENpin_logic.active_high"/>
@@ -1137,6 +1227,7 @@
     <config id="config.framework.sf_jpeg_decode">
       <property id="config.framework.sf_jpeg_decode.param_checking_enable" value="config.framework.sf_jpeg_decode.param_checking_enable.bsp"/>
     </config>
+    <config id="config.el.ux_host_class_hid"/>
     <config id="config.framework.sf_console">
       <property id="config.framework.sf_console.param_checking_enable" value="config.framework.sf_console.param_checking_enable.bsp"/>
       <property id="config.framework.sf_console.max_input_length" value="128"/>
@@ -1147,6 +1238,7 @@
       <property id="config.framework.sf_comms.param_checking_enable" value="config.framework.sf_comms.param_checking_enable.bsp"/>
       <property id="config.framework.sf_comms.read_size" value="15"/>
     </config>
+    <config id="config.el.fx"/>
     <config id="config.driver.sci_spi">
       <property id="config.driver.sci_spi.param_checking_enable" value="config.driver.sci_spi.param_checking_enable.bsp"/>
     </config>
