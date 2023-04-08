@@ -41,7 +41,7 @@
 /*-------------------------------------------------------------------------*
  * Prototypes:
  *-------------------------------------------------------------------------*/
-static bool ssp_touch_event_to_guix_event(sf_touch_panel_payload_t * p_touch_payload, GX_EVENT * g_gx_event);
+static bool ssp_touch_event_to_guix_event(sf_touch_panel_v2_payload_t * p_touch_payload, GX_EVENT * g_gx_event);
 
 /*---------------------------------------------------------------------------*
  * Function: gui_thread_entry
@@ -57,12 +57,9 @@ static bool ssp_touch_event_to_guix_event(sf_touch_panel_payload_t * p_touch_pay
 /*---------------------------------------------------------------------------*/
 void gui_thread_entry(void)
 {
-    ssp_err_t ssp_err;
-    sf_message_header_t * p_message = NULL;
-
-    static GX_EVENT g_gx_event;
-    UINT gx_status = GX_SUCCESS;
-    GX_CONST GX_STUDIO_WIDGET ** pp_studio_widget = &guix_widget_table[0];
+    ssp_err_t 					ssp_err 			= SSP_SUCCESS;
+    UINT 						gx_status 			= GX_SUCCESS;
+    GX_CONST GX_STUDIO_WIDGET 	**pp_studio_widget 	= &guix_widget_table[0];
 
     /* Initializes GUIX. */
     gx_status = gx_system_initialize ();
@@ -179,58 +176,7 @@ void gui_thread_entry(void)
     }
 #endif
 
-    while (1)
-    {
-        bool new_gui_event = false;
-
-        ssp_err = g_sf_message0.p_api->pend (g_sf_message0.p_ctrl, &gui_thread_message_queue,
-                                         (sf_message_header_t **) &p_message, TX_WAIT_FOREVER);
-        if(ssp_err)
-        {
-            // TODO: Error handling
-            debug_print("\r\nError at gui_thread_entry::g_sf_message0.p_api->pend\r\n");
-        }
-
-        switch (p_message->event_b.class_code)
-        {
-            case SF_MESSAGE_EVENT_CLASS_TOUCH:
-            {
-                switch (p_message->event_b.code)
-                {
-                    case SF_MESSAGE_EVENT_NEW_DATA:
-                    {
-                        /** Translate an SSP touch event into a GUIX event */
-                        new_gui_event = ssp_touch_event_to_guix_event ((sf_touch_panel_payload_t*) p_message, &g_gx_event);
-                    }
-                    default:
-                    break;
-                }
-                break;
-            }
-            default:
-            break;
-        }
-
-        /** Message is processed, so release buffer. */
-        ssp_err = g_sf_message0.p_api->bufferRelease (g_sf_message0.p_ctrl, (sf_message_header_t *) p_message,
-                                                  SF_MESSAGE_RELEASE_OPTION_FORCED_RELEASE);
-        if(ssp_err)
-        {
-            // TODO: Error handling
-            debug_print("\r\nError at gui_thread_entry::g_sf_message0.p_api->bufferRelease\r\n");
-        }
-
-        /** Post message. */
-        if (new_gui_event)
-        {
-            gx_status = gx_system_event_send (&g_gx_event);
-            if(gx_status)
-            {
-                // TODO: Error handling
-                debug_print("\r\nError at gui_thread_entry::gx_system_event_send\r\n");
-            }
-        }
-    }
+	/* Let thread die, with updated Synergy V2 touch, this thread is no longer needed to handle touch events */
 }
 
 /*---------------------------------------------------------------------------*
@@ -245,26 +191,29 @@ void gui_thread_entry(void)
  *  @endcode
  */
 /*---------------------------------------------------------------------------*/
-static bool ssp_touch_event_to_guix_event(sf_touch_panel_payload_t * p_touch_payload, GX_EVENT * gx_event)
+static bool ssp_touch_event_to_guix_event(sf_touch_panel_v2_payload_t * p_touch_payload, GX_EVENT * gx_event)
 {
     bool send_event = true;
 
     switch (p_touch_payload->event_type)
     {
-        case SF_TOUCH_PANEL_EVENT_DOWN:
+        case SF_TOUCH_PANEL_V2_EVENT_DOWN:
             gx_event->gx_event_type = GX_EVENT_PEN_DOWN;
         break;
-        case SF_TOUCH_PANEL_EVENT_UP:
+
+        case SF_TOUCH_PANEL_V2_EVENT_UP:
             gx_event->gx_event_type = GX_EVENT_PEN_UP;
         break;
-        case SF_TOUCH_PANEL_EVENT_HOLD:
-        case SF_TOUCH_PANEL_EVENT_MOVE:
+
+        case SF_TOUCH_PANEL_V2_EVENT_HOLD:
+        case SF_TOUCH_PANEL_V2_EVENT_MOVE:
             gx_event->gx_event_type = GX_EVENT_PEN_DRAG;
         break;
-        case SF_TOUCH_PANEL_EVENT_INVALID:
-            send_event = false;
-        break;
+
+        case SF_TOUCH_PANEL_V2_EVENT_INVALID:
+        case SF_TOUCH_PANEL_V2_EVENT_NONE:
         default:
+            send_event = false;
         break;
     }
 
@@ -286,6 +235,26 @@ static bool ssp_touch_event_to_guix_event(sf_touch_panel_payload_t * p_touch_pay
     }
 
     return send_event;
+}
+
+void touch_callback(sf_touchpanel_v2_callback_args_t *p_args)
+{
+    UINT 		gx_status 		= GX_SUCCESS;
+    GX_EVENT 	g_gx_event		= { 0 };
+    bool 		new_gui_event 	= false;
+
+    new_gui_event = ssp_touch_event_to_guix_event (&p_args->payload, &g_gx_event);
+
+    /** Post message. */
+    if (new_gui_event)
+    {
+        gx_status = gx_system_event_send (&g_gx_event);
+        if(gx_status)
+        {
+            // TODO: Error handling
+            debug_print("\r\nError at gui_thread_entry::gx_system_event_send\r\n");
+        }
+    }
 }
 
 #if defined(BSP_BOARD_S7G2_SK)
