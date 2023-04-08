@@ -565,7 +565,7 @@ Synergy Configuration
     Name: CLI Thread
     Stack size (bytes): 1024
     Priority: 9
-    Auto start: Disabled
+    Auto start: Enabled
     Time slicing interval (ticks): 1
     
     Instance "g_sf_console Console Framework on sf_console"

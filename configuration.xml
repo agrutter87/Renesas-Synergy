@@ -1007,7 +1007,7 @@
       <property id="rtos.threadx.thread.name" value="CLI Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="9"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.framework.sf_console.373827169">
         <stack module="module.framework.sf_el_ux_comms_v2.452205228" requires="module.framework.sf_console.requires.sf_comms">
