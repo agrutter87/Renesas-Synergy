@@ -37,6 +37,7 @@
 /*-------------------------------------------------------------------------*
  * Globals:
  *-------------------------------------------------------------------------*/
+static GX_EVENT 	g_gx_event		= { 0 };
 
 /*-------------------------------------------------------------------------*
  * Prototypes:
@@ -179,80 +180,61 @@ void gui_thread_entry(void)
 	/* Let thread die, with updated Synergy V2 touch, this thread is no longer needed to handle touch events */
 }
 
-/*---------------------------------------------------------------------------*
- * Function: ssp_touch_event_to_guix_event
- *---------------------------------------------------------------------------*/
-/** TODO: Description of Function
- *
- *  @param [in] p_args      TODO: Pointer to arguments provided by SSP
- *  @par Example Code:
- *  @code
- *  //TODO: provide example or remove if not needed
- *  @endcode
- */
-/*---------------------------------------------------------------------------*/
-static bool ssp_touch_event_to_guix_event(sf_touch_panel_v2_payload_t * p_touch_payload, GX_EVENT * gx_event)
+void touch_callback(sf_touchpanel_v2_callback_args_t *p_args)
 {
-    bool send_event = true;
+    UINT 		gx_status 		= GX_SUCCESS;
+    bool 		send_event 		= true;
+    GX_EVENT 	*p_gx_event 	= &g_gx_event;
+    sf_touch_panel_v2_payload_t const * const p_payload = &p_args->payload;
 
-    switch (p_touch_payload->event_type)
+    switch (p_payload->event_type)
     {
+        /* New touch event reported. */
         case SF_TOUCH_PANEL_V2_EVENT_DOWN:
-            gx_event->gx_event_type = GX_EVENT_PEN_DOWN;
-        break;
+            p_gx_event->gx_event_type = GX_EVENT_PEN_DOWN;
+            break;
 
+        /* Touch released. */
         case SF_TOUCH_PANEL_V2_EVENT_UP:
-            gx_event->gx_event_type = GX_EVENT_PEN_UP;
-        break;
+            p_gx_event->gx_event_type = GX_EVENT_PEN_UP;
+            break;
 
+        /* Touch has not moved since last touch event. */
+        /* Touch has moved since last touch event. */
         case SF_TOUCH_PANEL_V2_EVENT_HOLD:
         case SF_TOUCH_PANEL_V2_EVENT_MOVE:
-            gx_event->gx_event_type = GX_EVENT_PEN_DRAG;
-        break;
+            p_gx_event->gx_event_type = GX_EVENT_PEN_DRAG;
+            break;
 
-        case SF_TOUCH_PANEL_V2_EVENT_INVALID:
+
+        /* No valid touch event happened. */
+        /* Invalid touch data */
         case SF_TOUCH_PANEL_V2_EVENT_NONE:
+        case SF_TOUCH_PANEL_V2_EVENT_INVALID:
         default:
             send_event = false;
-        break;
+            break;
     }
 
     if (send_event)
     {
         /** Send event to GUI */
-        gx_event->gx_event_sender = GX_ID_NONE;
-        gx_event->gx_event_target = 0;
-        gx_event->gx_event_display_handle = 0;
+        p_gx_event->gx_event_sender = GX_ID_NONE;
+        p_gx_event->gx_event_target = 0;
+        p_gx_event->gx_event_display_handle = 0;
 
-        gx_event->gx_event_payload.gx_event_pointdata.gx_point_x = p_touch_payload->x;
+        p_gx_event->gx_event_payload.gx_event_pointdata.gx_point_x = p_payload->x;
 
-#if defined(BSP_BOARD_S7G2_SK)
-        gx_event->gx_event_payload.gx_event_pointdata.gx_point_y = (320 - p_touch_payload->y);  // SK-S7G2
+#if defined(BSP_BOARD_S7G2_SK)||defined(BSP_BOARD_S5D9_PK)
+        p_gx_event->gx_event_payload.gx_event_pointdata.gx_point_y = (GX_VALUE)(320 - p_payload->y);  // SK-S7G2
 #else
-        gx_event->gx_event_payload.gx_event_pointdata.gx_point_y = p_touch_payload->y;  // DK-S7G2, PE-HMI1
+        p_gx_event->gx_event_payload.gx_event_pointdata.gx_point_y = p_payload->y;  // DK-S7G2, PE-HMI1
 #endif
-
-    }
-
-    return send_event;
-}
-
-void touch_callback(sf_touchpanel_v2_callback_args_t *p_args)
-{
-    UINT 		gx_status 		= GX_SUCCESS;
-    GX_EVENT 	g_gx_event		= { 0 };
-    bool 		new_gui_event 	= false;
-
-    new_gui_event = ssp_touch_event_to_guix_event (&p_args->payload, &g_gx_event);
-
-    /** Post message. */
-    if (new_gui_event)
-    {
-        gx_status = gx_system_event_send (&g_gx_event);
-        if(gx_status)
+        gx_status = gx_system_event_send(p_gx_event);
+        /* Confirm that the event flags were set */
+        if (GX_SUCCESS != gx_status)
         {
-            // TODO: Error handling
-            debug_print("\r\nError at gui_thread_entry::gx_system_event_send\r\n");
+
         }
     }
 }
