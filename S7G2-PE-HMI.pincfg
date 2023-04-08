@@ -1101,7 +1101,6 @@
   <v1:propertySetting propertyId="p515.symbolic_name" value="GPIO24"/>
   <v1:propertySetting propertyId="p411.symbolic_name" value="SPI0__Pin_Option_B_MOSIA_B"/>
   <v1:propertySetting propertyId="p506.symbolic_name" value="SD_MMC1_SD1CD"/>
-  <v1:propertySetting propertyId="p206.symbolic_name" value="IIC1__Pin_Option_A_SDA1_A"/>
   <v1:propertySetting propertyId="p905.symbolic_name" value="GLCD_Controller__Pin_Option_B_LCD_DATA11_B"/>
   <v1:propertySetting propertyId="pa01.symbolic_name" value="GLCD_Controller__Pin_Option_B_LCD_DATA06_B"/>
   <v1:propertySetting propertyId="p900.symbolic_name" value="GLCD_Controller__Pin_Option_B_LCD_CLK_B"/>
@@ -1157,7 +1156,6 @@
   <v1:propertySetting propertyId="p805.symbolic_name" value="GLCD_Controller__Pin_Option_B_LCD_DATA17_B"/>
   <v1:propertySetting propertyId="p614.symbolic_name" value="External_Memory_Interface_D10__DQ10"/>
   <v1:propertySetting propertyId="p008.symbolic_name" value="GPIO12"/>
-  <v1:propertySetting propertyId="p205.symbolic_name" value="IIC1__Pin_Option_A_SCL1_A"/>
   <v1:propertySetting propertyId="p314.symbolic_name" value="GLCD_Controller__Pin_Option_B_LCD_TCON1_B"/>
   <v1:propertySetting propertyId="p811.symbolic_name" value="GPIO25"/>
   <v1:propertySetting propertyId="p608.symbolic_name" value="External_Memory_Interface_A00_BC0__A00_DQM1"/>
@@ -1388,4 +1386,5 @@
   <v1:configSetting configurationId="vss1usbhs" altId="vss1usbhs.usbhs0.vss1usbhs">
     <v1:connectionSetting altId="usbhs0.vss1.vss1usbhs"/>
   </v1:configSetting>
+  <v1:configSetting configurationId="iic1.pairing" altId="iic1.pairing.a"/>
 </v1:pinSettings>
