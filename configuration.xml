@@ -7,8 +7,8 @@
     <option key="#TargetARCHITECTURE#" value="cortex-m4"/>
     <option key="#RTOS#" value="Express Logic ThreadX"/>
     <option key="#pinconfiguration#" value="S7G2-PE-HMI.pincfg"/>
-    <option key="#SSPVersion#" value="1.6.3"/>
-    <option key="#DefaultLinkerScript#" value="s7g2.ld"/>
+    <option key="#SSPVersion#" value="2.3.0"/>
+    <option key="#DefaultLinkerScript#" value="r7fs7g27h2a01cbd.ld"/>
     <option key="#ConfigurationFragments#" value="Renesas##BSP##Board##s7g2_pe_hmi1##"/>
   </generalSettings>
   <synergyBspConfiguration>
@@ -43,6 +43,8 @@
       <property id="config.bsp.s7g2.ssp.OFS1.voltage_detection0.start" value="config.bsp.s7g2.ssp.OFS1.voltage_detection0.start.disabled"/>
       <property id="config.bsp.s7g2.ssp.OFS1.voltage_detection0_level" value="config.bsp.s7g2.ssp.OFS1.voltage_detection0_level.280"/>
       <property id="config.bsp.s7g2.ssp.OFS1.hoco_osc" value="config.bsp.s7g2.ssp.OFS1.hoco_osc.disabled"/>
+      <property id="config.bsp.ssp.mcu.adc.max_freq_hz" value="60000000"/>
+      <property id="config.bsp.ssp.mcu.sci_spi.max_bitrate" value="30000000"/>
     </config>
     <config id="config.bsp.synergy">
       <property id="config.bsp.common.main" value="0x1000"/>
@@ -96,148 +98,150 @@
     <node id="board.clock.fclk.display" option="board.clock.fclk.display.value"/>
   </synergyClockConfiguration>
   <synergyComponentSelection>
-    <component apiversion="" class="Common" condition="" group="all" subgroup="ssp_common" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Common" condition="" group="all" subgroup="ssp_common" variant="" vendor="Renesas" version="2.3.0">
       <description>SSP Common Code</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_console" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_console" variant="" vendor="Renesas" version="2.3.0">
       <description>Console, Requires=[Communications ,ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_gx" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_gx" variant="" vendor="Renesas" version="2.3.0">
       <description>SF_EL_GX GUIX Adaptation Framework: Provides=[SSP GUIX Adaptation Framework] , Requires=[ThreadX ,GUIX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_ux" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_ux" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX Synergy Port: Provides=[USBX Driver] , Requires=[USBX ,Transfer]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_ux_comms_v2" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_ux_comms_v2" variant="" vendor="Renesas" version="2.3.0">
       <description>USBX CDC ACM Device Communciations: Provides=[Communications] , Requires=[USBX ,ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_external_irq" variant="" vendor="Renesas" version="1.6.3">
-      <description>Framework External IRQ: Provides=[Framework External IRQ] , Requires=[External IRQ ,ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_jpeg_decode" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_jpeg_decode" variant="" vendor="Renesas" version="2.3.0">
       <description>Framework JPEG Decode: Provides=[SF JPEG Decode] , Requires=[ThreadX ,JPEG Decode]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_message" variant="" vendor="Renesas" version="1.6.3">
-      <description>Messaging Framework: Provides=[Message] , Requires=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_tes_2d_drw" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_tes_2d_drw" variant="" vendor="Renesas" version="2.3.0">
       <description>TES D/AVE 2D Port: Provides=[D/AVE 2D Port] , Requires=[ThreadX ,D/AVE 2D]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_touch_panel_i2c" variant="" vendor="Renesas" version="1.6.3">
-      <description>Framework Touch Panel using I2C: Provides=[Framework Touch Panel] , Requires=[ThreadX ,Message ,I2C ,Framework External IRQ]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_uart_comms" variant="" vendor="Renesas" version="2.3.0">
+      <description>Framework UART Communications: Provides=[Framework UART] , Requires=[ThreadX ,Communications]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="TES" condition="" group="all" subgroup="dave2d" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="TES" condition="" group="all" subgroup="dave2d" variant="" vendor="Renesas" version="2.3.0">
       <description>TES D/AVE 2D: Provides=[D/AVE 2D]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_adc" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_adc" variant="" vendor="Renesas" version="2.3.0">
       <description>A/D Converter: Provides=[ADC]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_cgc" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_cgc" variant="" vendor="Renesas" version="2.3.0">
       <description>Clock Generation Circuit: Provides=[CGC]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dtc" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dtc" variant="" vendor="Renesas" version="2.3.0">
       <description>Data Transfer Controller: Provides=[Transfer]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_elc" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_elc" variant="" vendor="Renesas" version="2.3.0">
       <description>Event Link Controller: Provides=[ELC]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_fmi" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_fmi" variant="" vendor="Renesas" version="2.3.0">
       <description>Factory MCU Information Module: Provides=[FMI]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_glcd" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_glcd" variant="" vendor="Renesas" version="2.3.0">
       <description>Graphics LCD: Provides=[Display]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_gpt" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_gpt" variant="" vendor="Renesas" version="2.3.0">
       <description>General Purpose Timer: Provides=[Timer ,GPT]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_icu" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_icu" variant="" vendor="Renesas" version="2.3.0">
       <description>External IRQ: Provides=[External IRQ]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="2.3.0">
       <description>I/O Port: Provides=[IO Port]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_common" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_common" variant="" vendor="Renesas" version="2.3.0">
       <description>JPEG Common</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_decode" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_decode" variant="" vendor="Renesas" version="2.3.0">
       <description>JPEG Decode: Provides=[JPEG Decode]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_riic" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_riic" variant="" vendor="Renesas" version="2.3.0">
       <description>RIIC: Provides=[I2C Master]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_spi" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_spi" variant="" vendor="Renesas" version="2.3.0">
       <description>SCI SPI: Provides=[SPI] , Requires=[SCI Common]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="gx" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_uart" variant="" vendor="Renesas" version="2.3.0">
+      <description>SCI UART: Provides=[UART] , Requires=[SCI Common]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="gx" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic GUIX: Provides=[GUIX] , Requires=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="tx" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="tx" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic ThreadX: Provides=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX: Provides=[USBX] , Requires=[ThreadX ,USBX Driver]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_device_class_cdc_acm" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_device_class_cdc_acm" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX Device Class CDC ACM: Provides=[USBX Device Class CDC ACM] , Requires=[ThreadX ,USBX]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="R7FS7G27H2A01CBD" vendor="Renesas" version="1.6.3">
-      <description>Board support package for R7FS7G27H2A01CBD</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="" vendor="Renesas" version="1.6.3">
-      <description>Board support package for S7G2</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="ssp" variant="" vendor="Renesas" version="1.6.3">
-      <description>Board support package for S7G2</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_ft5x06" variant="" vendor="Renesas" version="1.6.3">
-      <description>TOUCH_PANEL_I2C_FT5X06 Drivers</description>
-      <originalPack>Renesas.Synergy_touch_panel_i2c_ft5x06.1.6.3.pack</originalPack>
-    </component>
-    <component apiversion="" class="BSP" condition="" group="Board" subgroup="s7g2_pe_hmi1" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="BSP" condition="" group="Board" subgroup="s7g2_pe_hmi1" variant="" vendor="Renesas" version="2.3.0">
       <description>S7G2_PE_HMI1 Board Support Files</description>
-      <originalPack>Renesas.Synergy_board_s7g2_pe_hmi1.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy_board_s7g2_pe_hmi1.2.3.0.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_i2c" variant="" vendor="Renesas" version="1.6.3">
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="R7FS7G27H2A01CBD" vendor="Renesas" version="2.3.0">
+      <description>Board support package for R7FS7G27H2A01CBD</description>
+      <originalPack>Renesas.Synergy_mcu_s7g2.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="" vendor="Renesas" version="2.3.0">
+      <description>Board support package for S7G2</description>
+      <originalPack>Renesas.Synergy_mcu_s7g2.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="ssp" variant="" vendor="Renesas" version="2.3.0">
+      <description>Board support package for S7G2</description>
+      <originalPack>Renesas.Synergy_mcu_s7g2.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_external_irq" variant="" vendor="Renesas" version="2.3.0">
+      <description>Framework External IRQ: Provides=[Framework External IRQ] , Requires=[External IRQ ,ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_i2c" variant="" vendor="Renesas" version="2.3.0">
       <description>Framework I2C: Provides=[Framework I2C] , Requires=[ThreadX ,I2C]</description>
-      <originalPack>Renesas.Synergy.1.6.3.pack</originalPack>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_touch_panel_v2" variant="" vendor="Renesas" version="2.3.0">
+      <description>Framework Touch Panel: Provides=[Framework Touch Panel] , Requires=[ThreadX ,Framework I2C ,Framework External IRQ]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_chip_ft5x06" variant="" vendor="Renesas" version="2.3.0">
+      <description>TOUCH_PANEL_CHIP_FT5X06 Drivers</description>
+      <originalPack>Renesas.Synergy_touch_panel_chip_ft5x06.2.3.0.pack</originalPack>
     </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
   <synergyMessagingConfiguration>
-    <subscriber context="rtos.threadx.thread.972549488" end="0" id="subscriber.268418874" start="0">
-      <subscribe eventClass="module.framework.sf_touch_panel.eventClass.eventClassTouch"/>
-    </subscriber>
+    <subscriber context="rtos.threadx.thread.972549488" end="0" id="subscriber.268418874" start="0"/>
   </synergyMessagingConfiguration>
   <synergyModuleConfiguration>
     <module id="module.driver.cgc_on_cgc.0">
@@ -257,7 +261,6 @@
       <property id="module.framework.sf_el_gx.name" value="g_sf_el_gx"/>
       <property id="module.framework.sf_el_gx.display_cfg_inheritance" value="module.framework.sf_el_gx.display_cfg_inheritance.layer1"/>
       <property id="module.framework.sf_el_gx.p_callback" value="NULL"/>
-      <property id="module.framework.sf_el_gx.rotation_angle" value="module.framework.sf_el_gx.rotation_angle.angle0"/>
       <property id="module.framework.sf_el_gx.p_canvas.used" value="module.framework.sf_el_gx.p_canvas.used.false"/>
       <property id="module.framework.sf_el_gx.jpegbuffer_size" value="768000"/>
       <property id="module.framework.sf_el_gx.canvas_section" value="sdram"/>
@@ -467,40 +470,6 @@
       <property id="module.driver.display.underflow_1_ipl" value="board.icu.common.irq.priority3"/>
       <property id="module.driver.display.underflow_2_ipl" value="board.icu.common.irq.disabled"/>
     </module>
-    <module id="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.2102600061">
-      <property id="module.framework.sf_touch_panel.name" value="g_sf_touch_panel_i2c0"/>
-      <property id="module.framework.sf_touch_panel.priority" value="8"/>
-      <property id="module.framework.sf_touch_panel.hsize_pixels" value="800"/>
-      <property id="module.framework.sf_touch_panel.vsize_pixels" value="480"/>
-      <property id="module.framework.sf_touch_panel.update_hz" value="10"/>
-      <property id="module.framework.sf_touch_panel.pin" value="IOPORT_PORT_10_PIN_02"/>
-      <property id="module.framework.sf_touch_panel.ev_class_instance_number" value="0"/>
-      <property id="module.framework.sf_touch_panel.rotation_angle" value="module.framework.sf_touch_panel.rotation_angle.angle0"/>
-      <property id="module.framework.sf_touch_panel.init_function" value="sf_touch_panel_i2c_init0"/>
-      <property id="module.framework.sf_touch_panel.init" value="module.framework.sf_touch_panel.init.enable"/>
-    </module>
-    <module id="module.framework.sf_message.128999731">
-      <property id="module.framework.sf_message.name" value="g_sf_message0"/>
-      <property id="module.framework.sf_message.work_memory_size" value="2048"/>
-      <property id="module.framework.sf_message.pp_subscriber_lists" value="p_subscriber_lists"/>
-      <property id="module.framework.sf_message.p_blk_pool_name" value="sf_msg_blk_pool"/>
-      <property id="module.framework.sf_message.init_function" value="sf_message_init0"/>
-      <property id="module.framework.sf_message.init" value="module.framework.sf_message.init.enable"/>
-    </module>
-    <module id="module.framework.sf_external_irq_on_sf_external_irq.1411306814">
-      <property id="module.framework.sf_external_irq.name" value="g_sf_external_irq0"/>
-      <property id="module.framework.sf_external_irq.event" value="module.framework.sf_external_irq.event.button_event_semaphore_put"/>
-    </module>
-    <module id="module.driver.external_irq_on_icu.149691471">
-      <property id="module.driver.external_irq.name" value="g_external_irq0"/>
-      <property id="module.driver.external_irq.channel" value="12"/>
-      <property id="module.driver.external_irq.trigger" value="module.driver.external_irq.trigger.trig_falling"/>
-      <property id="module.driver.external_irq.filter_enable" value="module.driver.external_irq.filter_enable.true"/>
-      <property id="module.driver.external_irq.pclk_div" value="module.driver.external_irq.pclk_div.pclk_div_by_1"/>
-      <property id="module.driver.external_irq.interrupt_enable" value="module.driver.external_irq.interrupt_enable.true"/>
-      <property id="module.driver.external_irq.p_callback" value="NULL"/>
-      <property id="module.driver.external_irq.irq_ipl" value="board.icu.common.irq.priority3"/>
-    </module>
     <module id="module.driver.i2c_on_riic.1871560326">
       <property id="module.driver.i2c.name" value="g_i2c1"/>
       <property id="module.driver.i2c.channel" value="1"/>
@@ -548,9 +517,6 @@
       <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
-    </module>
-    <module id="module.external.ex_touch_panel_i2c_ft5x06_on_ex_touch_panel_i2c_ft5x06.1095816589">
-      <property id="module.external.ex_touch_panel.name" value="module.external.ex_touch_panel.name.ft5x06"/>
     </module>
     <module id="module.driver.timer_on_gpt.1475282313">
       <property id="module.driver.timer.name" value="g_backlight_pwm"/>
@@ -653,6 +619,10 @@
       <property id="module.driver.adc.scan_end_b_ipl" value="board.icu.common.irq.priority6"/>
       <property id="module.driver.adc.voltage_ref" value="module.driver.adc.voltage_ref.ref"/>
       <property id="module.driver.adc.over_current" value="module.driver.adc.over_current.enable"/>
+      <property id="module.driver.adc.pga" value="module.driver.adc.pga.default"/>
+      <property id="module.driver.adc.pga0" value="module.driver.adc.pga.disabled"/>
+      <property id="module.driver.adc.pga1" value="module.driver.adc.pga.disabled"/>
+      <property id="module.driver.adc.pga2" value="module.driver.adc.pga.disabled"/>
     </module>
     <module id="module.framework.sf_console.373827169">
       <property id="module.framework.sf_console.name" value="g_sf_console"/>
@@ -671,6 +641,7 @@
       <property id="module.el.ux_device_class_cdc_acm_v2.name" value="g_ux_device_class_cdc_acm0"/>
       <property id="module.el.ux_device_class_cdc_acm_v2.pfunc_activate" value="ux_cdc_device0_instance_activate"/>
       <property id="module.el.ux_device_class_cdc_acm_v2.pfunc_deactivate" value="ux_cdc_device0_instance_deactivate"/>
+      <property id="module.el.ux_device_class_cdc_acm_v2.parameter_change" value="NULL"/>
       <property id="module.el.ux_device_class_cdc_acm_v2.init_function" value="ux_device_class_cdc_acm_init0"/>
       <property id="module.el.ux_device_class_cdc_acm_v2.init" value="module.el.ux_device_class_cdc_acm_v2.init.enable"/>
     </module>
@@ -716,6 +687,7 @@
       <property id="module.el.ux_v2.pool_memory_name" value="g_ux_pool_memory"/>
       <property id="module.el.ux_v2.pool_memory_size" value="18432"/>
       <property id="module.el.ux_v2.system_change_function" value="NULL"/>
+      <property id="module.el.ux_v2.slave_change_function" value="NULL"/>
       <property id="module.el.ux_v2.init_function" value="ux_common_init0"/>
       <property id="module.el.ux_v2.init" value="module.el.ux_v2.init.enable"/>
     </module>
@@ -768,21 +740,33 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
-    <module id="module.driver.i2c_on_riic.2017129187">
-      <property id="module.driver.i2c.name" value="g_i2c0"/>
-      <property id="module.driver.i2c.channel" value="0"/>
-      <property id="module.driver.i2c.rate" value="module.driver.i2c.rate.rate_standard"/>
-      <property id="module.driver.i2c.slave" value="0x10"/>
-      <property id="module.driver.i2c.addr_mode" value="module.driver.i2c.addr_mode.addr_mode_7bit"/>
-      <property id="module.driver.i2c.sda_delay" value="300"/>
-      <property id="module.driver.i2c.timeout_mode" value="module.driver.i2c.timeout_mode.short_mode"/>
-      <property id="module.driver.i2c.p_callback" value="NULL"/>
-      <property id="module.driver.i2c.rxi_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.txi_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.tei_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.eri_ipl" value="board.icu.common.irq.priority12"/>
+    <module id="module.driver.uart_on_sci_uart.468692281">
+      <property id="module.driver.uart.name" value="g_uart7"/>
+      <property id="module.driver.uart.channel" value="7"/>
+      <property id="module.driver.uart.baud_rate" value="115200"/>
+      <property id="module.driver.uart.data_bits" value="module.driver.uart.data_bits.data_bits_8"/>
+      <property id="module.driver.uart.parity" value="module.driver.uart.parity.parity_off"/>
+      <property id="module.driver.uart.stop_bits" value="module.driver.uart.stop_bits.stop_bits_1"/>
+      <property id="module.driver.uart.ctsrts_en" value="module.driver.uart.ctsrts_en.false"/>
+      <property id="module.driver.uart.callback" value="user_uart_callback"/>
+      <property id="module.driver.uart.callback.rts_pin_ctrl" value="NULL"/>
+      <property id="module.driver.uart.clk_src" value="module.driver.uart.clk_src.int_clk"/>
+      <property id="module.driver.uart.baudclk_out" value="module.driver.uart.baudclk_out.false"/>
+      <property id="module.driver.uart.rx_edge_start" value="module.driver.uart.rx_edge_start.true"/>
+      <property id="module.driver.uart.noisecancel_en" value="module.driver.uart.noisecancel_en.false"/>
+      <property id="module.driver.uart.bitrate_modulation" value="module.driver.uart.bitrate_modulation.true"/>
+      <property id="module.driver.uart.rx_fifo_trigger" value="module.driver.uart.rx_fifo_trigger.max"/>
+      <property id="module.driver.uart.rxi_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.uart.txi_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.uart.tei_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.uart.eri_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.uart.baud_rate_error" value="2.0"/>
+      <property id="module.driver.uart.uart_comm_mode" value="module.driver.uart.uart_comm_mode.uart_rs232_mode"/>
+      <property id="module.driver.uart.uart_rs485_mode" value="module.driver.uart.uart_rs485_mode.uart_hd_mode"/>
+      <property id="module.driver.uart.rs485_de_port" value="module.driver.uart.rs485_de_port.PORT_09"/>
+      <property id="module.driver.uart.rs485_de_pin" value="module.driver.uart.rs485_de_pin.PIN_14"/>
     </module>
-    <module id="module.driver.transfer_on_dtc.290654138">
+    <module id="module.driver.transfer_on_dtc.2079827350">
       <property id="module.driver.transfer.name" value="g_transfer4"/>
       <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
       <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
@@ -799,7 +783,12 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
-    <module id="module.driver.transfer_on_dtc.1496529553">
+    <module id="module.framework.sf_comms_on_sf_uart_comms.1105027220">
+      <property id="module.framework.sf_comms.name" value="g_sf_uart7"/>
+      <property id="module.framework.sf_comms.init_function" value="sf_uart_init"/>
+      <property id="module.framework.sf_comms.init" value="module.framework.sf_comms.init.enable"/>
+    </module>
+    <module id="module.driver.transfer_on_dtc.438772738">
       <property id="module.driver.transfer.name" value="g_transfer5"/>
       <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
       <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
@@ -816,13 +805,75 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
-    <module id="module.framework.sf_i2c_on_sf_i2c_v2.2078539709">
+    <module id="module.driver.transfer_on_dtc.1184688669">
+      <property id="module.driver.transfer.name" value="g_transfer6"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
+    </module>
+    <module id="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.720543584">
+      <property id="module.framework.sf_touch_panel_v2.name" value="g_sf_touch_panel_v2_0"/>
+      <property id="module.framework.sf_touch_panel_v2.priority" value="3"/>
+      <property id="module.framework.sf_touch_panel_v2.update_hz" value="10"/>
+      <property id="module.framework.sf_touch_panel_v2.rotation_angle" value="module.framework.sf_touch_panel_v2.rotation_angle.angle0"/>
+      <property id="module.framework.sf_touch_panel_v2.init_function" value="sf_touch_panel_v2_init0"/>
+      <property id="module.framework.sf_touch_panel_v2.init" value="module.framework.sf_touch_panel_v2.init.enable"/>
+      <property id="module.framework.sf_touch_panel_v2.auto_start" value="module.framework.sf_touch_panel_v2.auto_start.enable"/>
+      <property id="module.framework.sf_touch_panel_v2.callback" value="touch_callback"/>
+    </module>
+    <module id="module.external.ex_touch_panel_chip_ft5x06_on_ex_touch_panel_chip_ft5x06.2081681592">
+      <property id="module.external.ex_touch_panel_chip.name" value="g_touch_panel_chip_ft5x06"/>
+      <property id="module.external.ex_touch_panel_chip_hsize.hsize_pixels" value="800"/>
+      <property id="module.external.ex_touch_panel_chip_vsize.vsize_pixels" value="480"/>
+      <property id="module.external.ex_touch_panel_chip_ft5x06.port" value="module.external.ex_touch_panel_chip_ft5x06.port.PORT_10"/>
+      <property id="module.external.ex_touch_panel_chip_ft5x06.pin" value="module.external.ex_touch_panel_chip_ft5x06.pin.PIN_02"/>
+    </module>
+    <module id="module.framework.sf_i2c_on_sf_i2c_v2.695081868">
       <property id="module.framework.sf_i2c_v2.name" value="g_sf_i2c_device0"/>
-      <property id="module.framework.sf_i2c_v2.slave" value="0x10"/>
+      <property id="module.framework.sf_i2c_v2.slave" value="0x20"/>
       <property id="module.framework.sf_i2c_v2.addr_mode" value="module.framework.sf_i2c_v2.addr_mode.addr_mode_7bit"/>
     </module>
-    <module id="module.framework.sf_i2c_bus_on_sf_i2c_v2.2059981963">
+    <module id="module.framework.sf_i2c_bus_on_sf_i2c_v2.1708077196">
       <property id="module.framework.sf_i2c_bus_v2.name" value="g_sf_i2c_bus0"/>
+    </module>
+    <module id="module.framework.sf_external_irq_on_sf_external_irq.1322637072">
+      <property id="module.framework.sf_external_irq.name" value="g_sf_external_irq0"/>
+      <property id="module.framework.sf_external_irq.event" value="module.framework.sf_external_irq.event.button_event_semaphore_put"/>
+    </module>
+    <module id="module.driver.external_irq_on_icu.2022074477">
+      <property id="module.driver.external_irq.name" value="g_external_irq0"/>
+      <property id="module.driver.external_irq.channel" value="12"/>
+      <property id="module.driver.external_irq.trigger" value="module.driver.external_irq.trigger.trig_falling"/>
+      <property id="module.driver.external_irq.filter_enable" value="module.driver.external_irq.filter_enable.true"/>
+      <property id="module.driver.external_irq.pclk_div" value="module.driver.external_irq.pclk_div.pclk_div_by_1"/>
+      <property id="module.driver.external_irq.interrupt_enable" value="module.driver.external_irq.interrupt_enable.true"/>
+      <property id="module.driver.external_irq.p_callback" value="NULL"/>
+      <property id="module.driver.external_irq.irq_ipl" value="board.icu.common.irq.priority3"/>
+    </module>
+    <module id="module.driver.i2c_on_riic.1623577375">
+      <property id="module.driver.i2c.name" value="g_i2c0"/>
+      <property id="module.driver.i2c.channel" value="1"/>
+      <property id="module.driver.i2c.rate" value="module.driver.i2c.rate.rate_standard"/>
+      <property id="module.driver.i2c.slave" value="0x00"/>
+      <property id="module.driver.i2c.addr_mode" value="module.driver.i2c.addr_mode.addr_mode_7bit"/>
+      <property id="module.driver.i2c.sda_delay" value="300"/>
+      <property id="module.driver.i2c.timeout_mode" value="module.driver.i2c.timeout_mode.short_mode"/>
+      <property id="module.driver.i2c.p_callback" value="NULL"/>
+      <property id="module.driver.i2c.rxi_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.i2c.txi_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.i2c.tei_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.i2c.eri_ipl" value="board.icu.common.irq.priority12"/>
     </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
@@ -897,16 +948,17 @@
           </stack>
         </stack>
       </stack>
-      <stack module="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.2102600061">
-        <stack module="module.framework.sf_message.128999731" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.sf_message"/>
-        <stack module="module.driver.i2c_on_riic.1871560326" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.i2c">
-          <stack module="module.driver.transfer_on_dtc.869156205" requires="module.driver.i2c_on_riic.requires.transfer_tx"/>
-          <stack module="module.driver.transfer_on_dtc.1575258710" requires="module.driver.i2c_on_riic.requires.transfer_rx"/>
+      <stack module="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.720543584">
+        <stack module="module.external.ex_touch_panel_chip_ft5x06_on_ex_touch_panel_chip_ft5x06.2081681592" requires="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.requires.ex_touch_chip">
+          <stack module="module.framework.sf_i2c_on_sf_i2c_v2.695081868" requires="module.external.ex_touch_panel_chip_ft5x06.requires.i2c">
+            <stack module="module.framework.sf_i2c_bus_on_sf_i2c_v2.1708077196" requires="module.framework.sf_i2c_on_sf_i2c.requires.sf_i2c_bus_v2">
+              <stack module="module.driver.i2c_on_riic.1623577375" requires="module.framework.sf_i2c_on_sf_i2c.requires.i2c"/>
+            </stack>
+          </stack>
+          <stack module="module.framework.sf_external_irq_on_sf_external_irq.1322637072" requires="module.external.ex_touch_panel_chip_ft5x06.requires.sf_external_irq">
+            <stack module="module.driver.external_irq_on_icu.2022074477" requires="module.framework.sf_external_irq_on_sf_external_irq.requires.external_irq"/>
+          </stack>
         </stack>
-        <stack module="module.framework.sf_external_irq_on_sf_external_irq.1411306814" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.sf_external_irq">
-          <stack module="module.driver.external_irq_on_icu.149691471" requires="module.framework.sf_external_irq_on_sf_external_irq.requires.external_irq"/>
-        </stack>
-        <stack module="module.external.ex_touch_panel_i2c_ft5x06_on_ex_touch_panel_i2c_ft5x06.1095816589" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.ex_touch_panel"/>
       </stack>
     </context>
     <context id="rtos.threadx.thread.437261037">
@@ -914,7 +966,7 @@
       <property id="rtos.threadx.thread.name" value="Accelerometer Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="6"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.driver.spi_on_sci_spi.1157042288">
         <stack module="module.driver.transfer_on_dtc.742082179" requires="module.driver.spi_on_sci_spi.requires.transfer_tx"/>
@@ -938,14 +990,11 @@
       <property id="rtos.threadx.thread.name" value="LiDAR Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="1"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
-      <stack module="module.framework.sf_i2c_on_sf_i2c_v2.2078539709">
-        <stack module="module.framework.sf_i2c_bus_on_sf_i2c_v2.2059981963" requires="module.framework.sf_i2c_on_sf_i2c.requires.sf_i2c_bus_v2">
-          <stack module="module.driver.i2c_on_riic.2017129187" requires="module.framework.sf_i2c_on_sf_i2c.requires.i2c">
-            <stack module="module.driver.transfer_on_dtc.290654138" requires="module.driver.i2c_on_riic.requires.transfer_tx"/>
-            <stack module="module.driver.transfer_on_dtc.1496529553" requires="module.driver.i2c_on_riic.requires.transfer_rx"/>
-          </stack>
+      <stack module="module.framework.sf_comms_on_sf_uart_comms.1105027220">
+        <stack module="module.driver.uart_on_sci_uart.468692281" requires="module.framework.sf_comms_on_sf_uart_comms.requires.uart">
+          <stack module="module.driver.transfer_on_dtc.2079827350" requires="module.driver.uart_on_sci_uart.requires.transfer_tx"/>
         </stack>
       </stack>
     </context>
@@ -964,10 +1013,6 @@
       <property id="config.framework.sf_comms.read_size" value="128"/>
       <property id="config.framework.sf_comms.timeout" value="100"/>
     </config>
-    <config id="config.framework.sf_message">
-      <property id="config.framework.sf_message.param_checking_enable" value="config.framework.sf_message.param_checking_enable.bsp"/>
-      <property id="config.framework.sf_message.queue_depth" value="16"/>
-    </config>
     <config id="config.driver.cgc">
       <property id="config.driver.cgc.param_checking_enable" value="config.driver.cgc.param_checking_enable.bsp"/>
       <property id="config.driver.cgc.main_osc_wait" value="config.driver.cgc.main_osc_wait.wait_8163"/>
@@ -980,8 +1025,18 @@
       <property id="config.driver.ioport.checking" value="config.driver.ioport.checking.system"/>
     </config>
     <config id="config.threadx.thread"/>
+    <config id="config.framework.sf_touch_panel_v2">
+      <property id="config.framework.sf_touch_panel_v2.param_checking_enable" value="config.framework.sf_touch_panel_v2.param_checking_enable.bsp"/>
+      <property id="config.framework.sf_touch_panel_v2.thread_stack_size" value="512"/>
+    </config>
     <config id="config.driver.adc">
       <property id="config.driver.adc.param_checking_enable" value="config.driver.adc.param_checking_enable.enabled"/>
+    </config>
+    <config id="config.driver.sci_uart">
+      <property id="config.driver.sci_uart.external_rts_operation" value="config.driver.sci_uart.external_rts_operation.disabled"/>
+      <property id="config.driver.sci_uart.uart_rx_enable" value="config.driver.sci_uart.uart_rx_enable.enabled"/>
+      <property id="config.driver.sci_uart.uart_tx_enable" value="config.driver.sci_uart.uart_tx_enable.enabled"/>
+      <property id="config.driver.sci_uart.param_checking_enable" value="config.driver.sci_uart.param_checking_enable.bsp"/>
     </config>
     <config id="config.framework.sf_el_ux">
       <property id="config.framework.sf_el_ux.VBUSENpin_logic" value="config.framework.sf_el_ux.VBUSENpin_logic.active_high"/>
@@ -1027,12 +1082,10 @@
       <property id="config.driver.fmi.custom_base_address_symbol" value="g_fmi_data"/>
       <property id="config.driver.fmi.part_number_mask" value="0xFE00"/>
     </config>
-    <config id="config.framework.sf_touch_panel_i2c">
-      <property id="config.framework.sf_touch_panel_i2c.param_checking_enable" value="config.framework.sf_touch_panel_i2c.param_checking_enable.bsp"/>
-    </config>
     <config id="config.el.gx">
       <property id="config.el.gx.enable_synergy_drw" value="config.el.gx.enable_synergy_drw.yes"/>
       <property id="config.el.gx.enable_synergy_jpeg" value="config.el.gx.enable_synergy_jpeg.yes"/>
+      <property id="config.el.gx.enable_gui_legacy_api" value="config.el.gx.enable_gui_legacy_api.yes"/>
     </config>
     <config id="config.framework.sf_tes_2d_drw">
       <property id="module.framework.sf_tes_2d_drw.work_memory_size" value="32768"/>
@@ -1052,6 +1105,10 @@
       <property id="config.framework.sf_console.max_input_length" value="128"/>
       <property id="config.framework.sf_console.max_write_length" value="64"/>
       <property id="config.framework.sf_console.prv_timeout" value="0xFFFFFFFF"/>
+    </config>
+    <config id="config.framework.sf_uart_comms">
+      <property id="config.framework.sf_comms.param_checking_enable" value="config.framework.sf_comms.param_checking_enable.bsp"/>
+      <property id="config.framework.sf_comms.read_size" value="15"/>
     </config>
     <config id="config.driver.sci_spi">
       <property id="config.driver.sci_spi.param_checking_enable" value="config.driver.sci_spi.param_checking_enable.bsp"/>
