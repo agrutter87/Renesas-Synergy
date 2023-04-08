@@ -103,8 +103,8 @@ Synergy Configuration
       P202 A12 GPIO GPIO1 Low None "Output mode (Initial Low)" CMOS - "BUS_ASYNCH_BUS_SDRAM0: WR_BC1; CAN0: CRX; ETHERC_MII0: ERXD2; GLCDC0: LCD_TCON3; GPT5: GTIOCB; ICU0: IRQ03; SCI2: SCK; SCI9: RXD; SCI9: SCL; SDHI0: DAT6; SPI1: MISO" 
       P203 B12 GPIO GPIO35 Low None "Output mode (Initial Low)" CMOS - "BUS_ASYNCH_BUS_SDRAM0: A19; CAN0: CTX; CTSU0: TSCAP; ETHERC_MII0: COL; GPT5: GTIOCA; ICU0: IRQ02; SCI2: CTS; SCI9: SDA; SCI9: TXD; SDHI0: DAT5; SPI1: MOSI" 
       P204 D11 USBFS0_OVRCURB USB_Full_Speed_USB0_OVRCURB Low - "Peripheral mode" CMOS None "AGT1: AGTIO; BUS_ASYNCH_BUS_SDRAM0: A18; CAC0: CACREF; CTSU0: TS00; ETHERC_MII0: RX_DV; GPT_OPS0: GTIW; GPT4: GTIOCB; IIC0: SCL; SCI4: SCK; SCI9: SCK; SDHI0: DAT4; SPI1: RSPCK; SSI1: SSISCK; USB_FS0: OVRCURB" 
-      P205 C12 IIC1_SCL IIC1__Pin_Option_A_SCL1_A Medium None "Peripheral mode" CMOS None "AGT1: AGTO; BUS_ASYNCH_BUS_SDRAM0: A16; CGC0: CLKOUT; CTSU0: TSCAP; ETHERC_MII0: WOL; ETHERC_RMII0: WOL; GPT_OPS0: GTIV; GPT4: GTIOCA; ICU0: IRQ01; IIC1: SCL; SCI4: SDA; SCI4: TXD; SCI9: CTS; SDHI0: DAT3; SPI1: SSL0; SSI1: SSIWS; USB_FS0: OVRCURA" 
-      P206 G9 IIC1_SDA IIC1__Pin_Option_A_SDA1_A Medium None "Peripheral mode" CMOS None "BUS_ASYNCH_BUS_SDRAM0: WAIT; CTSU0: TS01; ETHERC_MII0: LINKSTA; ETHERC_RMII0: LINKSTA; GPT_OPS0: GTIU; ICU0: IRQ00; IIC1: SDA; SCI4: RXD; SCI4: SCL; SDHI0: DAT2; SPI1: SSL1; SSI1: SSIDATA; USB_FS0: VBUSEN" 
+      P205 C12 IIC1_SCL - Medium None "Peripheral mode" CMOS None "AGT1: AGTO; BUS_ASYNCH_BUS_SDRAM0: A16; CGC0: CLKOUT; CTSU0: TSCAP; ETHERC_MII0: WOL; ETHERC_RMII0: WOL; GPT_OPS0: GTIV; GPT4: GTIOCA; ICU0: IRQ01; IIC1: SCL; SCI4: SDA; SCI4: TXD; SCI9: CTS; SDHI0: DAT3; SPI1: SSL0; SSI1: SSIWS; USB_FS0: OVRCURA" 
+      P206 G9 IIC1_SDA - Medium None "Peripheral mode" CMOS None "BUS_ASYNCH_BUS_SDRAM0: WAIT; CTSU0: TS01; ETHERC_MII0: LINKSTA; ETHERC_RMII0: LINKSTA; GPT_OPS0: GTIU; ICU0: IRQ00; IIC1: SDA; SCI4: RXD; SCI4: SCL; SDHI0: DAT2; SPI1: SSL1; SSI1: SSIDATA; USB_FS0: VBUSEN" 
       P207 C13 GPIO GPIO33 Low - "Output mode (Initial Low)" CMOS - "BUS_ASYNCH_BUS_SDRAM0: A17; CTSU0: TS02; SPI1: SSL2" 
       P212 H15 CGC0_EXTAL - - None "Peripheral mode" CMOS None "AGT1: AGTEE; CGC0: EXTAL; GPT_POEG3: GTETRG; ICU0: IRQ03; SCI1: RXD; SCI1: SCL" 
       P213 H14 GPIO GPIO3 - IRQ02 "Input mode" - None "ADC1: ADTRG; CGC0: XTAL; GPT_POEG2: GTETRG; ICU0: IRQ02; SCI1: SDA; SCI1: TXD" 
@@ -835,12 +835,12 @@ Synergy Configuration
               
         Instance "D/AVE 2D Driver on dave2d"
           Instance "D/AVE 2D Port on sf_tes_2d_drw"
-    Instance "g_sf_touch_panel_v2_0 Touch Panel V2 Framework on sf_touch_panel_v2"
-      Name: g_sf_touch_panel_v2_0
+    Instance "g_sf_touch_panel Touch Panel V2 Framework on sf_touch_panel_v2"
+      Name: g_sf_touch_panel
       Thread Priority: 3
       Update Hz: 10
       Touch Coordinate Rotation Angle(Clockwise): 0
-      Name of generated initialization function: sf_touch_panel_v2_init0
+      Name of generated initialization function: sf_touch_panel_init
       Auto Initialization: Enable
       Auto Start: Enable
       Name of touchpanel callback function to be defined by user: touch_callback
@@ -854,7 +854,7 @@ Synergy Configuration
         
         Instance "g_sf_i2c_device0 I2C Framework Device on sf_i2c"
           Name: g_sf_i2c_device0
-          Slave Address : 0x20
+          Slave Address : 0x38
           Address Mode: 7-Bit
           
           Instance "g_sf_i2c_bus0 I2C Framework Shared Bus on sf_i2c"
@@ -863,17 +863,51 @@ Synergy Configuration
             Instance "g_i2c0 I2C Master Driver on r_riic"
               Name: g_i2c0
               Channel: 1
-              Rate: Standard
+              Rate: Fast-mode
               Slave Address: 0
               Address Mode: 7-Bit
               SDA Output Delay (nano seconds): 300
               Timeout Mode: Short Mode
               Callback: NULL
-              Receive Interrupt Priority: Priority 12
-              Transmit Interrupt Priority: Priority 12
-              Transmit End Interrupt Priority: Priority 12
-              Error Interrupt Priority: Priority 12
+              Receive Interrupt Priority: Priority 3
+              Transmit Interrupt Priority: Priority 3
+              Transmit End Interrupt Priority: Priority 3
+              Error Interrupt Priority: Priority 3
               
+              Instance "g_transfer7 Transfer Driver on r_dtc IIC1 TXI"
+                Name: g_transfer7
+                Mode: Normal
+                Transfer Size: 1 Byte
+                Destination Address Mode: Fixed
+                Source Address Mode: Incremented
+                Repeat Area (Unused in Normal Mode): Source
+                Interrupt Frequency: After all transfers have completed
+                Destination Pointer: NULL
+                Source Pointer: NULL
+                Number of Transfers: 0
+                Number of Blocks (Valid only in Block Mode): 0
+                Activation Source (Must enable IRQ): IIC1 TXI
+                Auto Enable: False
+                Callback (Only valid with Software start): NULL
+                ELC Software Event Interrupt Priority: Disabled
+                
+              Instance "g_transfer8 Transfer Driver on r_dtc IIC1 RXI"
+                Name: g_transfer8
+                Mode: Normal
+                Transfer Size: 1 Byte
+                Destination Address Mode: Incremented
+                Source Address Mode: Fixed
+                Repeat Area (Unused in Normal Mode): Destination
+                Interrupt Frequency: After all transfers have completed
+                Destination Pointer: NULL
+                Source Pointer: NULL
+                Number of Transfers: 0
+                Number of Blocks (Valid only in Block Mode): 0
+                Activation Source (Must enable IRQ): IIC1 RXI
+                Auto Enable: False
+                Callback (Only valid with Software start): NULL
+                ELC Software Event Interrupt Priority: Disabled
+                
         Instance "g_sf_external_irq0 External IRQ Framework on sf_external_irq"
           Name: g_sf_external_irq0
           Event: Semaphore Put
@@ -955,7 +989,7 @@ Synergy Configuration
     Name: USB Thread
     Stack size (bytes): 1024
     Priority: 9
-    Auto start: Enabled
+    Auto start: Disabled
     Time slicing interval (ticks): 1
     
   Thread "LiDAR Thread"

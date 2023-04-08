@@ -823,11 +823,11 @@
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
     <module id="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.720543584">
-      <property id="module.framework.sf_touch_panel_v2.name" value="g_sf_touch_panel_v2_0"/>
+      <property id="module.framework.sf_touch_panel_v2.name" value="g_sf_touch_panel"/>
       <property id="module.framework.sf_touch_panel_v2.priority" value="3"/>
       <property id="module.framework.sf_touch_panel_v2.update_hz" value="10"/>
       <property id="module.framework.sf_touch_panel_v2.rotation_angle" value="module.framework.sf_touch_panel_v2.rotation_angle.angle0"/>
-      <property id="module.framework.sf_touch_panel_v2.init_function" value="sf_touch_panel_v2_init0"/>
+      <property id="module.framework.sf_touch_panel_v2.init_function" value="sf_touch_panel_init"/>
       <property id="module.framework.sf_touch_panel_v2.init" value="module.framework.sf_touch_panel_v2.init.enable"/>
       <property id="module.framework.sf_touch_panel_v2.auto_start" value="module.framework.sf_touch_panel_v2.auto_start.enable"/>
       <property id="module.framework.sf_touch_panel_v2.callback" value="touch_callback"/>
@@ -841,7 +841,7 @@
     </module>
     <module id="module.framework.sf_i2c_on_sf_i2c_v2.695081868">
       <property id="module.framework.sf_i2c_v2.name" value="g_sf_i2c_device0"/>
-      <property id="module.framework.sf_i2c_v2.slave" value="0x20"/>
+      <property id="module.framework.sf_i2c_v2.slave" value="0x38"/>
       <property id="module.framework.sf_i2c_v2.addr_mode" value="module.framework.sf_i2c_v2.addr_mode.addr_mode_7bit"/>
     </module>
     <module id="module.framework.sf_i2c_bus_on_sf_i2c_v2.1708077196">
@@ -864,16 +864,50 @@
     <module id="module.driver.i2c_on_riic.1623577375">
       <property id="module.driver.i2c.name" value="g_i2c0"/>
       <property id="module.driver.i2c.channel" value="1"/>
-      <property id="module.driver.i2c.rate" value="module.driver.i2c.rate.rate_standard"/>
+      <property id="module.driver.i2c.rate" value="module.driver.i2c.rate.rate_fast"/>
       <property id="module.driver.i2c.slave" value="0x00"/>
       <property id="module.driver.i2c.addr_mode" value="module.driver.i2c.addr_mode.addr_mode_7bit"/>
       <property id="module.driver.i2c.sda_delay" value="300"/>
       <property id="module.driver.i2c.timeout_mode" value="module.driver.i2c.timeout_mode.short_mode"/>
       <property id="module.driver.i2c.p_callback" value="NULL"/>
-      <property id="module.driver.i2c.rxi_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.txi_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.tei_ipl" value="board.icu.common.irq.priority12"/>
-      <property id="module.driver.i2c.eri_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.i2c.rxi_ipl" value="board.icu.common.irq.priority3"/>
+      <property id="module.driver.i2c.txi_ipl" value="board.icu.common.irq.priority3"/>
+      <property id="module.driver.i2c.tei_ipl" value="board.icu.common.irq.priority3"/>
+      <property id="module.driver.i2c.eri_ipl" value="board.icu.common.irq.priority3"/>
+    </module>
+    <module id="module.driver.transfer_on_dtc.1407374395">
+      <property id="module.driver.transfer.name" value="g_transfer7"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
+    </module>
+    <module id="module.driver.transfer_on_dtc.479455012">
+      <property id="module.driver.transfer.name" value="g_transfer8"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
@@ -952,7 +986,10 @@
         <stack module="module.external.ex_touch_panel_chip_ft5x06_on_ex_touch_panel_chip_ft5x06.2081681592" requires="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.requires.ex_touch_chip">
           <stack module="module.framework.sf_i2c_on_sf_i2c_v2.695081868" requires="module.external.ex_touch_panel_chip_ft5x06.requires.i2c">
             <stack module="module.framework.sf_i2c_bus_on_sf_i2c_v2.1708077196" requires="module.framework.sf_i2c_on_sf_i2c.requires.sf_i2c_bus_v2">
-              <stack module="module.driver.i2c_on_riic.1623577375" requires="module.framework.sf_i2c_on_sf_i2c.requires.i2c"/>
+              <stack module="module.driver.i2c_on_riic.1623577375" requires="module.framework.sf_i2c_on_sf_i2c.requires.i2c">
+                <stack module="module.driver.transfer_on_dtc.1407374395" requires="module.driver.i2c_on_riic.requires.transfer_tx"/>
+                <stack module="module.driver.transfer_on_dtc.479455012" requires="module.driver.i2c_on_riic.requires.transfer_rx"/>
+              </stack>
             </stack>
           </stack>
           <stack module="module.framework.sf_external_irq_on_sf_external_irq.1322637072" requires="module.external.ex_touch_panel_chip_ft5x06.requires.sf_external_irq">
@@ -982,7 +1019,7 @@
       <property id="rtos.threadx.thread.name" value="USB Thread"/>
       <property id="rtos.threadx.thread.stack" value="1024"/>
       <property id="rtos.threadx.thread.priority" value="9"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
     </context>
     <context id="rtos.threadx.thread.1724881954">
