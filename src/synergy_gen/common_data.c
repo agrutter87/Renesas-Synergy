@@ -2,6 +2,7 @@
 #include "common_data.h"
 
 #define UX_HOST_INITIALIZE
+#define USB_HOST_VIDEO_CLASS_REGISTER
 #define USB_HOST_HUB_CLASS_REGISTER
 #define USB_HOST_HID_CLASS_REGISTER
 #define USB_HOST_STORAGE_CLASS_REGISTER
@@ -17,6 +18,49 @@ void fx_common_init0(void) {
 	/** Initialize the FileX system. */
 	fx_system_initialize();
 }
+#if (2) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_transfer10) && !defined(SSP_SUPPRESS_ISR_DMACELC_EVENT_ELC_SOFTWARE_EVENT_1)
+SSP_VECTOR_DEFINE_CHAN(dmac_int_isr, DMAC, INT, 1);
+#endif
+#endif
+dmac_instance_ctrl_t g_transfer10_ctrl;
+transfer_info_t g_transfer10_info = { .dest_addr_mode =
+		TRANSFER_ADDR_MODE_INCREMENTED, .repeat_area =
+		TRANSFER_REPEAT_AREA_DESTINATION, .irq = TRANSFER_IRQ_EACH,
+		.chain_mode = TRANSFER_CHAIN_MODE_DISABLED, .src_addr_mode =
+				TRANSFER_ADDR_MODE_FIXED, .size = TRANSFER_SIZE_1_BYTE, .mode =
+				TRANSFER_MODE_BLOCK, .p_dest = (void*) NULL, .p_src =
+				(void const*) NULL, .num_blocks = 0, .length = 0, };
+const transfer_on_dmac_cfg_t g_transfer10_extend = { .channel = 1,
+		.offset_byte = 0, };
+const transfer_cfg_t g_transfer10_cfg = { .p_info = &g_transfer10_info,
+		.activation_source = ELC_EVENT_ELC_SOFTWARE_EVENT_1, .auto_enable =
+				false, .p_callback = NULL, .p_context = &g_transfer10,
+		.irq_ipl = (2), .p_extend = &g_transfer10_extend, };
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer10 = { .p_ctrl = &g_transfer10_ctrl,
+		.p_cfg = &g_transfer10_cfg, .p_api = &g_transfer_on_dmac };
+#if (2) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_transfer9) && !defined(SSP_SUPPRESS_ISR_DMACELC_EVENT_ELC_SOFTWARE_EVENT_0)
+SSP_VECTOR_DEFINE_CHAN(dmac_int_isr, DMAC, INT, 0);
+#endif
+#endif
+dmac_instance_ctrl_t g_transfer9_ctrl;
+transfer_info_t g_transfer9_info = { .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+		.repeat_area = TRANSFER_REPEAT_AREA_SOURCE, .irq = TRANSFER_IRQ_EACH,
+		.chain_mode = TRANSFER_CHAIN_MODE_DISABLED, .src_addr_mode =
+				TRANSFER_ADDR_MODE_INCREMENTED, .size = TRANSFER_SIZE_1_BYTE,
+		.mode = TRANSFER_MODE_BLOCK, .p_dest = (void*) NULL, .p_src =
+				(void const*) NULL, .num_blocks = 0, .length = 0, };
+const transfer_on_dmac_cfg_t g_transfer9_extend = { .channel = 0, .offset_byte =
+		0, };
+const transfer_cfg_t g_transfer9_cfg = { .p_info = &g_transfer9_info,
+		.activation_source = ELC_EVENT_ELC_SOFTWARE_EVENT_0, .auto_enable =
+				false, .p_callback = NULL, .p_context = &g_transfer9, .irq_ipl =
+				(2), .p_extend = &g_transfer9_extend, };
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer9 = { .p_ctrl = &g_transfer9_ctrl, .p_cfg =
+		&g_transfer9_cfg, .p_api = &g_transfer_on_dmac };
 /***********************************************************************************************************************
  * Registers Interrupt Vector for USBHS Controller.
  **********************************************************************************************************************/
@@ -35,16 +79,17 @@ void fx_common_init0(void) {
  * The definition of wrapper interface for USBX Synergy Port HCD Driver.
  **********************************************************************************************************************/
 static UINT g_sf_el_ux_hcd_hs_0_initialize(UX_HCD *hcd) {
-#if ((SYNERGY_NOT_DEFINED != SYNERGY_NOT_DEFINED) && (SYNERGY_NOT_DEFINED != SYNERGY_NOT_DEFINED))
-                /* DMA support */
-                UX_HCD_SYNERGY_TRANSFER hcd_transfer;
-                hcd_transfer.ux_synergy_transfer_tx = (transfer_instance_t *)&SYNERGY_NOT_DEFINED;
-                hcd_transfer.ux_synergy_transfer_rx = (transfer_instance_t *)&SYNERGY_NOT_DEFINED;
-                return (UINT)ux_hcd_synergy_initialize_transfer_support(hcd, (UX_HCD_SYNERGY_TRANSFER *)&hcd_transfer);
-            #else
-	/* Non DMA support */
-	return (UINT) ux_hcd_synergy_initialize(hcd);
-#endif
+#if ((SYNERGY_NOT_DEFINED != g_transfer9) && (SYNERGY_NOT_DEFINED != g_transfer10))
+	/* DMA support */
+	UX_HCD_SYNERGY_TRANSFER hcd_transfer;
+	hcd_transfer.ux_synergy_transfer_tx = (transfer_instance_t*) &g_transfer9;
+	hcd_transfer.ux_synergy_transfer_rx = (transfer_instance_t*) &g_transfer10;
+	return (UINT) ux_hcd_synergy_initialize_transfer_support(hcd,
+			(UX_HCD_SYNERGY_TRANSFER*) &hcd_transfer);
+#else
+                /* Non DMA support */
+                return (UINT)ux_hcd_synergy_initialize(hcd);
+            #endif
 } /* End of function g_sf_el_ux_hcd_hs_0_initialize() */
 #undef SYNERGY_NOT_DEFINED
 #if (BSP_IRQ_DISABLED) != BSP_IRQ_DISABLED
@@ -997,11 +1042,11 @@ void ux_common_init0(void) {
 #endif
 
 #ifdef USB_HOST_VIDEO_CLASS_REGISTER
-                status_ux_init =  ux_host_stack_class_register(_ux_system_host_class_video_name, ux_host_class_video_entry);
-                if (UX_SUCCESS != status_ux_init)
-                {
-                    ux_v2_err_callback(NULL,&status_ux_init);
-                }
+	status_ux_init = ux_host_stack_class_register(
+			_ux_system_host_class_video_name, ux_host_class_video_entry);
+	if (UX_SUCCESS != status_ux_init) {
+		ux_v2_err_callback(NULL, &status_ux_init);
+	}
 #endif
 
 #ifdef USB_HOST_AUDIO_CLASS_REGISTER
@@ -1060,6 +1105,8 @@ void ux_host_init0(void) {
 		g_ux_host_0_err_callback(NULL, &status_g_ux_host_0);
 	}
 }
+/* Pointer to a USBX Host Video Class Instance */
+UX_HOST_CLASS_VIDEO *g_ux_host_class_video0;
 #ifndef UX_HOST_CLASS_HID_CLIENTS_REGISTER
 #define UX_HOST_CLASS_HID_CLIENTS_REGISTER
 

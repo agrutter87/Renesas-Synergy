@@ -3,12 +3,12 @@
 #define SF_EL_UX_HCD_HS_CFG_H_
 #include "sf_el_ux_cfg.h"
 
-#if (0)
-            #define UX_SYNERGY_MAX_BULK_PAYLOAD (0)
-            #define UX_SYNERGY_MAX_ISO_PAYLOAD  (0)
-            #endif
+#if (1024)
+#define UX_SYNERGY_MAX_BULK_PAYLOAD (1024)
+#define UX_SYNERGY_MAX_ISO_PAYLOAD  (1024)
+#endif
 
-#define UX_SYNERGY_BULK_PIPE_START_INDEX (1UL)
+#define UX_SYNERGY_BULK_PIPE_START_INDEX (3UL)
 
 #if defined(UX_HOST_VBUS_ENABLE_LOW)
             #if !defined(UX_HOST_HS_VBUS_ENABLE_LOW)

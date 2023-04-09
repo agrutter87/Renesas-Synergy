@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "bsp_api.h"
 #include "fx_api.h"
+#include "r_dmac.h"
+#include "r_transfer_api.h"
 #include "r_dtc.h"
 #include "r_transfer_api.h"
 #include "r_riic.h"
@@ -31,6 +33,16 @@
 extern "C" {
 #endif
 void fx_common_init0(void);
+/* Transfer on DMAC Instance. */
+extern const transfer_instance_t g_transfer10;
+#ifndef NULL
+void NULL(transfer_callback_args_t *p_args);
+#endif
+/* Transfer on DMAC Instance. */
+extern const transfer_instance_t g_transfer9;
+#ifndef NULL
+void NULL(transfer_callback_args_t *p_args);
+#endif
 #include "ux_api.h"
 #include "ux_hcd_synergy.h"
 #include "sf_el_ux_hcd_hs_cfg.h"
@@ -168,6 +180,11 @@ UINT ux_system_host_change_function(ULONG event, UX_HOST_CLASS *host_class,
 extern CHAR g_ux_pool_memory[];
 void g_ux_host_0_err_callback(void *p_instance, void *p_data);
 void ux_host_init0(void);
+#include "ux_api.h"
+#include "ux_host_class_video.h"
+
+/* Pointer to a USBX Host Video Class Instance */
+extern UX_HOST_CLASS_VIDEO *g_ux_host_class_video0;
 #include "ux_api.h"
 #include "ux_host_class_hub.h"
 #include "ux_host_class_hid.h"
