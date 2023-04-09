@@ -25,6 +25,7 @@
  * Includes:
  *-------------------------------------------------------------------------*/
 #include "usb_thread.h"
+#include "SEGGER_RTT.h"
 
 /*-------------------------------------------------------------------------*
  * Constants:
@@ -46,6 +47,10 @@
 #define LED_OFF IOPORT_LEVEL_HIGH
 #endif
 
+#define EVENTFLAG_USB_DEVICE_INSERTED   0x01
+
+/* Define the number of buffers used in this demo. */
+#define MAX_NUM_BUFFERS  2
 
 /*-------------------------------------------------------------------------*
  * Types:
@@ -66,10 +71,51 @@ static FX_FILE g_file;
 /* LED type structure */
 bsp_leds_t leds;
 
+#if (defined(UX_HOST_CLASS_VIDEO))
+/* video class instance */
+UX_HOST_CLASS_VIDEO* volatile video_host_class;
+
+/* video buffer */
+UCHAR video_buffer[10*1024];
+
+/* Name string of VS types */
+struct
+{
+    int type;
+    char* name;
+} vs_type_name[] =
+{
+    { UX_HOST_CLASS_VIDEO_VS_UNDEFINED,             "UX_HOST_CLASS_VIDEO_VS_UNDEFINED"             },
+    { UX_HOST_CLASS_VIDEO_VS_INPUT_HEADER,          "UX_HOST_CLASS_VIDEO_VS_INPUT_HEADER"          },
+    { UX_HOST_CLASS_VIDEO_VS_OUTPUT_HEADER,         "UX_HOST_CLASS_VIDEO_VS_OUTPUT_HEADER"         },
+    { UX_HOST_CLASS_VIDEO_VS_STILL_IMAGE_FRAME,     "UX_HOST_CLASS_VIDEO_VS_STILL_IMAGE_FRAME"     },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_UNCOMPRESSED,   "UX_HOST_CLASS_VIDEO_VS_FORMAT_UNCOMPRESSED"   },
+    { UX_HOST_CLASS_VIDEO_VS_FRAME_UNCOMPRESSED,    "UX_HOST_CLASS_VIDEO_VS_FRAME_UNCOMPRESSED"    },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_MJPEG,          "UX_HOST_CLASS_VIDEO_VS_FORMAT_MJPEG"          },
+    { UX_HOST_CLASS_VIDEO_VS_FRAME_MJPEG,           "UX_HOST_CLASS_VIDEO_VS_FRAME_MJPEG"           },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_MPEG2TS,        "UX_HOST_CLASS_VIDEO_VS_FORMAT_MPEG2TS"        },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_DV,             "UX_HOST_CLASS_VIDEO_VS_FORMAT_DV"             },
+    { UX_HOST_CLASS_VIDEO_VS_COLORFORMAT,           "UX_HOST_CLASS_VIDEO_VS_COLORFORMAT"           },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_FRAME_BASED,    "UX_HOST_CLASS_VIDEO_VS_FORMAT_FRAME_BASED"    },
+    { UX_HOST_CLASS_VIDEO_VS_FRAME_FRAME_BASED,     "UX_HOST_CLASS_VIDEO_VS_FRAME_FRAME_BASED"     },
+    { UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED,   "UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED"   }
+};
+#endif
+
 /*-------------------------------------------------------------------------*
  * Prototypes:
  *-------------------------------------------------------------------------*/
 UINT write_key(uint8_t key);
+
+VOID uvc_transfer_request_done_callback(UX_TRANSFER * transfer_request);
+
+#if (defined(UX_HOST_CLASS_VIDEO))
+VOID uvc_parameter_interval_list(UX_HOST_CLASS_VIDEO *video);
+UINT uvc_parameter_frame_list(UX_HOST_CLASS_VIDEO *video);
+VOID uvc_parameter_list(UX_HOST_CLASS_VIDEO *video);
+
+VOID uvc_process_function(UX_HOST_CLASS_VIDEO* video);
+#endif
 
 /*---------------------------------------------------------------------------*
  * Function: write_key
@@ -82,77 +128,125 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 {
     UX_HOST_CLASS_STORAGE_MEDIA* p_ux_host_class_storage_media;
 
-    /* Check if there is a device insertion.  */
-    if ((ULONG) UX_DEVICE_INSERTION == event)
+    switch(event)
     {
-        /* check for Interface Descriptors Interface protocol value to identify the device on the bus */
-        if(((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_interface->ux_interface_descriptor.bInterfaceProtocol == KEYBOARD_DEVICE)
-        {
-            #ifdef SEMI_HOSTING
-            if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
+    	case UX_DEVICE_INSERTION:
+    		SEGGER_RTT_printf(0, "UX_DEVICE_INSERTION %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+        	if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_name, host_class,
+        	                                               _ux_utility_string_length_get(_ux_system_host_class_hid_name)))
+        	{
+        		ULONG bInterfaceProtocol = ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_interface->ux_interface_descriptor.bInterfaceProtocol;
+        		switch(bInterfaceProtocol)
+        		{
+        			case KEYBOARD_DEVICE:
+    					SEGGER_RTT_printf(0, "HID device: Keyboard is connected \n");
+
+    					g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
+
+    					g_hid = instance;
+        				break;
+        			default:
+    					SEGGER_RTT_printf(0, "HID device: bInterfaceProtocol %d is connected \n");
+        				break;
+        		}
+        	}
+            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_storage_name, host_class,
+                                                   _ux_utility_string_length_get(_ux_system_host_class_storage_name)))
             {
-                /* Debugger is connected */
-                /* Call this before any calls to printf() */
-                printf("HID device: Keyboard is connected \n");
+                // Get the pointer to the media
+                ux_system_host_storage_fx_media_get (instance, &p_ux_host_class_storage_media, &g_fx_media0_ptr);
+
+				SEGGER_RTT_printf(0, "Storage device is connected \n");
+
+                g_ioport.p_api->pinWrite(leds.p_leds[2], LED_ON);
+                g_storage = instance;
             }
-            #endif
-
-            g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
-            g_hid = instance;
-        }
-        else if (UX_SUCCESS
-                == _ux_utility_memory_compare (_ux_system_host_class_storage_name, host_class,
-                                               _ux_utility_string_length_get(_ux_system_host_class_storage_name)))
-        {
-            // Get the pointer to the media
-            ux_system_host_storage_fx_media_get (instance, &p_ux_host_class_storage_media, &g_fx_media0_ptr);
-
-            #ifdef SEMI_HOSTING
-            if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
+#if (defined(UX_HOST_CLASS_VIDEO))
+            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_video_name, host_class,
+                                                   _ux_utility_string_length_get(_ux_system_host_class_video_name)))
             {
-                /* Debugger is connected */
-                /* Call this before any calls to printf() */
-                printf("Storage device is connected \n");
+				video_host_class = instance;
+
+				/* Set the event flag to let application know the device insertion. */
+				tx_event_flags_set (&g_device_insert_eventflag, EVENTFLAG_USB_DEVICE_INSERTED, TX_OR);
             }
-            #endif
-
-            g_ioport.p_api->pinWrite(leds.p_leds[2], LED_ON);
-            g_storage = instance;
-        }
-    }
-
-    /* Check if some device is removed.  */
-    else if((ULONG) UX_DEVICE_REMOVAL == event)
-    {
-        /* Check if we got an HID class device.  */
-        if (instance == g_hid)
-        {
-            #ifdef SEMI_HOSTING
-            if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
+#endif
+    		break;
+    	case UX_DEVICE_REMOVAL:
+    		SEGGER_RTT_printf(0, "UX_DEVICE_REMOVAL %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+            /* Check if we got an HID class device.  */
+            if (instance == g_hid)
             {
-                /* Debugger is connected */
-                /* Call this before any calls to printf() */
-                printf("HID device: Keyboard is disconnected \n");
-            }
-            #endif
+				SEGGER_RTT_printf(0, "HID device: Keyboard is removed \n");
 
-            g_ioport.p_api->pinWrite(leds.p_leds[0], LED_OFF);
-            g_hid = NULL;
-        }
-        else if (instance == g_storage)
-        {
-            #ifdef SEMI_HOSTING
-            if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
+                g_ioport.p_api->pinWrite(leds.p_leds[0], LED_OFF);
+                g_hid = NULL;
+            }
+            else if (instance == g_storage)
             {
-                /* Debugger is connected */
-                /* Call this before any calls to printf() */
-                printf("Storage device is disconnected \n");
-            }
-            #endif
+				SEGGER_RTT_printf(0, "Storage device is removed \n");
 
-            g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
-            g_storage = NULL;
-        }
+                g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
+                g_storage = NULL;
+            }
+#if (defined(UX_HOST_CLASS_VIDEO))
+            else if (instance == video_host_class)
+            {
+				SEGGER_RTT_printf(0, "Video device is removed \n");
+
+                /* Clear the event flag in case the camera was removed before the application could clear it. */
+                tx_event_flags_set (&g_device_insert_eventflag, (ULONG)~EVENTFLAG_USB_DEVICE_INSERTED, TX_AND);
+
+                video_host_class = NULL;
+            }
+#endif
+    		break;
+    	case UX_HID_CLIENT_INSERTION:
+    		SEGGER_RTT_printf(0, "UX_HID_CLIENT_INSERTION %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+    		break;
+    	case UX_HID_CLIENT_REMOVAL:
+    		SEGGER_RTT_printf(0, "UX_HID_CLIENT_REMOVAL %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+    		break;
+    	case UX_STORAGE_MEDIA_INSERTION:
+    		SEGGER_RTT_printf(0, "UX_STORAGE_MEDIA_INSERTION %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+    		break;
+    	case UX_STORAGE_MEDIA_REMOVAL:
+    		SEGGER_RTT_printf(0, "UX_STORAGE_MEDIA_REMOVAL %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
+    		break;
+    	case UX_DEVICE_CONNECTION:
+    		SEGGER_RTT_printf(0, "UX_DEVICE_CONNECTION, instance = 0x%x\n", instance);
+    		break;
+    	case UX_DEVICE_DISCONNECTION:
+    		SEGGER_RTT_printf(0, "UX_DEVICE_DISCONNECTION, instance = 0x%x\n", instance);
+            if (instance == g_hid)
+            {
+				SEGGER_RTT_printf(0, "HID device: Keyboard is disconnected \n");
+
+                g_ioport.p_api->pinWrite(leds.p_leds[0], LED_OFF);
+                g_hid = NULL;
+            }
+            else if (instance == g_storage)
+            {
+				SEGGER_RTT_printf(0, "Storage device is disconnected \n");
+
+                g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
+                g_storage = NULL;
+            }
+#if (defined(UX_HOST_CLASS_VIDEO))
+            else if (instance == video_host_class)
+            {
+				SEGGER_RTT_printf(0, "Video device is disconnected \n");
+
+                /* Clear the event flag in case the camera was removed before the application could clear it. */
+                tx_event_flags_set (&g_device_insert_eventflag, (ULONG)~EVENTFLAG_USB_DEVICE_INSERTED, TX_AND);
+
+                video_host_class = NULL;
+            }
+#endif
+            break;
+    	default:
+    		SEGGER_RTT_printf(0, "ux_host_event_callback, unexpected event %d for %s\n", host_class->ux_host_class_name, event);
+    		break;
     }
 
     /* Allow other devices to be handled and always return UX_SUCCESS.
@@ -206,14 +300,7 @@ UINT write_key(uint8_t key)
         }
         else
         {
-            #ifdef SEMI_HOSTING
-            if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
-            {
-                /* Debugger is connected */
-                /* Call this before any calls to printf() */
-                printf("error while accessing the media \n");
-            }
-            #endif
+			SEGGER_RTT_printf(0, "error while accessing the media \n");
 
             tx_thread_sleep(TX_WAIT_FOREVER);
         }
@@ -223,6 +310,284 @@ UINT write_key(uint8_t key)
 
     return status;
 }
+
+/* Video data received callback function. */
+VOID uvc_transfer_request_done_callback(UX_TRANSFER * transfer_request)
+{
+    /* This is the callback function invoked by UVC class after a packet of
+       data is received. */
+
+    /* The actual number of bytes being received into the data buffer is
+       recorded in tranfer_request -> ux_transfer_request_actual_length. */
+
+    /* Since this callback function executes in the USB host controller
+       thread, a semaphore is released so the application can pick up the
+       video data in application thread. */
+
+    SSP_PARAMETER_NOT_USED(transfer_request);
+
+    tx_semaphore_put(&g_data_received_semaphore);
+}
+
+
+#if (defined(UX_HOST_CLASS_VIDEO))
+/* Show the interval types */
+VOID uvc_parameter_interval_list(UX_HOST_CLASS_VIDEO *video)
+{
+    UX_HOST_CLASS_VIDEO_FRAME_DESCRIPTOR frame_descriptor;
+
+    ULONG min_frame_interval;
+    ULONG max_frame_interval;
+    ULONG frame_interval_step;
+    int i;
+
+    /* Make the descriptor machine independent.  */
+    _ux_utility_descriptor_parse(video -> ux_host_class_video_current_frame_address,
+                                 _ux_system_class_video_frame_descriptor_structure,
+                                 UX_HOST_CLASS_VIDEO_FRAME_DESCRIPTOR_ENTRIES, (UCHAR *) &frame_descriptor);
+
+    /* Check the frame interval type.  */
+    if (frame_descriptor.bFrameIntervalType == 0)
+    {
+        /* Frame interval type is continuous.  */
+        min_frame_interval = _ux_utility_long_get(video -> ux_host_class_video_current_frame_address + 26);
+        max_frame_interval = _ux_utility_long_get(video -> ux_host_class_video_current_frame_address + 30);
+        frame_interval_step = _ux_utility_long_get(video -> ux_host_class_video_current_frame_address + 34);
+
+        SSP_PARAMETER_NOT_USED(min_frame_interval);
+        SSP_PARAMETER_NOT_USED(max_frame_interval);
+        SSP_PARAMETER_NOT_USED(frame_interval_step);
+
+		SEGGER_RTT_printf(0, "        interval min:%d, max:%d, step:%d\n",
+				(int)min_frame_interval,
+				(int)max_frame_interval,
+				(int)frame_interval_step);
+    }
+    else
+    {
+		SEGGER_RTT_printf(0, "        interval ");
+
+		/* Frame interval type is discrete.  */
+		for(i = 0; i < (int)frame_descriptor.bFrameIntervalType; i++)
+		{
+			SEGGER_RTT_printf(0, "%d", (int)_ux_utility_long_get(video -> ux_host_class_video_current_frame_address + 26 + (unsigned int)i * sizeof(ULONG)));
+
+			if((unsigned int)(i+1)<frame_descriptor.bFrameIntervalType)
+			{
+				SEGGER_RTT_printf(0, ", ");
+			}
+			else
+			{
+				SEGGER_RTT_printf(0, "\n");
+			}
+		}
+    }
+}
+
+
+/* Show the frame resolutions */
+UINT uvc_parameter_frame_list(UX_HOST_CLASS_VIDEO *video)
+{
+    ULONG frame_index;
+    UX_HOST_CLASS_VIDEO_PARAMETER_FRAME_DATA frame_parameter;
+
+    UINT status = UX_SUCCESS;
+
+    /* frame resolutions */
+	SEGGER_RTT_printf(0, "    --- frame resolutions\n");
+
+    for (frame_index = 1; frame_index <= video -> ux_host_class_video_number_frames; frame_index++)
+    {
+        /* Get frame data for current frame index.  */
+        frame_parameter.ux_host_class_video_parameter_frame_requested = frame_index;
+        status = _ux_host_class_video_frame_data_get(video, &frame_parameter);
+        if (status != UX_SUCCESS)
+        {
+            return(status);
+        }
+
+		/* Show the frame resolution  */
+		SEGGER_RTT_printf(0, "    frame %d,%d\n",
+				(int)frame_parameter.ux_host_class_video_parameter_frame_width,
+				(int)frame_parameter.ux_host_class_video_parameter_frame_height);
+
+        /* Save the current frame index.  */
+        video -> ux_host_class_video_current_frame = frame_index;
+
+        uvc_parameter_interval_list(video);
+    }
+
+	SEGGER_RTT_printf(0, "    --\n");
+
+    return(status);
+}
+
+
+/* Show the device parameters */
+VOID uvc_parameter_list(UX_HOST_CLASS_VIDEO *video)
+{
+    ULONG format_index;
+    UX_HOST_CLASS_VIDEO_PARAMETER_FORMAT_DATA format_parameter;
+
+    UINT status = UX_SUCCESS;
+    int i;
+
+    /* format types */
+    SEGGER_RTT_printf(0, "\n--- format types\n");
+
+    for (format_index = 1; format_index <= video -> ux_host_class_video_number_formats; format_index++)
+    {
+        /* Get format data for current format index.  */
+        format_parameter.ux_host_class_video_parameter_format_requested = format_index;
+        status = _ux_host_class_video_format_data_get(video, &format_parameter);
+        if (status == UX_SUCCESS)
+        {
+			/* Show the format type  */
+			char* type_name;
+
+			type_name = "Unknow type name";
+			for(i=0; (unsigned int)i<(sizeof(vs_type_name)/sizeof(vs_type_name[0])); i++)
+			{
+				if(format_parameter.ux_host_class_video_parameter_format_subtype==(ULONG)vs_type_name[i].type)
+				{
+					type_name = vs_type_name[i].name;
+					break;
+				}
+			}
+
+			SEGGER_RTT_printf(0, "format %s\n", type_name);
+
+			/* Save number of frames in the video instance.  */
+            video -> ux_host_class_video_number_frames = format_parameter.ux_host_class_video_parameter_number_frame_descriptors;
+
+            uvc_parameter_frame_list(video);
+        }
+    }
+
+    SEGGER_RTT_printf(0, "--\n");
+}
+
+VOID uvc_process_function(UX_HOST_CLASS_VIDEO* video)
+{
+    /* This demo uses two buffers. One buffer is used by video device while the
+       application consumes data in the other buffer. */
+    UCHAR *buffer_ptr[MAX_NUM_BUFFERS];
+
+    /* Index variable keeping track of the current buffer being used by the video device. */
+    ULONG buffer_index;
+
+    /* Maximum buffer requirement reported by the video device. */
+    ULONG max_buffer_size;
+
+    UINT status;
+    ULONG actual_flags;
+    UINT frame_count;
+
+    UX_HOST_CLASS_VIDEO_PARAMETER_CHANNEL channel;
+
+    /* List parameters */
+    uvc_parameter_list(video);
+
+    /* Set video parameters. This setting value is a dummy.
+       Depending on the application, set the necessary parameters. */
+    status = ux_host_class_video_frame_parameters_set(video,
+                UX_HOST_CLASS_VIDEO_VS_FORMAT_MJPEG,
+                176, 144,
+                333333);
+
+    SEGGER_RTT_printf(0, "parameters set status = %d\n", status);
+
+    /* Set the user callback function of video class. */
+    ux_host_class_video_transfer_callback_set(video, uvc_transfer_request_done_callback);
+
+    /* Find out the maximum memory buffer size for the video configuration
+       set above. */
+    max_buffer_size = ux_host_class_video_max_payload_get(video);
+
+    SEGGER_RTT_printf(0, "max_buffer_size = %d\n", (int)max_buffer_size);
+
+    /* Clear semaphore to zero */
+    while (1)
+    {
+        if(tx_semaphore_get(&g_data_received_semaphore, 0)==TX_NO_INSTANCE)
+        {
+            break;
+        }
+    }
+
+    SEGGER_RTT_printf(0, "Start video transfer.\n");
+
+    /* Start video transfer.  */
+    status = ux_host_class_video_start(video);
+    if(status!=UX_SUCCESS)
+    {
+        /* Setting these to zero is a hack since we're mixing old and new APIs (new API does this and is required for reads). */
+        video -> ux_host_class_video_transfer_request_start_index = 0;
+        video -> ux_host_class_video_transfer_request_end_index = 0;
+
+        channel.ux_host_class_video_parameter_format_requested = video -> ux_host_class_video_current_format;
+        channel.ux_host_class_video_parameter_frame_requested = video -> ux_host_class_video_current_frame;
+        channel.ux_host_class_video_parameter_frame_interval_requested = video -> ux_host_class_video_current_frame_interval;
+        channel.ux_host_class_video_parameter_channel_bandwidth_selection = 1024;
+
+        status = ux_host_class_video_ioctl(video, UX_HOST_CLASS_VIDEO_IOCTL_CHANNEL_START, &channel);
+    }
+
+    SEGGER_RTT_printf(0, "start status = %d\n", status);
+
+    /* Allocate space for video buffer. */
+    for(buffer_index = 0; buffer_index < MAX_NUM_BUFFERS; buffer_index++)
+    {
+        buffer_ptr[buffer_index] = &video_buffer[max_buffer_size * buffer_index];
+
+        /* Add buffer to the video device for video streaming data. */
+        ux_host_class_video_transfer_buffer_add(video, buffer_ptr[buffer_index]);
+    }
+
+
+    buffer_index = 0;
+    frame_count = 0;
+
+    while (1)
+    {
+        /* Suspend here until a transfer callback is called. */
+        status = tx_semaphore_get(&g_data_received_semaphore, 100);
+        if(status!=TX_SUCCESS)
+        {
+            /* Check camera status */
+            status = tx_event_flags_get(&g_device_insert_eventflag, EVENTFLAG_USB_DEVICE_INSERTED, TX_OR, (ULONG *)&actual_flags, 0);
+            if(status==TX_SUCCESS)
+            {
+                /* Stop video transfer.  */
+                ux_host_class_video_stop(video);
+            }
+            break;
+        }
+
+        /* Received data. The callback function needs to obtain the actual
+           number of bytes received, so the application routine can read the
+           correct amount of data from the buffer. */
+
+        /* Application can now consume video data while the video device stores
+           the data into the other buffer. */
+
+        /* Add the buffer back for video transfer. */
+        ux_host_class_video_transfer_buffer_add(video, buffer_ptr[buffer_index]);
+
+        /* Increment the buffer_index, and wrap to zero if it exceeds the
+           maximum number of buffers. */
+        buffer_index = (buffer_index + 1);
+        if(buffer_index >= MAX_NUM_BUFFERS)
+        {
+            buffer_index = 0;
+        }
+
+        frame_count++;
+    }
+
+    SEGGER_RTT_printf(0, "Stop video transfer. frame_count = %d\n\n", frame_count);
+}
+#endif
 
 /*---------------------------------------------------------------------------*
  * Function: usb_thread_entry
@@ -239,15 +604,7 @@ void usb_thread_entry(void)
     UINT status;
     ULONG key;
     ULONG keyboard_state;
-
-    #ifdef SEMI_HOSTING
-    #ifdef __GNUC__
-    if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
-    {
-        initialise_monitor_handles();
-    }
-    #endif
-    #endif
+    ULONG actual_flags;
 
     /* Get LED information for this board */
     err = R_BSP_LedsGet(&leds);
@@ -258,14 +615,8 @@ void usb_thread_entry(void)
         application execution. In a more realistic scenarios
         a more robust and complex error handling solution should
         be provided. */
-        #ifdef SEMI_HOSTING
-        if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)
-        {
-            /* Debugger is connected */
-            /* Call this before any calls to printf() */
-            printf("Could not get board LED info, error:%d\n",err);
-        }
-        #endif
+
+    	SEGGER_RTT_printf(0, "Could not get board LED info, error:%d\n",err);
 
         while (1)
         {
@@ -294,6 +645,21 @@ void usb_thread_entry(void)
                 write_key(key_value);
             }
         }
+
+#if (defined(UX_HOST_CLASS_VIDEO))
+        /* Suspend here until a USBX Host Class Instance gets ready. */
+        status = tx_event_flags_get(&g_device_insert_eventflag, EVENTFLAG_USB_DEVICE_INSERTED, TX_OR, (ULONG *)&actual_flags, TX_NO_WAIT);
+        if(TX_SUCCESS == status)
+        {
+            /* This delay is required for now to get valid ISO IN UX_ENDPOINT instance. */
+            tx_thread_sleep(100);
+
+            if(video_host_class!=NULL)
+            {
+                uvc_process_function(video_host_class);
+            }
+        }
+#endif
 
         tx_thread_sleep(1);
     }
