@@ -71,7 +71,6 @@ static FX_FILE g_file;
 /* LED type structure */
 bsp_leds_t leds;
 
-#if (defined(UX_HOST_CLASS_VIDEO))
 /* video class instance */
 UX_HOST_CLASS_VIDEO* volatile video_host_class;
 
@@ -100,7 +99,6 @@ struct
     { UX_HOST_CLASS_VIDEO_VS_FRAME_FRAME_BASED,     "UX_HOST_CLASS_VIDEO_VS_FRAME_FRAME_BASED"     },
     { UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED,   "UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED"   }
 };
-#endif
 
 /*-------------------------------------------------------------------------*
  * Prototypes:
@@ -109,13 +107,11 @@ UINT write_key(uint8_t key);
 
 VOID uvc_transfer_request_done_callback(UX_TRANSFER * transfer_request);
 
-#if (defined(UX_HOST_CLASS_VIDEO))
 VOID uvc_parameter_interval_list(UX_HOST_CLASS_VIDEO *video);
 UINT uvc_parameter_frame_list(UX_HOST_CLASS_VIDEO *video);
 VOID uvc_parameter_list(UX_HOST_CLASS_VIDEO *video);
 
 VOID uvc_process_function(UX_HOST_CLASS_VIDEO* video);
-#endif
 
 /*---------------------------------------------------------------------------*
  * Function: write_key
@@ -161,7 +157,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_ON);
                 g_storage = instance;
             }
-#if (defined(UX_HOST_CLASS_VIDEO))
             else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_video_name, host_class,
                                                    _ux_utility_string_length_get(_ux_system_host_class_video_name)))
             {
@@ -170,7 +165,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 				/* Set the event flag to let application know the device insertion. */
 				tx_event_flags_set (&g_device_insert_eventflag, EVENTFLAG_USB_DEVICE_INSERTED, TX_OR);
             }
-#endif
     		break;
     	case UX_DEVICE_REMOVAL:
     		SEGGER_RTT_printf(0, "UX_DEVICE_REMOVAL %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
@@ -189,7 +183,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
                 g_storage = NULL;
             }
-#if (defined(UX_HOST_CLASS_VIDEO))
             else if (instance == video_host_class)
             {
 				SEGGER_RTT_printf(0, "Video device is removed \n");
@@ -199,7 +192,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 
                 video_host_class = NULL;
             }
-#endif
     		break;
     	case UX_HID_CLIENT_INSERTION:
     		SEGGER_RTT_printf(0, "UX_HID_CLIENT_INSERTION %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
@@ -232,7 +224,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
                 g_storage = NULL;
             }
-#if (defined(UX_HOST_CLASS_VIDEO))
             else if (instance == video_host_class)
             {
 				SEGGER_RTT_printf(0, "Video device is disconnected \n");
@@ -242,7 +233,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 
                 video_host_class = NULL;
             }
-#endif
             break;
     	default:
     		SEGGER_RTT_printf(0, "ux_host_event_callback, unexpected event %d for %s\n", host_class->ux_host_class_name, event);
@@ -330,7 +320,6 @@ VOID uvc_transfer_request_done_callback(UX_TRANSFER * transfer_request)
 }
 
 
-#if (defined(UX_HOST_CLASS_VIDEO))
 /* Show the interval types */
 VOID uvc_parameter_interval_list(UX_HOST_CLASS_VIDEO *video)
 {
@@ -587,7 +576,6 @@ VOID uvc_process_function(UX_HOST_CLASS_VIDEO* video)
 
     SEGGER_RTT_printf(0, "Stop video transfer. frame_count = %d\n\n", frame_count);
 }
-#endif
 
 /*---------------------------------------------------------------------------*
  * Function: usb_thread_entry
@@ -646,7 +634,6 @@ void usb_thread_entry(void)
             }
         }
 
-#if (defined(UX_HOST_CLASS_VIDEO))
         /* Suspend here until a USBX Host Class Instance gets ready. */
         status = tx_event_flags_get(&g_device_insert_eventflag, EVENTFLAG_USB_DEVICE_INSERTED, TX_OR, (ULONG *)&actual_flags, TX_NO_WAIT);
         if(TX_SUCCESS == status)
@@ -659,7 +646,6 @@ void usb_thread_entry(void)
                 uvc_process_function(video_host_class);
             }
         }
-#endif
 
         tx_thread_sleep(1);
     }
