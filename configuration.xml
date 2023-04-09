@@ -729,7 +729,7 @@
     </module>
     <module id="module.el.ux_v2.1236169328">
       <property id="module.el.ux_v2.pool_memory_name" value="g_ux_pool_memory"/>
-      <property id="module.el.ux_v2.pool_memory_size" value="81920"/>
+      <property id="module.el.ux_v2.pool_memory_size" value="163840"/>
       <property id="module.el.ux_v2.system_change_function" value="ux_host_event_callback"/>
       <property id="module.el.ux_v2.slave_change_function" value="NULL"/>
       <property id="module.el.ux_v2.init_function" value="ux_common_init0"/>
@@ -1152,6 +1152,21 @@
           </stack>
         </stack>
       </stack>
+      <object id="rtos.threadx.object.flags.1593197075">
+        <property id="rtos.threadx.object.flags.name" value="Device Insert Event Flags"/>
+        <property id="rtos.threadx.object.flags.symbol" value="g_device_insert_eventflag"/>
+      </object>
+      <object id="rtos.threadx.object.queue.1819340189">
+        <property id="rtos.threadx.object.queue.name" value="Jpeg Queue"/>
+        <property id="rtos.threadx.object.queue.symbol" value="g_jpeg_queue"/>
+        <property id="rtos.threadx.object.queue.msg_size" value="3"/>
+        <property id="rtos.threadx.object.queue.queue_size" value="960"/>
+      </object>
+      <object id="rtos.threadx.object.semaphore.1472363448">
+        <property id="rtos.threadx.object.semaphore.name" value="Data Receive Semaphore"/>
+        <property id="rtos.threadx.object.semaphore.symbol" value="g_data_received_semaphore"/>
+        <property id="rtos.threadx.object.semaphore.count" value="0"/>
+      </object>
     </context>
     <context id="rtos.threadx.thread.1724881954">
       <property id="_symbol" value="lidar_thread"/>
