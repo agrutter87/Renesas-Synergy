@@ -415,6 +415,153 @@ Synergy Configuration
     Host HID Interrupt OUT Endpoint Support: Disabled (default)
     HID report transfer timeout: 
     
+  Module "USBX Host Class Mass Storage Source"
+    Use FileX stub: Disabled (default)
+    Maximum number of SCSI logical units: 1
+    Maximum number of storage media instance: 1
+    Storage memory size in bytes for FileX used for data transfer: 1024
+    Maximum transfer size in bytes in one BOT data-transport phase: 1024
+    Stack size for the Mass Storage Class internal thread: 1024
+    Timeout in mili second for a BOT transfer request: 100000
+    Timeout in mili second for the status from a command in the Control/Bulk/Interrupt transport: 30000
+    Remove Filex dependency on host class: Disabled (default)
+    
+  Module "USBX Source"
+    Ticks per seconds for USBX system: 
+    Maximum Classes: 
+    Maximum Slave Classes: 
+    Maximum Slave Interfaces: 
+    Maximum Host Class Containers: 
+    Maximum Device Class Containers: 
+    Maximum Host Controllers: 
+    Maximum Devices: 
+    Maximum EDs: 
+    Maximum TDs: 
+    Maximum Isochronous TDs: 
+    Stack size for USBX threads: 
+    Stack size for Enumeration thread: 2048
+    USBX Enumeration Thread Priority: 
+    USBX Standard Thread Priority: 
+    USBX HID Keyboard Class Thread Priority: 
+    USBX HCD Thread Priority: 
+    No Use of Time Slice: Disabled (default)
+    Maximum Slave Logical Units: 
+    Maximum Host Logical Units: 
+    Slave Request Control Maximum Length: 
+    Slave Request Data Maximum Length: 
+    Enforce Safe Alignment: Disabled (default)
+    Control Transfer Timeout: 
+    Non-Control Transfer Timeout: 
+    Disable CDC ACM Non-Blocking Transmission: Yes (default)
+    Bidirectional Endpoint Support: Disable (default)
+    Enable Assert Check: Yes (default)
+    Enable Assertion On Failure Detection: No (default)
+    Host Device Class Code Validation: Disabled (default)
+    USBX Standalone Mode: Disabled (default)
+    
+  Module "FileX Source"
+    Error Checking: Enabled (default)
+    exFAT Support: Disabled(default)
+    Max Long Name Len: 
+    Max Last Name Len: 
+    Max Sector Cache: 
+    Fat Map Size: 
+    Max Fat Cache: 
+    Update Rate (Seconds): 
+    Max exFat Cache Size: 
+    No Timer: Disabled (default)
+    Single Thread: Disabled (default)
+    Don't Update Open Files: Disabled (default)
+    Media Search Cache: Enabled (default)
+    Direct Data Read Cache Fill: Enabled (default)
+    Media Statistics: Enabled (default)
+    Single Open Legacy: Disabled (default)
+    Rename Path Inherit: Disabled (default)
+    No Local Path: Disabled (default)
+    Fault Tolerant Data: Disabled (default)
+    Fault Tolerant: Disabled (default)
+    64-bit LBA: Disabled (default)
+    Fault Tolerant Service: Disabled (default)
+    Standalone enable: Disabled (default)
+    Disable cache: Disabled (default)
+    Disable file close: Disabled (default)
+    Disable fast open: Disabled (default)
+    Disable force memory operation: Disabled (default)
+    Disable build option: Disabled (default)
+    Disable one line function: Disabled (default)
+    Disable fat entry refresh: Disabled (default)
+    Disable consecutive detect: Disabled (default)
+    Fault Tolerant Boot Index: 
+    Fault Tolerant Minimal Cluster Size: 
+    
+  Module "ThreadX Source"
+    Error Checking: Enabled (default)
+    Timer Ticks Per Second: 
+    Max Priorities: 
+    Minimum Stack: 
+    Timer Thread Stack Size: 
+    Timer Thread Priority: 
+    Trace Time Mask: 
+    No FileX Pointer: Disabled (default)
+    Timer Process In ISR: Enabled (default)
+    Reactivate Inline: Disabled (default)
+    Stack Filling: Enabled (default)
+    Stack Checking: Disabled (default)
+    Preemption Threshold: Disabled (default)
+    Redundant Clearing: Enabled (default)
+    No Timer: Disabled (default)
+    Notify Callbacks: Disabled (default)
+    Inline Thread Resume Suspend: Disabled (default)
+    Not Interruptable: Disabled (default)
+    Event Trace: Disabled (default)
+    Trace Buffer Name: g_tx_trace_buffer
+    Memory section for Trace Buffer: .bss
+    Trace Buffer Size: 65536
+    Trace Buffer Number of Registries: 30
+    Block Pool Performance Info: Disabled (default)
+    Byte Pool Performance Info: Disabled (default)
+    Event Flags Performance Info: Disabled (default)
+    Mutex Performance Info: Disabled (default)
+    Queue Performance Info: Disabled (default)
+    Semaphore Performance Info: Disabled (default)
+    Thread Performance Info: Disabled (default)
+    Timer Performance Info: Disabled (default)
+    Hardware Thread Stack Monitoring: Enabled (default)
+    Systick Interrupt Priority: Priority 0 (highest)
+    IAR Library Support: Disabled (default)
+    EPK Support: Disabled (default)
+    TX_THREAD_EXTENSION_0: 
+    TX_THREAD_EXTENSION_1: 
+    TX_THREAD_EXTENSION_2: 
+    TX_THREAD_EXTENSION_3: int bsd_errno;
+    TX_BLOCK_POOL_EXTENSION: 
+    TX_BYTE_POOL_EXTENSION: 
+    TX_EVENT_FLAGS_GROUP_EXTENSION: 
+    TX_MUTEX_EXTENSION: 
+    TX_QUEUE_EXTENSION: 
+    TX_SEMAPHORE_EXTENSION: 
+    TX_TIMER_EXTENSION: 
+    TX_THREAD_USER_EXTENSION: 
+    TX_THREAD_CREATE_EXTENSION(thread_ptr): 
+    TX_THREAD_DELETE_EXTENSION(thread_ptr): 
+    TX_THREAD_COMPLETED_EXTENSION(thread_ptr): 
+    TX_THREAD_TERMINATED_EXTENSION(thread_ptr): 
+    TX_BLOCK_POOL_CREATE_EXTENSION(pool_ptr): 
+    TX_BYTE_POOL_CREATE_EXTENSION(pool_ptr): 
+    TX_EVENT_FLAGS_GROUP_CREATE_EXTENSION(group_ptr): 
+    TX_MUTEX_CREATE_EXTENSION(mutex_ptr): 
+    TX_QUEUE_CREATE_EXTENSION(queue_ptr): 
+    TX_SEMAPHORE_CREATE_EXTENSION(semaphore_ptr): 
+    TX_TIMER_CREATE_EXTENSION(timer_ptr): 
+    TX_BLOCK_POOL_DELETE_EXTENSION(pool_ptr): 
+    TX_BYTE_POOL_DELETE_EXTENSION(pool_ptr): 
+    TX_EVENT_FLAGS_GROUP_DELETE_EXTENSION(group_ptr): 
+    TX_MUTEX_DELETE_EXTENSION(mutex_ptr): 
+    TX_QUEUE_DELETE_EXTENSION(queue_ptr): 
+    TX_SEMAPHORE_DELETE_EXTENSION(semaphore_ptr): 
+    TX_TIMER_DELETE_EXTENSION(timer_ptr): 
+    
+  Module "USBX Device Class CDC-ACM Source"
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -589,6 +736,9 @@ Synergy Configuration
           Name of generated initialization function: ux_device_class_cdc_acm_init0
           Auto Initialization: Enable
           
+          Instance "USBX Device Class CDC-ACM Source"
+            Show linkage warning: Disabled
+            
           Instance "USBX Device Configuration"
             Vendor ID: 0x045B
             Product ID: 0x5300
@@ -617,12 +767,15 @@ Synergy Configuration
               
             Instance "USBX on ux"
               USBX Pool Memory Name: g_ux_pool_memory
-              USBX Pool Memory Size: 81920
+              USBX Pool Memory Size: 163840
               User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
               User Callback for Device Event Notification(Only valid for USB Device): NULL
               Name of generated initialization function: ux_common_init0
               Auto Initialization: Enable
               
+              Instance "USBX Source"
+                Show linkage warning: Disabled
+                
           Instance "g_usb_interface_desc_cdcacm_0 USBX Interface Configuration CDC-ACM"
             Name: g_usb_interface_desc_cdcacm_0
             Interface Number of Communications Class interface: 0x00
@@ -1022,6 +1175,9 @@ Synergy Configuration
       Instance "g_ux_host_class_storage0 USBX Host Class Mass Storage"
         Name: g_ux_host_class_storage0
         
+        Instance "USBX Host Class Mass Storage Source"
+          Show linkage warning: Disabled
+          
         Instance "USBX Host Configuration g_ux_host_0"
           Name: g_ux_host_0
           Name of generated initialization function: ux_host_init0
@@ -1033,16 +1189,25 @@ Synergy Configuration
             
           Instance "USBX on ux"
             USBX Pool Memory Name: g_ux_pool_memory
-            USBX Pool Memory Size: 81920
+            USBX Pool Memory Size: 163840
             User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
             User Callback for Device Event Notification(Only valid for USB Device): NULL
             Name of generated initialization function: ux_common_init0
             Auto Initialization: Enable
             
+            Instance "USBX Source"
+              Show linkage warning: Disabled
+              
       Instance "FileX Common on fx"
         Name of generated initialization function: fx_common_init0
         Auto Initialization: Enable
         
+        Instance "FileX Source"
+          Show linkage warning: Disabled
+          
+          Instance "ThreadX Source"
+            Show linkage warning: Disabled
+            
     Instance "g_ux_host_class_hid0 USBX Host Class HID"
       Name: g_ux_host_class_hid0
       HID Client - Keyboard Support: Enable
@@ -1063,12 +1228,15 @@ Synergy Configuration
           
         Instance "USBX on ux"
           USBX Pool Memory Name: g_ux_pool_memory
-          USBX Pool Memory Size: 81920
+          USBX Pool Memory Size: 163840
           User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
           User Callback for Device Event Notification(Only valid for USB Device): NULL
           Name of generated initialization function: ux_common_init0
           Auto Initialization: Enable
           
+          Instance "USBX Source"
+            Show linkage warning: Disabled
+            
     Instance "USBX Host Class HUB"
       Instance "USBX Host Class HUB Source"
         Show linkage warning: Disabled
@@ -1084,12 +1252,30 @@ Synergy Configuration
           
         Instance "USBX on ux"
           USBX Pool Memory Name: g_ux_pool_memory
-          USBX Pool Memory Size: 81920
+          USBX Pool Memory Size: 163840
           User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
           User Callback for Device Event Notification(Only valid for USB Device): NULL
           Name of generated initialization function: ux_common_init0
           Auto Initialization: Enable
           
+          Instance "USBX Source"
+            Show linkage warning: Disabled
+            
+    Object "g_device_insert_eventflag Event Flags"
+      Name: Device Insert Event Flags
+      Symbol: g_device_insert_eventflag
+      
+    Object "g_jpeg_queue Queue"
+      Name: Jpeg Queue
+      Symbol: g_jpeg_queue
+      Message Size (Words): 3
+      Queue Size (Bytes): 960
+      
+    Object "g_data_received_semaphore Semaphore"
+      Name: Data Receive Semaphore
+      Symbol: g_data_received_semaphore
+      Initial count: 0
+      
   Thread "LiDAR Thread"
     Symbol: lidar_thread
     Name: LiDAR Thread

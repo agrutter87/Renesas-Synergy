@@ -242,6 +242,18 @@
       <description>Express Logic FileX: Provides=[FileX] , Requires=[FileX I/O ,ThreadX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="fx_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic FileX: Provides=[FileX] , Requires=[FileX I/O ,ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="tx_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic ThreadX: Provides=[ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX: Provides=[USBX] , Requires=[ThreadX ,USBX Driver]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
     <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_hid" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX Host Class HID: Provides=[USBX Host Class HID] , Requires=[ThreadX ,USBX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
@@ -260,6 +272,14 @@
     </component>
     <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_storage" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX Host Class Storage: Provides=[USBX Host Class Storage] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_storage_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Storage: Provides=[USBX Host Class Storage] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_device_class_cdc_acm_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Device Class CDC ACM: Provides=[USBX Device Class CDC ACM] , Requires=[ThreadX ,USBX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
   </synergyComponentSelection>
@@ -968,6 +988,21 @@
     <module id="module.el.ux_host_class_hid_src.897817433">
       <property id="module.el.ux_host_class_hid_src.linkage_warning" value="module.el.ux_host_class_hid_src.linkage_warning.disabled"/>
     </module>
+    <module id="module.el.ux_host_class_storage_src.234724872">
+      <property id="module.el.ux_host_class_storage_src.linkage_warning" value="module.el.ux_host_class_storage_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.el.ux_src.512566289">
+      <property id="module.el.ux_src.linkage_warning" value="module.el.ux_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.el.fx_src.1857956688">
+      <property id="module.el.fx_src.linkage_warning" value="module.el.fx_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.framework.tx_src.153812369">
+      <property id="module.el.tx_src.linkage_warning" value="module.el.tx_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.el.ux_device_class_cdc_acm_src.1322759850">
+      <property id="module.el.ux_device_class_cdc_acm_src.linkage_warning" value="module.el.ux_device_class_cdc_acm_src.linkage_warning.disabled"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
       <stack module="module.driver.cgc_on_cgc.0"/>
@@ -1012,9 +1047,12 @@
       <stack module="module.framework.sf_console.373827169">
         <stack module="module.framework.sf_el_ux_comms_v2.452205228" requires="module.framework.sf_console.requires.sf_comms">
           <stack module="module.el.ux_device_class_cdc_acm_v2.986727552" requires="module.framework.sf_el_ux_comms_v2.requires.ux_device_class_cdc_acm_v2">
+            <stack module="module.el.ux_device_class_cdc_acm_src.1322759850" requires="module.el.ux_device_class_cdc_acm_v2.requires.ux_device_class_cdc_acm_src"/>
             <stack module="module.el.ux_device.1450838389" requires="module.el.ux_device_class_cdc_acm_v2.requires.ux_device">
               <stack module="module.framework.sf_el_ux_dcd_fs.1942753464" requires="module.el.ux_device.requires.sf_el_ux_dcd"/>
-              <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_device.requires.ux_v2"/>
+              <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_device.requires.ux_v2">
+                <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
+              </stack>
             </stack>
             <stack module="module.el.ux.interface_descriptor_cdcacm.cdc_acm.546805219" requires="module.el.ux_device_class_cdc_acm_v2.requires.interface_descriptor_cdcacm"/>
           </stack>
@@ -1082,25 +1120,36 @@
       <property id="rtos.threadx.thread.timeslice" value="10"/>
       <stack module="module.framework.fx_usbmsc.727326386">
         <stack module="module.el.ux_host_class_storage.1554404982" requires="module.framework.fx_usbmsc.requires.ux_host_class_storage">
+          <stack module="module.el.ux_host_class_storage_src.234724872" requires="module.el.ux_host_class_storage.requires.ux_host_class_storage_src"/>
           <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_storage.requires.ux_host">
             <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
-            <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+            <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
+              <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
+            </stack>
           </stack>
         </stack>
-        <stack module="module.el.fx_common.1102657128" requires="module.framework.fx_usbmsc.requires.fx_common"/>
+        <stack module="module.el.fx_common.1102657128" requires="module.framework.fx_usbmsc.requires.fx_common">
+          <stack module="module.el.fx_src.1857956688" requires="module.el.fx.requires.fx_src">
+            <stack module="module.framework.tx_src.153812369" requires="module.el.fx_src.requires.tx_src"/>
+          </stack>
+        </stack>
       </stack>
       <stack module="module.el.ux_host_class_hid.829478025">
         <stack module="module.el.ux_host_class_hid_src.897817433" requires="module.el.ux_host_class_hid.requires.ux_host_class_hid_src"/>
         <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class.requires.ux_host">
           <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
-          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
+            <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
+          </stack>
         </stack>
       </stack>
       <stack module="module.el.ux_host_class_hub.1279551116">
         <stack module="module.el.ux_host_class_hub_src.197294882" requires="module.el.ux_host_class_hub.requires.ux_host_class_hub_src"/>
         <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_hub.requires.ux_host">
           <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
-          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2"/>
+          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
+            <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
+          </stack>
         </stack>
       </stack>
     </context>
@@ -1192,6 +1241,39 @@
     <config id="config.driver.riic">
       <property id="config.driver.riic.param_checking_enable" value="config.driver.riic.param_checking_enable.bsp"/>
     </config>
+    <config id="config.el.ux_src">
+      <property id="config.el.ux_src.periodic_rate" value=""/>
+      <property id="config.el.ux_src.max_classes" value=""/>
+      <property id="config.el.ux_src.max_slave_classes" value=""/>
+      <property id="config.el.ux_src.max_slave_interfaces" value=""/>
+      <property id="config.el.ux_src.class_driver" value=""/>
+      <property id="config.el.ux_src.device_class_driver" value=""/>
+      <property id="config.el.ux_src.max_hcd" value=""/>
+      <property id="config.el.ux_src.max_devices" value=""/>
+      <property id="config.el.ux_src.max_ed" value=""/>
+      <property id="config.el.ux_src.max_td" value=""/>
+      <property id="config.el.ux_src.max_iso_td" value=""/>
+      <property id="config.el.ux_src.thread_stack_size" value=""/>
+      <property id="config.el.ux_src.enum_thread_stack_size" value="2048"/>
+      <property id="config.el.ux_src.thread_pri_enum" value=""/>
+      <property id="config.el.ux_src.thread_pri_class" value=""/>
+      <property id="config.el.ux_src.thread_pri_keyboard" value=""/>
+      <property id="config.el.ux_src.thread_pri_hcd" value=""/>
+      <property id="config.el.ux_src.no_time_slice" value="config.el.ux_src.no_time_slice.disabled"/>
+      <property id="config.el.ux_src.max_slave_lun" value=""/>
+      <property id="config.el.ux_src.max_host_lun" value=""/>
+      <property id="config.el.ux_src.slave_request_control_max_length" value=""/>
+      <property id="config.el.ux_src.slave_request_data_max_length" value=""/>
+      <property id="config.el.ux_src.enforce_safe_alignment" value="config.el.ux_src.enforce_safe_alignment.disabled"/>
+      <property id="config.el.ux_src.control_transfer_timeout" value=""/>
+      <property id="config.el.ux_src.non_control_transfer_timeout" value=""/>
+      <property id="config.el.ux_src.device_class_cdc_acm_transmission_disable" value="config.el.ux_src.device_class_cdc_acm_transmission_disable.yes"/>
+      <property id="config.el.ux_src.device_bidirectional_endpoint_support" value="config.el.ux_src.device_bidirectional_endpoint_support.disabled"/>
+      <property id="config.el.ux_src.enable_assert" value="config.el.ux_src.enable_assert.yes"/>
+      <property id="config.el.ux_src.assert_fail" value="config.el.ux_src.assert_fail.no"/>
+      <property id="config.el.ux_src.code_validation" value="config.el.ux_src.code_validation.disabled"/>
+      <property id="config.el.ux_src.standalone_mode" value="config.el.ux_src.standalone_mode.disabled"/>
+    </config>
     <config id="config.driver.gpt">
       <property id="config.driver.gpt.param_checking_enable" value="config.driver.gpt.param_checking_enable.bsp"/>
     </config>
@@ -1208,6 +1290,52 @@
       <property id="config.driver.fmi.param_checking_enable" value="config.driver.fmi.param_checking_enable.bsp"/>
       <property id="config.driver.fmi.custom_base_address_symbol" value="g_fmi_data"/>
       <property id="config.driver.fmi.part_number_mask" value="0xFE00"/>
+    </config>
+    <config id="config.el.fx_src">
+      <property id="config.el.fx_src.error_checking" value="config.el.fx_src.error_checking.enabled"/>
+      <property id="config.el.fx_src.enable_exFAT" value="config.el.fx_src.enable_exFAT.disabled"/>
+      <property id="config.el.fx_src.max_long_name_len" value=""/>
+      <property id="config.el.fx_src.max_last_name_len" value=""/>
+      <property id="config.el.fx_src.max_sector_cache" value=""/>
+      <property id="config.el.fx_src.fat_map_size" value=""/>
+      <property id="config.el.fx_src.max_fat_cache" value=""/>
+      <property id="config.el.fx_src.update_rate_in_seconds" value=""/>
+      <property id="config.el.fx_src.max_exfat_cache_size" value=""/>
+      <property id="config.el.fx_src.no_timer" value="config.el.fx_src.no_timer.disabled"/>
+      <property id="config.el.fx_src.single_thread" value="config.el.fx_src.single_thread.disabled"/>
+      <property id="config.el.fx_src.dont_update_open_files" value="config.el.fx_src.dont_update_open_files.disabled"/>
+      <property id="config.el.fx_src.media_search_cache" value="config.el.fx_src.media_search_cache.enabled"/>
+      <property id="config.el.fx_src.direct_data_read_cache_fill" value="config.el.fx_src.direct_data_read_cache_fill.enabled"/>
+      <property id="config.el.fx_src.media_statistics" value="config.el.fx_src.media_statistics.enabled"/>
+      <property id="config.el.fx_src.single_open_legacy" value="config.el.fx_src.single_open_legacy.disabled"/>
+      <property id="config.el.fx_src.rename_path_inherit" value="config.el.fx_src.rename_path_inherit.disabled"/>
+      <property id="config.el.fx_src.no_local_path" value="config.el.fx_src.no_local_path.disabled"/>
+      <property id="config.el.fx_src.fault_tolerant_data" value="config.el.fx_src.fault_tolerant_data.disabled"/>
+      <property id="config.el.fx_src.fault_tolerant" value="config.el.fx_src.fault_tolerant.disabled"/>
+      <property id="config.el.fx_src.lba_64bit" value="config.el.fx_src.lba_64bit.disabled"/>
+      <property id="config.el.fx_src.fault_tolerant_service" value="config.el.fx_src.fault_tolerant_service.disabled"/>
+      <property id="config.el.fx_src.standalone_enable" value="config.el.fx_src.standalone_enable.disabled"/>
+      <property id="config.el.fx_src.disable_cache" value="config.el.fx_src.disable_cache.disabled"/>
+      <property id="config.el.fx_src.disable_file_close" value="config.el.fx_src.disable_file_close.disabled"/>
+      <property id="config.el.fx_src.disable_fast_open" value="config.el.fx_src.disable_fast_open.disabled"/>
+      <property id="config.el.fx_src.disable_force_memory_operation" value="config.el.fx_src.disable_force_memory_operation.disabled"/>
+      <property id="config.el.fx_src.disable_build_option" value="config.el.fx_src.disable_build_option.disabled"/>
+      <property id="config.el.fx_src.disable_one_line_function" value="config.el.fx_src.disable_one_line_function.disabled"/>
+      <property id="config.el.fx_src.disable_fat_entry_refresh" value="config.el.fx_src.disable_fat_entry_refresh.disabled"/>
+      <property id="config.el.fx_src.disable_consecutive_detect" value="config.el.fx_src.disable_consecutive_detect.disabled"/>
+      <property id="config.el.fx_src.fault_tolerant_boot_index" value=""/>
+      <property id="config.el.fx_src.fault_tolerant_minimal_cluster" value=""/>
+    </config>
+    <config id="config.el.ux_host_class_storage_src">
+      <property id="config.el.ux_host_class_storage_src.filex_stub" value="config.el.ux_host_class_storage_src.filex_stub.disabled"/>
+      <property id="config.el.ux_host_class_storage_src.lun" value="1"/>
+      <property id="config.el.ux_host_class_storage_src.max_media" value="1"/>
+      <property id="config.el.ux_host_class_storage_src.storage_memory_buffer_size" value="1024"/>
+      <property id="config.el.ux_host_class_storage_src.storage_max_transfer_size" value="1024"/>
+      <property id="config.el.ux_host_class_storage_src.storage_thread_stack_size" value="1024"/>
+      <property id="config.el.ux_host_class_storage_src.transfer_timeout" value="100000"/>
+      <property id="config.el.ux_host_class_storage_src.cbi_status_timeout" value="30000"/>
+      <property id="config.el.ux_host_class_storage_src.host_class_storage_no_filex" value="config.el.ux_host_class_storage_src.host_class_storage_no_filex.disabled"/>
     </config>
     <config id="config.el.gx">
       <property id="config.el.gx.enable_synergy_drw" value="config.el.gx.enable_synergy_drw.yes"/>
@@ -1237,6 +1365,73 @@
     <config id="config.framework.sf_uart_comms">
       <property id="config.framework.sf_comms.param_checking_enable" value="config.framework.sf_comms.param_checking_enable.bsp"/>
       <property id="config.framework.sf_comms.read_size" value="15"/>
+    </config>
+    <config id="config.el.tx_src">
+      <property id="config.el.tx_src.error_checking" value="config.el.tx_src.error_checking.enabled"/>
+      <property id="config.el.tx_src.timer_ticks_per_second" value=""/>
+      <property id="config.el.tx_src.max_priorities" value=""/>
+      <property id="config.el.tx_src.minimum_stack" value=""/>
+      <property id="config.el.tx_src.timer_thread_stack_size" value=""/>
+      <property id="config.el.tx_src.timer_thread_priority" value=""/>
+      <property id="config.el.tx_src.trace_time_mask" value=""/>
+      <property id="config.el.tx_src.no.filex.pointer" value="config.el.tx_src.no.filex.pointer.disabled"/>
+      <property id="config.el.tx_src.timer_process_in_isr" value="config.el.tx_src.timer_process_in_isr.enabled"/>
+      <property id="config.el.tx_src.reactivate_inline" value="config.el.tx_src.reactivate_inline.disabled"/>
+      <property id="config.el.tx_src.stack_filling" value="config.el.tx_src.stack_filling.enabled"/>
+      <property id="config.el.tx_src.stack_checking" value="config.el.tx_src.stack_checking.disabled"/>
+      <property id="config.el.tx_src.preemption_threshold" value="config.el.tx_src.preemption_threshold.disabled"/>
+      <property id="config.el.tx_src.redundant_clearing" value="config.el.tx_src.redundant_clearing.enabled"/>
+      <property id="config.el.tx_src.no_timer" value="config.el.tx_src.no_timer.disabled"/>
+      <property id="config.el.tx_src.notify_callbacks" value="config.el.tx_src.notify_callbacks.disabled"/>
+      <property id="config.el.tx_src.inline_thread_resume_suspend" value="config.el.tx_src.inline_thread_resume_suspend.disabled"/>
+      <property id="config.el.tx_src.not_interruptable" value="config.el.tx_src.not_interruptable.disabled"/>
+      <property id="config.el.tx_src.event_trace" value="config.el.tx_src.event_trace.disabled"/>
+      <property id="config.el.tx_src.trace_buf_name" value="g_tx_trace_buffer"/>
+      <property id="config.el.tx_src.trace_buffer_location" value=".bss"/>
+      <property id="config.el.tx_src.trace_buf_size" value="65536"/>
+      <property id="config.el.tx_src.num_registries" value="30"/>
+      <property id="config.el.tx_src.block_pool_performance_info" value="config.el.tx_src.block_pool_performance_info.disabled"/>
+      <property id="config.el.tx_src.byte_pool_performance_info" value="config.el.tx_src.byte_pool_performance_info.disabled"/>
+      <property id="config.el.tx_src.event_flags_performance_info" value="config.el.tx_src.event_flags_performance_info.disabled"/>
+      <property id="config.el.tx_src.mutex_performance_info" value="config.el.tx_src.mutex_performance_info.disabled"/>
+      <property id="config.el.tx_src.queue_performance_info" value="config.el.tx_src.queue_performance_info.disabled"/>
+      <property id="config.el.tx_src.semaphore_performance_info" value="config.el.tx_src.semaphore_performance_info.disabled"/>
+      <property id="config.el.tx_src.thread_performance_info" value="config.el.tx_src.thread_performance_info.disabled"/>
+      <property id="config.el.tx_src.timer_performance_info" value="config.el.tx_src.timer_performance_info.disabled"/>
+      <property id="config.el.tx_src.hw_stack_monitoring" value="config.el.tx_src.hw_stack_monitoring.enabled"/>
+      <property id="config.el.tx_src.SysTick_IRQn" value="board.icu.common.irq.priority0"/>
+      <property id="config.el.tx_src.iar_library_support" value="config.el.tx_src.iar_library_support.disabled"/>
+      <property id="config.el.tx_src.epk_support" value="config.el.tx_src.epk_support.disabled"/>
+      <property id="config.el.tx_src.tx_thread_extension_0" value=""/>
+      <property id="config.el.tx_src.tx_thread_extension_1" value=""/>
+      <property id="config.el.tx_src.tx_thread_extension_2" value=""/>
+      <property id="config.el.tx_src.tx_thread_extension_3" value="int bsd_errno;"/>
+      <property id="config.el.tx_src.tx_block_pool_extension" value=""/>
+      <property id="config.el.tx_src.tx_byte_pool_extension" value=""/>
+      <property id="config.el.tx_src.tx_event_flags_group_extension" value=""/>
+      <property id="config.el.tx_src.tx_mutex_extension" value=""/>
+      <property id="config.el.tx_src.tx_queue_extension" value=""/>
+      <property id="config.el.tx_src.tx_semaphore_extension" value=""/>
+      <property id="config.el.tx_src.tx_timer_extension" value=""/>
+      <property id="config.el.tx_src.tx_thread_user_extension" value=""/>
+      <property id="config.el.tx_src.tx_thread_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_thread_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_thread_completed_extension" value=""/>
+      <property id="config.el.tx_src.tx_thread_terminated_extension" value=""/>
+      <property id="config.el.tx_src.tx_block_pool_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_byte_pool_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_event_flags_group_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_mutex_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_queue_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_semaphore_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_timer_create_extension" value=""/>
+      <property id="config.el.tx_src.tx_block_pool_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_byte_pool_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_event_flags_group_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_mutex_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_queue_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_semaphore_delete_extension" value=""/>
+      <property id="config.el.tx_src.tx_timer_delete_extension" value=""/>
     </config>
     <config id="config.el.fx"/>
     <config id="config.driver.sci_spi">
