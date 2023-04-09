@@ -278,8 +278,20 @@
       <description>Express Logic USBX Host Class Storage: Provides=[USBX Host Class Storage] , Requires=[ThreadX ,USBX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dmac" variant="" vendor="Renesas" version="2.3.0">
+      <description>Direct Memory Access Controller: Provides=[Transfer]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
     <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_device_class_cdc_acm_src" variant="" vendor="Renesas" version="2.3.0">
       <description>Express Logic USBX Device Class CDC ACM: Provides=[USBX Device Class CDC ACM] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_video" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Video: Provides=[USBX Host Class Video] , Requires=[ThreadX ,USBX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="ux_host_class_video_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic USBX Host Class Video: Provides=[USBX Host Class Video] , Requires=[ThreadX ,USBX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
   </synergyComponentSelection>
@@ -988,6 +1000,9 @@
     <module id="module.el.ux_host_class_hid_src.897817433">
       <property id="module.el.ux_host_class_hid_src.linkage_warning" value="module.el.ux_host_class_hid_src.linkage_warning.disabled"/>
     </module>
+    <module id="module.el.ux.ux_host_class_video.881043580">
+      <property id="module.el.host_class.name" value="g_ux_host_class_video0"/>
+    </module>
     <module id="module.el.ux_host_class_storage_src.234724872">
       <property id="module.el.ux_host_class_storage_src.linkage_warning" value="module.el.ux_host_class_storage_src.linkage_warning.disabled"/>
     </module>
@@ -1002,6 +1017,45 @@
     </module>
     <module id="module.el.ux_device_class_cdc_acm_src.1322759850">
       <property id="module.el.ux_device_class_cdc_acm_src.linkage_warning" value="module.el.ux_device_class_cdc_acm_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.el.ux.ux_host_class_video_src.707732238">
+      <property id="module.el.ux_host_class_video_src.linkage_warning" value="module.el.ux_host_class_video_src.linkage_warning.disabled"/>
+    </module>
+    <module id="module.driver.transfer_on_dmac.117056116">
+      <property id="module.driver.transfer.name" value="g_transfer9"/>
+      <property id="module.driver.transfer.channel" value="0"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.offset" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.priority2"/>
+    </module>
+    <module id="module.driver.transfer_on_dmac.1034953159">
+      <property id="module.driver.transfer.name" value="g_transfer10"/>
+      <property id="module.driver.transfer.channel" value="1"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.offset" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.priority2"/>
     </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
@@ -1122,7 +1176,10 @@
         <stack module="module.el.ux_host_class_storage.1554404982" requires="module.framework.fx_usbmsc.requires.ux_host_class_storage">
           <stack module="module.el.ux_host_class_storage_src.234724872" requires="module.el.ux_host_class_storage.requires.ux_host_class_storage_src"/>
           <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_storage.requires.ux_host">
-            <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+            <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd">
+              <stack module="module.driver.transfer_on_dmac.117056116" requires="module.framework.sf_el_ux_hcd.requires.transfer_tx"/>
+              <stack module="module.driver.transfer_on_dmac.1034953159" requires="module.framework.sf_el_ux_hcd.requires.transfer_rx"/>
+            </stack>
             <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
               <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
             </stack>
@@ -1137,7 +1194,10 @@
       <stack module="module.el.ux_host_class_hid.829478025">
         <stack module="module.el.ux_host_class_hid_src.897817433" requires="module.el.ux_host_class_hid.requires.ux_host_class_hid_src"/>
         <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class.requires.ux_host">
-          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd">
+            <stack module="module.driver.transfer_on_dmac.117056116" requires="module.framework.sf_el_ux_hcd.requires.transfer_tx"/>
+            <stack module="module.driver.transfer_on_dmac.1034953159" requires="module.framework.sf_el_ux_hcd.requires.transfer_rx"/>
+          </stack>
           <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
             <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
           </stack>
@@ -1146,7 +1206,22 @@
       <stack module="module.el.ux_host_class_hub.1279551116">
         <stack module="module.el.ux_host_class_hub_src.197294882" requires="module.el.ux_host_class_hub.requires.ux_host_class_hub_src"/>
         <stack module="module.el.ux_host.898318957" requires="module.el.ux_host_class_hub.requires.ux_host">
-          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd"/>
+          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd">
+            <stack module="module.driver.transfer_on_dmac.117056116" requires="module.framework.sf_el_ux_hcd.requires.transfer_tx"/>
+            <stack module="module.driver.transfer_on_dmac.1034953159" requires="module.framework.sf_el_ux_hcd.requires.transfer_rx"/>
+          </stack>
+          <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
+            <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
+          </stack>
+        </stack>
+      </stack>
+      <stack module="module.el.ux.ux_host_class_video.881043580">
+        <stack module="module.el.ux.ux_host_class_video_src.707732238" requires="module.el.ux_host_class_storage.requires.ux_host_class_video_src"/>
+        <stack module="module.el.ux_host.898318957" requires="module.el.host_class.requires.ux_host">
+          <stack module="module.framework.sf_el_ux_hcd_hs.1681065023" requires="module.el.ux_host.requires.sf_el_ux_hcd">
+            <stack module="module.driver.transfer_on_dmac.117056116" requires="module.framework.sf_el_ux_hcd.requires.transfer_tx"/>
+            <stack module="module.driver.transfer_on_dmac.1034953159" requires="module.framework.sf_el_ux_hcd.requires.transfer_rx"/>
+          </stack>
           <stack module="module.el.ux_v2.1236169328" requires="module.el.ux_host.requires.ux_v2">
             <stack module="module.el.ux_src.512566289" requires="module.el.ux_v2.requires.ux_src"/>
           </stack>
@@ -1187,6 +1262,9 @@
     <config id="config.el.ux_v2"/>
     <config id="config.el.ux_device">
       <property id="config.el.ux_device.composite" value="config.el.ux_device.composite.disable"/>
+    </config>
+    <config id="config.driver.dmac">
+      <property id="config.driver.dmac.param_checking_enable" value="config.driver.dmac.param_checking_enable.bsp"/>
     </config>
     <config id="config.el.ux_host_class_storage"/>
     <config id="config.driver.glcd">
@@ -1236,8 +1314,8 @@
     </config>
     <config id="config.framework.sf_el_ux_hcd_hs">
       <property id="config.framework.sf_el_ux_hcd_hs.irq_ipl" value="board.icu.common.irq.priority3"/>
-      <property id="config.framework.sf_el_ux_hcd_hs.fifo_size" value="config.framework.sf_el_ux_hcd_hs.fifo_size.normal"/>
-      <property id="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index" value="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index.pipe1"/>
+      <property id="config.framework.sf_el_ux_hcd_hs.fifo_size" value="config.framework.sf_el_ux_hcd_hs.fifo_size.double"/>
+      <property id="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index" value="config.framework.sf_el_ux_hcd_hs.bulk_pipe_start_index.pipe3"/>
       <property id="config.framework.sf_el_ux_hcd_hs.VBUSENpin_logic" value="config.framework.sf_el_ux_hcd_hs.VBUSENpin_logic.active_high"/>
       <property id="config.framework.sf_el_ux_hcd_hs.hs_bit" value="config.framework.sf_el_ux_hcd_hs.hs_bit.bitset_high"/>
     </config>
@@ -1306,6 +1384,7 @@
       <property id="config.driver.fmi.custom_base_address_symbol" value="g_fmi_data"/>
       <property id="config.driver.fmi.part_number_mask" value="0xFE00"/>
     </config>
+    <config id="config.el.ux_host_class_video"/>
     <config id="config.el.fx_src">
       <property id="config.el.fx_src.error_checking" value="config.el.fx_src.error_checking.enabled"/>
       <property id="config.el.fx_src.enable_exFAT" value="config.el.fx_src.enable_exFAT.disabled"/>
@@ -1452,6 +1531,7 @@
     <config id="config.driver.sci_spi">
       <property id="config.driver.sci_spi.param_checking_enable" value="config.driver.sci_spi.param_checking_enable.bsp"/>
     </config>
+    <config id="config.el.ux_host_class_video_src"/>
     <config id="config.driver.dtc">
       <property id="config.driver.dtc.param_checking_enable" value="config.driver.dtc.param_checking_enable.bsp"/>
       <property id="config.driver.dtc.software_start" value="config.driver.dtc.software_start.disabled"/>

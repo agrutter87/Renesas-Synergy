@@ -400,8 +400,8 @@ Synergy Configuration
   Module "FileX Common on fx"
   Module "USBX Port HCD on sf_el_ux for USBHS"
     High Speed Interrupt Priority: Priority 3
-    FIFO size for Bulk/Isochronous Pipes: 512 bytes(default)
-    Number of Isochronous Pipes Reserved: 0(default)
+    FIFO size for Bulk/Isochronous Pipes: 1024 bytes
+    Number of Isochronous Pipes Reserved: 2
     VBUSEN pin Signal Logic: Active High
     Enable High Speed: Enable
     
@@ -415,6 +415,7 @@ Synergy Configuration
     Host HID Interrupt OUT Endpoint Support: Disabled (default)
     HID report transfer timeout: 
     
+  Module "USBX Host Class Video"
   Module "USBX Host Class Mass Storage Source"
     Use FileX stub: Disabled (default)
     Maximum number of SCSI logical units: 1
@@ -562,6 +563,10 @@ Synergy Configuration
     TX_TIMER_DELETE_EXTENSION(timer_ptr): 
     
   Module "USBX Device Class CDC-ACM Source"
+  Module "USBX Host Class Video Source"
+  Module "Transfer Driver on r_dmac"
+    Parameter Checking: Default (BSP)
+    
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -1187,6 +1192,42 @@ Synergy Configuration
             Name: g_sf_el_ux_hcd_hs_0
             USB Controller Selection: USBHS
             
+            Instance "g_transfer9 Transfer Driver on r_dmac ELC SOFTWARE EVENT 0"
+              Name: g_transfer9
+              Channel: 0
+              Mode: Block
+              Transfer Size: 1 Byte
+              Destination Address Mode: Fixed
+              Source Address Mode: Incremented
+              Repeat Area (Unused in Normal Mode): Source
+              Destination Pointer: NULL
+              Source Pointer: NULL
+              Number of Transfers: 0
+              Number of Blocks (Valid only in Repeat and Block Mode): 0
+              Offset value: 0
+              Activation Source: ELC SOFTWARE EVENT 0
+              Auto Enable: False
+              Callback: NULL
+              Transfer End Interrupt Priority: Priority 2
+              
+            Instance "g_transfer10 Transfer Driver on r_dmac ELC SOFTWARE EVENT 1"
+              Name: g_transfer10
+              Channel: 1
+              Mode: Block
+              Transfer Size: 1 Byte
+              Destination Address Mode: Incremented
+              Source Address Mode: Fixed
+              Repeat Area (Unused in Normal Mode): Destination
+              Destination Pointer: NULL
+              Source Pointer: NULL
+              Number of Transfers: 0
+              Number of Blocks (Valid only in Repeat and Block Mode): 0
+              Offset value: 0
+              Activation Source: ELC SOFTWARE EVENT 1
+              Auto Enable: False
+              Callback: NULL
+              Transfer End Interrupt Priority: Priority 2
+              
           Instance "USBX on ux"
             USBX Pool Memory Name: g_ux_pool_memory
             USBX Pool Memory Size: 163840
@@ -1226,6 +1267,42 @@ Synergy Configuration
           Name: g_sf_el_ux_hcd_hs_0
           USB Controller Selection: USBHS
           
+          Instance "g_transfer9 Transfer Driver on r_dmac ELC SOFTWARE EVENT 0"
+            Name: g_transfer9
+            Channel: 0
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Fixed
+            Source Address Mode: Incremented
+            Repeat Area (Unused in Normal Mode): Source
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 0
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
+          Instance "g_transfer10 Transfer Driver on r_dmac ELC SOFTWARE EVENT 1"
+            Name: g_transfer10
+            Channel: 1
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Incremented
+            Source Address Mode: Fixed
+            Repeat Area (Unused in Normal Mode): Destination
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 1
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
         Instance "USBX on ux"
           USBX Pool Memory Name: g_ux_pool_memory
           USBX Pool Memory Size: 163840
@@ -1250,6 +1327,104 @@ Synergy Configuration
           Name: g_sf_el_ux_hcd_hs_0
           USB Controller Selection: USBHS
           
+          Instance "g_transfer9 Transfer Driver on r_dmac ELC SOFTWARE EVENT 0"
+            Name: g_transfer9
+            Channel: 0
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Fixed
+            Source Address Mode: Incremented
+            Repeat Area (Unused in Normal Mode): Source
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 0
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
+          Instance "g_transfer10 Transfer Driver on r_dmac ELC SOFTWARE EVENT 1"
+            Name: g_transfer10
+            Channel: 1
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Incremented
+            Source Address Mode: Fixed
+            Repeat Area (Unused in Normal Mode): Destination
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 1
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
+        Instance "USBX on ux"
+          USBX Pool Memory Name: g_ux_pool_memory
+          USBX Pool Memory Size: 163840
+          User Callback for Host Event Notification(Only valid for USB Host): ux_host_event_callback
+          User Callback for Device Event Notification(Only valid for USB Device): NULL
+          Name of generated initialization function: ux_common_init0
+          Auto Initialization: Enable
+          
+          Instance "USBX Source"
+            Show linkage warning: Disabled
+            
+    Instance "g_ux_host_class_video0 USBX Host Class Video"
+      Class Instance Name: g_ux_host_class_video0
+      
+      Instance "USBX Host Class Video Source"
+        Show linkage warning: Disabled
+        
+      Instance "USBX Host Configuration g_ux_host_0"
+        Name: g_ux_host_0
+        Name of generated initialization function: ux_host_init0
+        Auto Initialization: Enable
+        
+        Instance "g_sf_el_ux_hcd_hs_0 USBX Port HCD on sf_el_ux for USBHS"
+          Name: g_sf_el_ux_hcd_hs_0
+          USB Controller Selection: USBHS
+          
+          Instance "g_transfer9 Transfer Driver on r_dmac ELC SOFTWARE EVENT 0"
+            Name: g_transfer9
+            Channel: 0
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Fixed
+            Source Address Mode: Incremented
+            Repeat Area (Unused in Normal Mode): Source
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 0
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
+          Instance "g_transfer10 Transfer Driver on r_dmac ELC SOFTWARE EVENT 1"
+            Name: g_transfer10
+            Channel: 1
+            Mode: Block
+            Transfer Size: 1 Byte
+            Destination Address Mode: Incremented
+            Source Address Mode: Fixed
+            Repeat Area (Unused in Normal Mode): Destination
+            Destination Pointer: NULL
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Repeat and Block Mode): 0
+            Offset value: 0
+            Activation Source: ELC SOFTWARE EVENT 1
+            Auto Enable: False
+            Callback: NULL
+            Transfer End Interrupt Priority: Priority 2
+            
         Instance "USBX on ux"
           USBX Pool Memory Name: g_ux_pool_memory
           USBX Pool Memory Size: 163840
