@@ -128,25 +128,37 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
     {
     	case UX_DEVICE_INSERTION:
     		SEGGER_RTT_printf(0, "UX_DEVICE_INSERTION %s, instance = 0x%x\n", host_class->ux_host_class_name, instance);
-        	if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_name, host_class,
+        	if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_name, host_class->ux_host_class_name,
         	                                               _ux_utility_string_length_get(_ux_system_host_class_hid_name)))
         	{
-        		ULONG bInterfaceProtocol = ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_interface->ux_interface_descriptor.bInterfaceProtocol;
-        		switch(bInterfaceProtocol)
-        		{
-        			case KEYBOARD_DEVICE:
-    					SEGGER_RTT_printf(0, "HID device: Keyboard is connected \n");
-
-    					g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
-
-    					g_hid = instance;
-        				break;
-        			default:
-    					SEGGER_RTT_printf(0, "HID device: bInterfaceProtocol %d is connected \n");
-        				break;
-        		}
+	        	if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_client_keyboard_name, ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_client->ux_host_class_hid_client_name,
+	        	                                               _ux_utility_string_length_get(_ux_system_host_class_hid_client_keyboard_name)))
+	        	{
+	        		SEGGER_RTT_printf(0, "HID keyboard is connected \n");
+					g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
+					g_hid = instance;
+	        	}
+	        	else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_client_mouse_name, ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_client->ux_host_class_hid_client_name,
+                        _ux_utility_string_length_get(_ux_system_host_class_hid_client_mouse_name)))
+				{
+	        		SEGGER_RTT_printf(0, "HID mouse is connected \n");
+					g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
+					g_hid = instance;
+				}
+	        	else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_hid_client_remote_control_name, ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_client->ux_host_class_hid_client_name,
+                        _ux_utility_string_length_get(_ux_system_host_class_hid_client_remote_control_name)))
+				{
+	        		SEGGER_RTT_printf(0, "HID remote control is connected \n");
+					g_ioport.p_api->pinWrite(leds.p_leds[0], LED_ON);
+					g_hid = instance;
+				}
+	        	else
+	        	{
+	        		/* _ux_host_class_hid_client_search could not find a device from _ux_host_class_hid_activate */
+	        		SEGGER_RTT_printf(0, "HID device \"%s\" is connected \n", ((UX_HOST_CLASS_HID *)instance)->ux_host_class_hid_client->ux_host_class_hid_client_name);
+	        	}
         	}
-            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_storage_name, host_class,
+            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_storage_name, host_class->ux_host_class_name,
                                                    _ux_utility_string_length_get(_ux_system_host_class_storage_name)))
             {
                 // Get the pointer to the media
@@ -157,7 +169,7 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_ON);
                 g_storage = instance;
             }
-            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_video_name, host_class,
+            else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_video_name, host_class->ux_host_class_name,
                                                    _ux_utility_string_length_get(_ux_system_host_class_video_name)))
             {
 				video_host_class = instance;
@@ -171,7 +183,7 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
             /* Check if we got an HID class device.  */
             if (instance == g_hid)
             {
-				SEGGER_RTT_printf(0, "HID device: Keyboard is removed \n");
+				SEGGER_RTT_printf(0, "HID device is removed \n");
 
                 g_ioport.p_api->pinWrite(leds.p_leds[0], LED_OFF);
                 g_hid = NULL;
@@ -210,29 +222,6 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
     		break;
     	case UX_DEVICE_DISCONNECTION:
     		SEGGER_RTT_printf(0, "UX_DEVICE_DISCONNECTION, instance = 0x%x\n", instance);
-            if (instance == g_hid)
-            {
-				SEGGER_RTT_printf(0, "HID device: Keyboard is disconnected \n");
-
-                g_ioport.p_api->pinWrite(leds.p_leds[0], LED_OFF);
-                g_hid = NULL;
-            }
-            else if (instance == g_storage)
-            {
-				SEGGER_RTT_printf(0, "Storage device is disconnected \n");
-
-                g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
-                g_storage = NULL;
-            }
-            else if (instance == video_host_class)
-            {
-				SEGGER_RTT_printf(0, "Video device is disconnected \n");
-
-                /* Clear the event flag in case the camera was removed before the application could clear it. */
-                tx_event_flags_set (&g_device_insert_eventflag, (ULONG)~EVENTFLAG_USB_DEVICE_INSERTED, TX_AND);
-
-                video_host_class = NULL;
-            }
             break;
     	default:
     		SEGGER_RTT_printf(0, "ux_host_event_callback, unexpected event %d for %s\n", host_class->ux_host_class_name, event);
