@@ -33,9 +33,9 @@ Synergy Configuration
          HOCO OScillation Enable: HOCO oscillation is disabled after reset
     
   Synergy Common
-    Main stack size (bytes): 0x4000
+    Main stack size (bytes): 0x1000
     Process stack size (bytes): 0
-    Heap size (bytes) - A minimum of 4K (0x1000) is required if standard library functions are to be used.: 0x4000
+    Heap size (bytes) - A minimum of 4K (0x1000) is required if standard library functions are to be used.: 0x1000
     MCU Vcc (mV): 3300
     MCU Analog Power Supply AVCC0 (mV): 3300
     Parameter checking: Enabled
@@ -349,7 +349,7 @@ Synergy Configuration
     Parameter Checking: Default (BSP)
     Maximum Input String Length: 128
     Maximum Write String Length: 64
-    Console print timeout value: 100
+    Console print timeout value: 0xFFFFFFFF
     
   Module "Communications Framework on sf_el_ux_comms_v2"
     Parameter Checking: Default (BSP)
@@ -631,7 +631,7 @@ Synergy Configuration
   Thread "Main System Thread"
     Symbol: main_system_thread
     Name: Main System Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 1024
     Priority: 7
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -732,7 +732,7 @@ Synergy Configuration
   Thread "Debug Thread"
     Symbol: debug_thread
     Name: Debug Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 1024
     Priority: 8
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -746,7 +746,7 @@ Synergy Configuration
   Thread "CLI Thread"
     Symbol: cli_thread
     Name: CLI Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 1024
     Priority: 9
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -826,7 +826,7 @@ Synergy Configuration
   Thread "GUI Thread"
     Symbol: gui_thread
     Name: GUI Thread
-    Stack size (bytes): 4096
+    Stack size (bytes): 2048
     Priority: 9
     Auto start: Enabled
     Time slicing interval (ticks): 10
@@ -1138,7 +1138,7 @@ Synergy Configuration
   Thread "Accelerometer Thread"
     Symbol: accelerometer_thread
     Name: Accelerometer Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 1024
     Priority: 6
     Auto start: Disabled
     Time slicing interval (ticks): 1
@@ -1286,8 +1286,8 @@ Synergy Configuration
     Instance "g_ux_host_class_hid0 USBX Host Class HID"
       Name: g_ux_host_class_hid0
       HID Client - Keyboard Support: Enable
-      HID Client - Mouse Support: Disable
-      HID Client - Remote Control Support: Disable
+      HID Client - Mouse Support: Enable
+      HID Client - Remote Control Support: Enable
       
       Instance "USBX Host Class HID Source"
         Show linkage warning: Disabled
@@ -1488,7 +1488,7 @@ Synergy Configuration
   Thread "LiDAR Thread"
     Symbol: lidar_thread
     Name: LiDAR Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 1024
     Priority: 9
     Auto start: Disabled
     Time slicing interval (ticks): 1

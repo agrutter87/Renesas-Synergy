@@ -1151,25 +1151,25 @@ static void ux_host_class_hid_clients_register(void) {
 				&status_ux_host_hid_clients_register);
 	}
 #endif
-#if (0)
-                /* Register the HID Mouse client. */
-                status_ux_host_hid_clients_register =  ux_host_class_hid_client_register(
-                                                                        _ux_system_host_class_hid_client_mouse_name,
-                                                                        ux_host_class_hid_mouse_entry);
-                if (UX_SUCCESS != status_ux_host_hid_clients_register)
-                {
-                     g_ux_host_class_hid0_err_callback(NULL ,&status_ux_host_hid_clients_register);
-                }
+#if (1)
+	/* Register the HID Mouse client. */
+	status_ux_host_hid_clients_register = ux_host_class_hid_client_register(
+			_ux_system_host_class_hid_client_mouse_name,
+			ux_host_class_hid_mouse_entry);
+	if (UX_SUCCESS != status_ux_host_hid_clients_register) {
+		g_ux_host_class_hid0_err_callback(NULL,
+				&status_ux_host_hid_clients_register);
+	}
 #endif
-#if (0)
-                /* Register the HID Remote Control client. */
-                status_ux_host_hid_clients_register =  ux_host_class_hid_client_register(
-                                                                        _ux_system_host_class_hid_client_remote_control_name,
-                                                                        ux_host_class_hid_remote_control_entry);
-                if (UX_SUCCESS != status_ux_host_hid_clients_register)
-                {
-                     g_ux_host_class_hid0_err_callback(NULL ,&status_ux_host_hid_clients_register);
-                }
+#if (1)
+	/* Register the HID Remote Control client. */
+	status_ux_host_hid_clients_register = ux_host_class_hid_client_register(
+			_ux_system_host_class_hid_client_remote_control_name,
+			ux_host_class_hid_remote_control_entry);
+	if (UX_SUCCESS != status_ux_host_hid_clients_register) {
+		g_ux_host_class_hid0_err_callback(NULL,
+				&status_ux_host_hid_clients_register);
+	}
 #endif
 } /* End of function ux_host_class_hid_clients_register() */
 #endif /* UX_HOST_CLASS_HID_CLIENTS_REGISTER */
