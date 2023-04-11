@@ -158,6 +158,7 @@ void application_thread_entry(ULONG thread_input)
  *****************************************************************************/
 void tx_application_define_user(void *first_unused_memory)
 {
+#if 0
     UINT tx_err = TX_SUCCESS;
 
     /* Create a byte memory pool from which to allocate the thread stacks. */
@@ -174,5 +175,6 @@ void tx_application_define_user(void *first_unused_memory)
     {
         g_application.p_features[feature_num].feature_define(&g_application.memory_byte_pool, g_application.p_features[feature_num].feature_name);
     }
+#endif
 }
 
