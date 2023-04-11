@@ -598,6 +598,24 @@ Synergy Configuration
     Disable brush alpha support: No(default)
     Maximum string length: 
     
+  Module "Messaging Framework on sf_message"
+    Parameter Checking: Default (BSP)
+    Message Queue Depth (Total number of messages to be enqueued in a Message Queue): 16
+    
+  Module "Audio Playback Framework on sf_audio_playback"
+    Parameter Checking: Default (BSP)
+    Buffer Size Bytes: 8192
+    Maximum Number of Streams: 1
+    Thread Stack Size: 512
+    
+  Module "Audio Playback Framework Shared on sf_audio_playback"
+  Module "Audio Playback Hardware Framework Shared on sf_audio_playback_hw_dac"
+    Parameter Checking: Default (BSP)
+    DMAC Support: Disabled
+    
+  Module "DAC Driver on r_dac"
+    Parameter Checking: Default (BSP)
+    
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -827,9 +845,9 @@ Synergy Configuration
     Symbol: gui_thread
     Name: GUI Thread
     Stack size (bytes): 2048
-    Priority: 9
-    Auto start: Enabled
-    Time slicing interval (ticks): 10
+    Priority: 5
+    Auto start: Disabled
+    Time slicing interval (ticks): 1
     
     Instance "GUIX on gx"
       Instance "g_sf_el_gx GUIX Port on sf_el_gx"
@@ -1201,7 +1219,7 @@ Synergy Configuration
     Symbol: usb_thread
     Name: USB Thread
     Stack size (bytes): 2048
-    Priority: 1
+    Priority: 7
     Auto start: Enabled
     Time slicing interval (ticks): 10
     
@@ -1541,6 +1559,201 @@ Synergy Configuration
           Callback (Only valid with Software start): NULL
           ELC Software Event Interrupt Priority: Disabled
           
+  Thread "Audio Thread"
+    Symbol: audio_thread
+    Name: Audio Thread
+    Stack size (bytes): 2048
+    Priority: 8
+    Auto start: Enabled
+    Time slicing interval (ticks): 1
+    
+    Instance "g_sf_audio_playback Audio Playback Framework on sf_audio_playback"
+      Name: g_sf_audio_playback
+      Message Class Instance: 0
+      Callback: sf_audio_playback_callback
+      Name of generated initialization function: sf_audio_playback_init0
+      Auto Initialization: Enable
+      
+      Instance "g_sf_audio_playback_common Audio Playback Framework Shared on sf_audio_playback"
+        Name: g_sf_audio_playback_common
+        Thread Priority: 3
+        Audio Message Queue Name: sf_audio_dummy_message_queue
+        
+        Instance "g_sf_message Messaging Framework on sf_message"
+          Name: g_sf_message
+          Work memory size in bytes: 2048
+          Pointer to subscriber list array: p_subscriber_lists
+          Name of the block pool internally used in the messaging framework: sf_msg_blk_pool
+          Name of generated initialization function: sf_message_init0
+          Auto Initialization: Enable
+          
+        Instance "g_sf_audio_playback_hw Audio Playback Hardware Framework Shared on sf_audio_playback_hw_dac"
+          Name: g_sf_audio_playback_hw
+          
+          Instance "g_audio_transfer Transfer Driver on r_dtc GPT0 COUNTER OVERFLOW"
+            Name: g_audio_transfer
+            Mode: Normal
+            Transfer Size: 2 Bytes
+            Destination Address Mode: Fixed
+            Source Address Mode: Incremented
+            Repeat Area (Unused in Normal Mode): Source
+            Interrupt Frequency: After all transfers have completed
+            Destination Pointer: &R_DAC->DADRn[0]
+            Source Pointer: NULL
+            Number of Transfers: 0
+            Number of Blocks (Valid only in Block Mode): 0
+            Activation Source (Must enable IRQ): GPT0 COUNTER OVERFLOW
+            Auto Enable: False
+            Callback (Only valid with Software start): NULL
+            ELC Software Event Interrupt Priority: Disabled
+            
+          Instance "g_audio_timer Timer Driver on r_gpt"
+            Name: g_audio_timer
+            Channel: 0
+            Mode: Periodic
+            Duty Cycle Range (only applicable in PWM mode): Shortest: 2 PCLK, Longest: (Period - 1) PCLK
+            Period Value: 44100
+            Period Unit: Hertz
+            Duty Cycle Value: 50
+            Duty Cycle Unit: Unit Raw Counts
+            Auto Start: False
+            GTIOCA Output Enabled: False
+            GTIOCA Stop Level: Pin Level Low
+            GTIOCB Output Enabled: False
+            GTIOCB Stop Level: Pin Level Low
+            Callback: NULL
+            Overflow Interrupt Priority: Priority 8
+            
+          Instance "g_audio_dac DAC Driver on r_dac"
+            Name: g_audio_dac
+            Channel: 0
+            Synchronize with ADC: Disabled
+            Data Format: Right Justified
+            Output Amplifier: Disable
+            Charge Pump Enabled (Requires MOCO active): Disable
+            
+    Object "g_sf_audio_playback_semaphore Semaphore"
+      Name: Audio Semaphore
+      Symbol: g_sf_audio_playback_semaphore
+      Initial count: 0
+      
+  Thread "Audio Framework Dummy Thread"
+    Symbol: sf_audio_dummy
+    Name: Audio Framework Dummy Thread
+    Stack size (bytes): 512
+    Priority: 9
+    Auto start: Disabled
+    Time slicing interval (ticks): 1
+    
   Messaging
+    Event "App Command Open"
+      Symbol: SF_MESSAGE_EVENT_APP_OPEN
+      Name: App Command Open
+      
+    Event "App Command Pause"
+      Symbol: SF_MESSAGE_EVENT_APP_PAUSE
+      Name: App Command Pause
+      
+    Event "App Command Resume"
+      Symbol: SF_MESSAGE_EVENT_APP_RESUME
+      Name: App Command Resume
+      
+    Event "App Command Close"
+      Symbol: SF_MESSAGE_EVENT_APP_CLOSE
+      Name: App Command Close
+      
+    Event "App Command Rewind"
+      Symbol: SF_MESSAGE_EVENT_APP_REWIND
+      Name: App Command Rewind
+      
+    Event "App Command Forward"
+      Symbol: SF_MESSAGE_EVENT_APP_FORWARD
+      Name: App Command Forward
+      
+    Event "App Command Goto"
+      Symbol: SF_MESSAGE_EVENT_APP_GOTO
+      Name: App Command Goto
+      
+    Event "App Command Restart"
+      Symbol: SF_MESSAGE_EVENT_APP_RESTART
+      Name: App Command Restart
+      
+    Event "App Command Volume Up"
+      Symbol: SF_MESSAGE_EVENT_APP_VOL_UP
+      Name: App Command Volume Up
+      
+    Event "App Command Volume Down"
+      Symbol: SF_MESSAGE_EVENT_APP_VOL_DOWN
+      Name: App Command Volume Down
+      
+    Event "App Callback Status Changed"
+      Symbol: SF_MESSAGE_EVENT_APP_CB_STATUS
+      Name: App Callback Status Changed
+      
+    Event "App Callback Volume Changed"
+      Symbol: SF_MESSAGE_EVENT_APP_CB_VOLUME
+      Name: App Callback Volume Changed
+      
+    Event "App Callback USB Inserted"
+      Symbol: SF_MESSAGE_EVENT_APP_CB_USB_IN
+      Name: App Callback USB Inserted
+      
+    Event "App Callback USB Removed"
+      Symbol: SF_MESSAGE_EVENT_APP_CB_USB_OUT
+      Name: App Callback USB Removed
+      
+    Event "App Error Open"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_OPEN
+      Name: App Error Open
+      
+    Event "App Error Header"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_HEADER
+      Name: App Error Header
+      
+    Event "App Error Pause"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_PAUSE
+      Name: App Error Pause
+      
+    Event "App Error Resume"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_RESUME
+      Name: App Error Resume
+      
+    Event "App Error Close"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_CLOSE
+      Name: App Error Close
+      
+    Event "App Error Volume"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_VOLUME
+      Name: App Error Volume
+      
+    Event "App Error Playback"
+      Symbol: SF_MESSAGE_EVENT_APP_ERR_PLAYBACK
+      Name: App Error Playback
+      
+    Event "App Last Event"
+      Symbol: SF_MESSAGE_EVENT_APP_LAST
+      Name: App Last Event
+      
+    Event Class "App Command"
+      Symbol: SF_MESSAGE_EVENT_CLASS_APP_CMD
+      Name: App Command
+      Payload header file: application_payloads.h
+      Payload: app_cmd_payload
+      Payload type: app_message_payload_t
+      
+    Event Class "App Callback"
+      Symbol: SF_MESSAGE_EVENT_CLASS_APP_CB
+      Name: App Callback
+      Payload header file: application_payloads.h
+      Payload: app_cb_payload
+      Payload type: app_message_payload_t
+      
+    Subscriber "Audio Framework Dummy Thread" 0 0
+      Event Class "Audio Playback"
+      
+    Subscriber "Audio Thread" 0 0
+      Event Class "App Command"
+      
     Subscriber "GUI Thread" 0 0
+      Event Class "App Callback"
       

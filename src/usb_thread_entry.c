@@ -26,6 +26,7 @@
  *-------------------------------------------------------------------------*/
 #include "usb_thread.h"
 #include "SEGGER_RTT.h"
+#include "application_define.h"
 
 /*-------------------------------------------------------------------------*
  * Constants:
@@ -100,6 +101,11 @@ struct
     { UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED,   "UX_HOST_CLASS_VIDEO_VS_FORMAT_STREAM_BASED"   }
 };
 
+/** Global variables */
+       FX_MEDIA                    * gp_media = FX_NULL;
+static UX_HOST_CLASS_STORAGE       * gp_storage       = UX_NULL;
+static UX_HOST_CLASS_STORAGE_MEDIA * gp_storage_media = UX_NULL;
+
 /*-------------------------------------------------------------------------*
  * Prototypes:
  *-------------------------------------------------------------------------*/
@@ -122,7 +128,19 @@ VOID uvc_process_function(UX_HOST_CLASS_VIDEO* video);
  */
 UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * instance)
 {
-    UX_HOST_CLASS_STORAGE_MEDIA* p_ux_host_class_storage_media;
+    UX_HOST_CLASS_STORAGE_MEDIA		*p_ux_host_class_storage_media;
+    UINT                     		status;
+
+    UX_HOST_CLASS          			*p_storage_class = NULL;
+    app_message_payload_t  			*p_message       = NULL;
+    sf_message_acquire_cfg_t 		cfg_acquire =
+    {
+        .buffer_keep = false
+    };
+    sf_message_post_cfg_t    		cfg_post =
+    {
+        .priority = SF_MESSAGE_PRIORITY_NORMAL
+    };
 
     switch(event)
     {
@@ -168,6 +186,43 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_ON);
                 g_storage = instance;
+
+                /* Get the storage class.  */
+                status = ux_host_stack_class_get(_ux_system_host_class_storage_name, &p_storage_class);
+                if (UX_SUCCESS != status)
+                {
+                    return (status);
+                }
+
+                /* Check if we got a storage class device.  */
+                if (p_storage_class == host_class)
+                {
+                    /* We only get the first media attached to the class container. */
+                    if (FX_NULL == gp_media)
+                    {
+                        gp_storage       = instance;
+                        gp_storage_media = host_class->ux_host_class_media;
+                        gp_media         = &gp_storage_media->ux_host_class_storage_media;
+
+                        /** Trigger app event */
+                        status = g_sf_message.p_api->bufferAcquire(g_sf_message.p_ctrl,
+                                                                   (sf_message_header_t **) &p_message,
+                                                                   &cfg_acquire,
+                                                                   TX_NO_WAIT);
+                        APP_ERROR_TRAP(status);
+
+                        p_message->header.event_b.class_code          = SF_MESSAGE_EVENT_CLASS_APP_CB;
+                        p_message->header.event_b.class_instance = 0;
+                        p_message->header.event_b.code           = SF_MESSAGE_EVENT_APP_CB_USB_IN;
+
+                        status                                   = g_sf_message.p_api->post(g_sf_message.p_ctrl,
+                                                                                            &p_message->header,
+                                                                                            &cfg_post,
+                                                                                            NULL,
+                                                                                            TX_NO_WAIT);
+                        APP_ERROR_TRAP(status);
+                    }
+                }
             }
             else if (UX_SUCCESS == _ux_utility_memory_compare (_ux_system_host_class_video_name, host_class->ux_host_class_name,
                                                    _ux_utility_string_length_get(_ux_system_host_class_video_name)))
@@ -194,6 +249,33 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS * host_class, VOID * inst
 
                 g_ioport.p_api->pinWrite(leds.p_leds[2], LED_OFF);
                 g_storage = NULL;
+
+                /*  Check if the storage device is removed.  */
+                if (instance == gp_storage)
+                {
+                    /* Set pointers to null, so that the demo thread will not try to access the media any more.  */
+                    gp_media         = FX_NULL;
+                    gp_storage_media = UX_NULL;
+                    gp_storage       = UX_NULL;
+
+                    /** Trigger app event */
+                    status = g_sf_message.p_api->bufferAcquire(g_sf_message.p_ctrl,
+                                                               (sf_message_header_t **) &p_message,
+                                                               &cfg_acquire,
+                                                               TX_NO_WAIT);
+                    APP_ERROR_TRAP(status);
+
+                    p_message->header.event_b.class_code          = SF_MESSAGE_EVENT_CLASS_APP_CB;
+                    p_message->header.event_b.class_instance = 0;
+                    p_message->header.event_b.code           = SF_MESSAGE_EVENT_APP_CB_USB_OUT;
+
+                    status                                   = g_sf_message.p_api->post(g_sf_message.p_ctrl,
+                                                                                        &p_message->header,
+                                                                                        &cfg_post,
+                                                                                        NULL,
+                                                                                        TX_NO_WAIT);
+                    APP_ERROR_TRAP(status);
+                }
             }
             else if (instance == video_host_class)
             {
@@ -606,6 +688,9 @@ void usb_thread_entry(void)
     {
         g_ioport.p_api->pinWrite(leds.p_leds[i], LED_OFF);
     }
+
+    status = tx_thread_resume(&gui_thread);
+    APP_ERROR_TRAP(status)
 
     while (1)
     {

@@ -8,6 +8,139 @@
 #define USB_HOST_STORAGE_CLASS_REGISTER
 #define UX_DCD_SYNERGY_USBFS_VECTOR
 
+dac_instance_ctrl_t g_audio_dac_ctrl;
+const dac_extended_cfg_t g_audio_dac_ex_ctrl = { .enable_charge_pump = false, };
+const dac_cfg_t g_audio_dac_cfg = { .channel = 0, .ad_da_synchronized = false,
+		.data_format = DAC_DATA_FORMAT_FLUSH_RIGHT, .output_amplifier_enabled =
+				false, .p_extend = &g_audio_dac_ex_ctrl };
+/* Instance structure to use this module. */
+const dac_instance_t g_audio_dac = { .p_ctrl = &g_audio_dac_ctrl, .p_cfg =
+		&g_audio_dac_cfg, .p_api = &g_dac_on_dac };
+#if (8) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_audio_timer) && !defined(SSP_SUPPRESS_ISR_GPT0)
+SSP_VECTOR_DEFINE_CHAN(gpt_counter_overflow_isr, GPT, COUNTER_OVERFLOW, 0);
+#endif
+#endif
+static gpt_instance_ctrl_t g_audio_timer_ctrl;
+static const timer_on_gpt_cfg_t g_audio_timer_extend = { .gtioca = {
+		.output_enabled = false, .stop_level = GPT_PIN_LEVEL_LOW }, .gtiocb = {
+		.output_enabled = false, .stop_level = GPT_PIN_LEVEL_LOW },
+		.shortest_pwm_signal = GPT_SHORTEST_LEVEL_OFF, };
+static const timer_cfg_t g_audio_timer_cfg = { .mode = TIMER_MODE_PERIODIC,
+		.period = 44100, .unit = TIMER_UNIT_FREQUENCY_HZ, .duty_cycle = 50,
+		.duty_cycle_unit = TIMER_PWM_UNIT_RAW_COUNTS, .channel = 0, .autostart =
+				false, .p_callback = NULL, .p_context = &g_audio_timer,
+		.p_extend = &g_audio_timer_extend, .irq_ipl = (8), };
+/* Instance structure to use this module. */
+const timer_instance_t g_audio_timer = { .p_ctrl = &g_audio_timer_ctrl, .p_cfg =
+		&g_audio_timer_cfg, .p_api = &g_timer_on_gpt };
+#if (BSP_IRQ_DISABLED) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_audio_transfer) && !defined(SSP_SUPPRESS_ISR_DTCELC_EVENT_GPT0_COUNTER_OVERFLOW)
+#define DTC_ACTIVATION_SRC_ELC_EVENT_GPT0_COUNTER_OVERFLOW
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_0) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_0);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0
+#endif
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_1) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_1);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1
+#endif
+#endif
+#endif
+
+dtc_instance_ctrl_t g_audio_transfer_ctrl;
+transfer_info_t g_audio_transfer_info = { .dest_addr_mode =
+		TRANSFER_ADDR_MODE_FIXED, .repeat_area = TRANSFER_REPEAT_AREA_SOURCE,
+		.irq = TRANSFER_IRQ_END, .chain_mode = TRANSFER_CHAIN_MODE_DISABLED,
+		.src_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED, .size =
+				TRANSFER_SIZE_2_BYTE, .mode = TRANSFER_MODE_NORMAL, .p_dest =
+				(void*) &R_DAC->DADRn[0], .p_src = (void const*) NULL,
+		.num_blocks = 0, .length = 0, };
+const transfer_cfg_t g_audio_transfer_cfg = { .p_info = &g_audio_transfer_info,
+		.activation_source = ELC_EVENT_GPT0_COUNTER_OVERFLOW, .auto_enable =
+				false, .p_callback = NULL, .p_context = &g_audio_transfer,
+		.irq_ipl = (BSP_IRQ_DISABLED) };
+/* Instance structure to use this module. */
+const transfer_instance_t g_audio_transfer = { .p_ctrl = &g_audio_transfer_ctrl,
+		.p_cfg = &g_audio_transfer_cfg, .p_api = &g_transfer_on_dtc };
+static sf_audio_playback_hw_dac_instance_ctrl_t g_sf_audio_playback_hw_ctrl;
+static const sf_audio_playback_hw_dac_cfg_t g_sf_audio_playback_hw_cfg_extend =
+		{ .p_lower_lvl_timer = &g_audio_timer,
+#define SYNERGY_NOT_DEFINED (1)
+#ifdef g_audio_dac
+    .p_lower_lvl_dac = &SYNERGY_NOT_DEFINED,
+#else
+				.p_lower_lvl_dac = &g_audio_dac,
+#endif
+#undef SYNERGY_NOT_DEFINED
+				.p_lower_lvl_transfer = &g_audio_transfer, };
+static const sf_audio_playback_hw_cfg_t g_sf_audio_playback_hw_cfg = {
+		.p_extend = &g_sf_audio_playback_hw_cfg_extend };
+const sf_audio_playback_hw_instance_t g_sf_audio_playback_hw = { .p_api =
+		&g_sf_audio_playback_hw_on_sf_audio_playback_hw_dac, .p_ctrl =
+		&g_sf_audio_playback_hw_ctrl, .p_cfg = &g_sf_audio_playback_hw_cfg, };
+#if defined(__ICCARM__)
+            #define g_sf_message_err_callback_WEAK_ATTRIBUTE
+            #pragma weak g_sf_message_err_callback  = g_sf_message_err_callback_internal
+            #elif defined(__GNUC__)
+            #define g_sf_message_err_callback_WEAK_ATTRIBUTE   __attribute__ ((weak, alias("g_sf_message_err_callback_internal")))
+            #endif
+void g_sf_message_err_callback(void *p_instance, void *p_data)
+g_sf_message_err_callback_WEAK_ATTRIBUTE;
+extern sf_message_subscriber_list_t *p_subscriber_lists[];
+sf_message_instance_ctrl_t g_sf_message_ctrl;
+static uint8_t g_sf_message_work_buffer[2048];
+/* Configures the messaging framework */
+sf_message_cfg_t g_sf_message_cfg = { .p_work_memory_start =
+		&g_sf_message_work_buffer, .work_memory_size_bytes = 2048,
+		.buffer_size = sizeof(sf_message_payload_t), .pp_subscriber_lists =
+				p_subscriber_lists, .p_block_pool_name =
+				(uint8_t*) "sf_msg_blk_pool" };
+/* Instance structure to use this module. */
+const sf_message_instance_t g_sf_message = { .p_ctrl = &g_sf_message_ctrl,
+		.p_cfg = &g_sf_message_cfg, .p_api = &g_sf_message_on_sf_message };
+/*******************************************************************************************************************//**
+ * @brief      This is a weak example initialization error function.  It should be overridden by defining a user  function 
+ *             with the prototype below.
+ *             - void g_sf_message_err_callback(void * p_instance, void * p_data)
+ *
+ * @param[in]  p_instance arguments used to identify which instance caused the error and p_data Callback arguments used to identify what error caused the callback.
+ **********************************************************************************************************************/
+void g_sf_message_err_callback_internal(void *p_instance, void *p_data);
+void g_sf_message_err_callback_internal(void *p_instance, void *p_data) {
+	/** Suppress compiler warning for not using parameters. */
+	SSP_PARAMETER_NOT_USED(p_instance);
+	SSP_PARAMETER_NOT_USED(p_data);
+
+	/** An error has occurred. Please check function arguments for more information. */
+	BSP_CFG_HANDLE_UNRECOVERABLE_ERROR(0);
+}
+/*******************************************************************************************************************//**
+ * @brief     Initialization function that the user can choose to have called automatically during thread entry.
+ *            The user can call this function at a later time if desired using the prototype below.
+
+ *            - void sf_message_init0(void)
+ **********************************************************************************************************************/
+void sf_message_init0(void) {
+	ssp_err_t ssp_err_g_sf_message;
+
+	/* Initializes Messaging Framework Queues */
+	g_message_init();
+
+	/* Opens the messaging framework */
+	ssp_err_g_sf_message = g_sf_message.p_api->open(g_sf_message.p_ctrl,
+			g_sf_message.p_cfg);
+	if (SSP_SUCCESS != ssp_err_g_sf_message) {
+		/* Error returns, check the cause. */
+		g_sf_message_err_callback((void*) &g_sf_message, &ssp_err_g_sf_message);
+	}
+}
+extern TX_QUEUE sf_audio_dummy_message_queue;
+extern const sf_message_instance_t g_sf_message;
+sf_audio_playback_common_instance_ctrl_t g_sf_audio_playback_common;
+const sf_audio_playback_common_cfg_t g_sf_audio_playback_common_cfg = {
+		.p_lower_lvl_hw = &g_sf_audio_playback_hw, .priority = 3, .p_message =
+				&g_sf_message, .p_queue = &sf_audio_dummy_message_queue, };
 #define FX_COMMON_INITIALIZE (1)
 /*******************************************************************************************************************//**
  * @brief     Initialization function that the user can choose to have called automatically during thread entry.
@@ -1816,6 +1949,10 @@ const cgc_instance_t g_cgc = { .p_api = &g_cgc_on_cgc, .p_cfg = NULL };
 /* Instance structure to use this module. */
 const fmi_instance_t g_fmi = { .p_api = &g_fmi_on_fmi };
 void g_common_init(void) {
+	/** Call initialization function if user has selected to do so. */
+#if (1)
+	sf_message_init0();
+#endif
 	/** Call initialization function if user has selected to do so. */
 #if FX_COMMON_INITIALIZE
 	fx_common_init0();

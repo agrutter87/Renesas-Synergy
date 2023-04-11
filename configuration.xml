@@ -298,10 +298,58 @@
       <description>Express Logic GUIX: Provides=[GUIX] , Requires=[ThreadX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_audio_playback" variant="" vendor="Renesas" version="2.3.0">
+      <description>Audio Playback: Provides=[Audio Playback] , Requires=[DAC ,Timer ,Transfer ,ThreadX ,Message]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_audio_playback_hw_dac" variant="" vendor="Renesas" version="2.3.0">
+      <description>Audio Playback DAC: Provides=[Audio Playback] , Requires=[DAC ,Timer ,Transfer]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_message" variant="" vendor="Renesas" version="2.3.0">
+      <description>Messaging Framework: Provides=[Message] , Requires=[ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dac" variant="" vendor="Renesas" version="2.3.0">
+      <description>D/A Converter: Provides=[DAC]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
   <synergyMessagingConfiguration>
-    <subscriber context="rtos.threadx.thread.972549488" end="0" id="subscriber.268418874" start="0"/>
+    <event display="App Command Open" value="SF_MESSAGE_EVENT_APP_OPEN"/>
+    <event display="App Command Pause" value="SF_MESSAGE_EVENT_APP_PAUSE"/>
+    <event display="App Command Resume" value="SF_MESSAGE_EVENT_APP_RESUME"/>
+    <event display="App Command Close" value="SF_MESSAGE_EVENT_APP_CLOSE"/>
+    <event display="App Command Rewind" value="SF_MESSAGE_EVENT_APP_REWIND"/>
+    <event display="App Command Forward" value="SF_MESSAGE_EVENT_APP_FORWARD"/>
+    <event display="App Command Goto" value="SF_MESSAGE_EVENT_APP_GOTO"/>
+    <event display="App Command Restart" value="SF_MESSAGE_EVENT_APP_RESTART"/>
+    <event display="App Command Volume Up" value="SF_MESSAGE_EVENT_APP_VOL_UP"/>
+    <event display="App Command Volume Down" value="SF_MESSAGE_EVENT_APP_VOL_DOWN"/>
+    <event display="App Callback Status Changed" value="SF_MESSAGE_EVENT_APP_CB_STATUS"/>
+    <event display="App Callback Volume Changed" value="SF_MESSAGE_EVENT_APP_CB_VOLUME"/>
+    <event display="App Callback USB Inserted" value="SF_MESSAGE_EVENT_APP_CB_USB_IN"/>
+    <event display="App Callback USB Removed" value="SF_MESSAGE_EVENT_APP_CB_USB_OUT"/>
+    <event display="App Error Open" value="SF_MESSAGE_EVENT_APP_ERR_OPEN"/>
+    <event display="App Error Header" value="SF_MESSAGE_EVENT_APP_ERR_HEADER"/>
+    <event display="App Error Pause" value="SF_MESSAGE_EVENT_APP_ERR_PAUSE"/>
+    <event display="App Error Resume" value="SF_MESSAGE_EVENT_APP_ERR_RESUME"/>
+    <event display="App Error Close" value="SF_MESSAGE_EVENT_APP_ERR_CLOSE"/>
+    <event display="App Error Volume" value="SF_MESSAGE_EVENT_APP_ERR_VOLUME"/>
+    <event display="App Error Playback" value="SF_MESSAGE_EVENT_APP_ERR_PLAYBACK"/>
+    <event display="App Last Event" value="SF_MESSAGE_EVENT_APP_LAST"/>
+    <eventClass display="App Command" header="application_payloads.h" id="eventClass.53558607" payload="app_cmd_payload" payloadType="app_message_payload_t" value="SF_MESSAGE_EVENT_CLASS_APP_CMD"/>
+    <eventClass display="App Callback" header="application_payloads.h" id="eventClass.189790357" payload="app_cb_payload" payloadType="app_message_payload_t" value="SF_MESSAGE_EVENT_CLASS_APP_CB"/>
+    <subscriber context="rtos.threadx.thread.1121720153" end="0" id="subscriber.1135337400" start="0">
+      <subscribe eventClass="module.framework.sf_audio_playback_common.eventClass.eventClassAudio"/>
+    </subscriber>
+    <subscriber context="rtos.threadx.thread.1630860845" end="0" id="subscriber.1549514771" start="0">
+      <subscribe eventClass="eventClass.53558607"/>
+    </subscriber>
+    <subscriber context="rtos.threadx.thread.972549488" end="0" id="subscriber.1793070438" start="0">
+      <subscribe eventClass="eventClass.189790357"/>
+    </subscriber>
   </synergyMessagingConfiguration>
   <synergyModuleConfiguration>
     <module id="module.driver.cgc_on_cgc.0">
@@ -1064,6 +1112,71 @@
     <module id="module.el.gx_src.2014229521">
       <property id="module.el.gx_src.linkage_warning" value="module.el.gx_src.linkage_warning.disabled"/>
     </module>
+    <module id="module.framework.sf_message.899281604">
+      <property id="module.framework.sf_message.name" value="g_sf_message"/>
+      <property id="module.framework.sf_message.work_memory_size" value="2048"/>
+      <property id="module.framework.sf_message.pp_subscriber_lists" value="p_subscriber_lists"/>
+      <property id="module.framework.sf_message.p_blk_pool_name" value="sf_msg_blk_pool"/>
+      <property id="module.framework.sf_message.init_function" value="sf_message_init0"/>
+      <property id="module.framework.sf_message.init" value="module.framework.sf_message.init.enable"/>
+    </module>
+    <module id="module.framework.sf_audio_playback_on_sf_audio_playback.277907011">
+      <property id="module.framework.sf_audio_playback.name" value="g_sf_audio_playback"/>
+      <property id="module.framework.sf_audio_playback.classinstance" value="0"/>
+      <property id="module.framework.sf_audio_playback.p_callback" value="sf_audio_playback_callback"/>
+      <property id="module.framework.sf_audio_playback.init_function" value="sf_audio_playback_init0"/>
+      <property id="module.framework.sf_audio_playback.init" value="module.framework.sf_audio_playback.init.enable"/>
+    </module>
+    <module id="module.framework.sf_audio_playback_common_on_sf_audio_playback.615451781">
+      <property id="module.framework.sf_audio_playback_common.name" value="g_sf_audio_playback_common"/>
+      <property id="module.framework.sf_audio_playback_common.priority" value="3"/>
+      <property id="module.framework.sf_audio_playback_common.queuename" value="sf_audio_dummy_message_queue"/>
+    </module>
+    <module id="module.framework.sf_audio_playback_hw.1473775493">
+      <property id="module.framework.sf_audio_playback_hw.name" value="g_sf_audio_playback_hw"/>
+    </module>
+    <module id="module.driver.dac_on_dac.1236151924">
+      <property id="module.driver.dac.name" value="g_audio_dac"/>
+      <property id="module.driver.dac.channel_id" value="0"/>
+      <property id="module.driver.dac.ad_da_synchronized" value="module.driver.dac.ad_da_synchronized.false"/>
+      <property id="module.driver.dac.data_format" value="module.driver.dac.data_format.data_format_flush_right"/>
+      <property id="module.driver.dac.output_amplifier_enabled" value="module.driver.dac.output_amplifier_enabled.false"/>
+      <property id="module.driver.dac.charge_pump_enabled" value="module.driver.dac.charge_pump_enabled.false"/>
+    </module>
+    <module id="module.driver.transfer_on_dtc.776388910">
+      <property id="module.driver.transfer.name" value="g_audio_transfer"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="&amp;R_DAC-&gt;DADRn[0]"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_gpt0_counter_overflow"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
+    </module>
+    <module id="module.driver.timer_on_gpt.588903283">
+      <property id="module.driver.timer.name" value="g_audio_timer"/>
+      <property id="module.driver.timer.channel" value="0"/>
+      <property id="module.driver.timer.mode" value="module.driver.timer.mode.mode_periodic"/>
+      <property id="module.driver.timer.shortest_pwm_signal" value="module.driver.timer.mode.shortest_pwm_signal_disabled"/>
+      <property id="module.driver.timer.period" value="44100"/>
+      <property id="module.driver.timer.unit" value="module.driver.timer.unit.unit_period_msec"/>
+      <property id="module.driver.timer.duty_cycle" value="50"/>
+      <property id="module.driver.timer.duty_cycle_unit" value="module.driver.timer.duty_cycle_unit.unit_percent"/>
+      <property id="module.driver.timer.autostart" value="module.driver.timer.autostart.true"/>
+      <property id="module.driver.timer.gtioca_output_enabled" value="module.driver.timer.gtioca_output_enabled.false"/>
+      <property id="module.driver.timer.gtioca_stop_level" value="module.driver.timer.gtioca_stop_level.pin_level_low"/>
+      <property id="module.driver.timer.gtiocb_output_enabled" value="module.driver.timer.gtiocb_output_enabled.false"/>
+      <property id="module.driver.timer.gtiocb_stop_level" value="module.driver.timer.gtiocb_stop_level.pin_level_low"/>
+      <property id="module.driver.timer.p_callback" value="NULL"/>
+      <property id="module.driver.timer.irq_ipl" value="board.icu.common.irq.priority8"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
       <stack module="module.driver.cgc_on_cgc.0"/>
@@ -1124,9 +1237,9 @@
       <property id="_symbol" value="gui_thread"/>
       <property id="rtos.threadx.thread.name" value="GUI Thread"/>
       <property id="rtos.threadx.thread.stack" value="2048"/>
-      <property id="rtos.threadx.thread.priority" value="9"/>
-      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
-      <property id="rtos.threadx.thread.timeslice" value="10"/>
+      <property id="rtos.threadx.thread.priority" value="5"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="1"/>
       <stack module="module.el.gx.1759321716">
         <stack module="module.framework.sf_el_gx.1033111048" requires="module.el.gx.requires.sf_el_gx">
           <stack module="module.driver.display_on_glcd.374521858" requires="module.framework.sf_el_gx.requires.display"/>
@@ -1177,7 +1290,7 @@
       <property id="_symbol" value="usb_thread"/>
       <property id="rtos.threadx.thread.name" value="USB Thread"/>
       <property id="rtos.threadx.thread.stack" value="2048"/>
-      <property id="rtos.threadx.thread.priority" value="1"/>
+      <property id="rtos.threadx.thread.priority" value="7"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="10"/>
       <stack module="module.framework.fx_usbmsc.727326386">
@@ -1264,6 +1377,37 @@
         </stack>
       </stack>
     </context>
+    <context id="rtos.threadx.thread.1630860845">
+      <property id="_symbol" value="audio_thread"/>
+      <property id="rtos.threadx.thread.name" value="Audio Thread"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
+      <property id="rtos.threadx.thread.priority" value="8"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="1"/>
+      <stack module="module.framework.sf_audio_playback_on_sf_audio_playback.277907011">
+        <stack module="module.framework.sf_audio_playback_common_on_sf_audio_playback.615451781" requires="module.framework.sf_audio_playback.requires.sf_audio_playback_common">
+          <stack module="module.framework.sf_message.899281604" requires="module.framework.sf_audio_playback_common.requires.sf_message"/>
+          <stack module="module.framework.sf_audio_playback_hw.1473775493" requires="module.framework.sf_audio_playback_common.requires.sf_audio_playback_hw">
+            <stack module="module.driver.transfer_on_dtc.776388910" requires="module.framework.sf_audio_playback_hw_dac.requires.transfer"/>
+            <stack module="module.driver.timer_on_gpt.588903283" requires="module.framework.sf_audio_playback_hw_dac.requires.timer"/>
+            <stack module="module.driver.dac_on_dac.1236151924" requires="module.framework.sf_audio_playback_hw_dac.requires.dac"/>
+          </stack>
+        </stack>
+      </stack>
+      <object id="rtos.threadx.object.semaphore.393736575">
+        <property id="rtos.threadx.object.semaphore.name" value="Audio Semaphore"/>
+        <property id="rtos.threadx.object.semaphore.symbol" value="g_sf_audio_playback_semaphore"/>
+        <property id="rtos.threadx.object.semaphore.count" value="0"/>
+      </object>
+    </context>
+    <context id="rtos.threadx.thread.1121720153">
+      <property id="_symbol" value="sf_audio_dummy"/>
+      <property id="rtos.threadx.thread.name" value="Audio Framework Dummy Thread"/>
+      <property id="rtos.threadx.thread.stack" value="512"/>
+      <property id="rtos.threadx.thread.priority" value="9"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.disabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="1"/>
+    </context>
     <config id="config.driver.jpeg_decode">
       <property id="config.driver.jpeg_decode.param_checking_enable" value="config.driver.jpeg_decode.param_checking_enable.bsp"/>
     </config>
@@ -1278,10 +1422,18 @@
     <config id="config.driver.glcd">
       <property id="config.driver.glcd.param_checking_enable" value="config.driver.glcd.param_checking_enable.bsp"/>
     </config>
+    <config id="config.framework.sf_audio_playback_hw_dac">
+      <property id="config.framework.sf_audio_playback_hw_dac.param_checking_enable" value="config.framework.sf_audio_playback_hw_dac.param_checking_enable.bsp"/>
+      <property id="config.framework.sf_audio_playback_hw_dac.dmac_support_enable" value="config.framework.sf_audio_playback_hw_dac.dmac_support_enable.disabled"/>
+    </config>
     <config id="config.framework.sf_el_ux_comms_v2">
       <property id="config.framework.sf_comms.param_checking_enable" value="config.framework.sf_comms.param_checking_enable.bsp"/>
       <property id="config.framework.sf_comms.read_size" value="128"/>
       <property id="config.framework.sf_comms.timeout" value="100"/>
+    </config>
+    <config id="config.framework.sf_message">
+      <property id="config.framework.sf_message.param_checking_enable" value="config.framework.sf_message.param_checking_enable.bsp"/>
+      <property id="config.framework.sf_message.queue_depth" value="16"/>
     </config>
     <config id="config.driver.cgc">
       <property id="config.driver.cgc.param_checking_enable" value="config.driver.cgc.param_checking_enable.bsp"/>
@@ -1330,6 +1482,9 @@
       <property id="config.framework.sf_touch_panel_v2.param_checking_enable" value="config.framework.sf_touch_panel_v2.param_checking_enable.bsp"/>
       <property id="config.framework.sf_touch_panel_v2.thread_stack_size" value="1024"/>
     </config>
+    <config id="config.driver.dac">
+      <property id="config.driver.dac.param_checking_enable" value="config.driver.dac.param_checking_enable.bsp"/>
+    </config>
     <config id="config.driver.adc">
       <property id="config.driver.adc.param_checking_enable" value="config.driver.adc.param_checking_enable.enabled"/>
     </config>
@@ -1345,6 +1500,12 @@
       <property id="config.driver.sci_uart.uart_rx_enable" value="config.driver.sci_uart.uart_rx_enable.enabled"/>
       <property id="config.driver.sci_uart.uart_tx_enable" value="config.driver.sci_uart.uart_tx_enable.enabled"/>
       <property id="config.driver.sci_uart.param_checking_enable" value="config.driver.sci_uart.param_checking_enable.bsp"/>
+    </config>
+    <config id="config.framework.sf_audio_playback">
+      <property id="config.framework.sf_audio_playback.param_checking_enable" value="config.framework.sf_audio_playback.param_checking_enable.bsp"/>
+      <property id="config.framework.sf_audio_playback.buffer_size_bytes" value="8192"/>
+      <property id="config.framework.sf_audio_playback.max_streams" value="1"/>
+      <property id="config.framework.sf_audio_playback.thread_stack_size" value="512"/>
     </config>
     <config id="config.framework.sf_el_ux">
       <property id="config.framework.sf_el_ux.VBUSENpin_logic" value="config.framework.sf_el_ux.VBUSENpin_logic.active_high"/>

@@ -1,190 +1,184 @@
-/*-------------------------------------------------------------------------*
- * File:  gui_thread_entry.c
- *-------------------------------------------------------------------------*
- * Description:
- */
- /**
- *    @addtogroup gui_thread_entry
- *  @{
- *  @brief     TODO: Description
- *
- * @par Example code:
- * TODO: Description of overall example code
- * @par
- * @code
- * TODO: Insert example code
- * @endcode
- */
-/*-------------------------------------------------------------------------*/
+/***********************************************************************************************************************
+* Copyright [2016] Renesas Electronics Corporation and/or its licensors. All Rights Reserved.
+* 
+ * This file is part of Renesas SynergyTM Software Package (SSP)
+*
+* The contents of this file (the "contents") are proprietary and confidential to Renesas Electronics Corporation
+* and/or its licensors ("Renesas") and subject to statutory and contractual protections.
+*
+* This file is subject to a Renesas SSP license agreement. Unless otherwise agreed in an SSP license agreement with
+* Renesas: 1) you may not use, copy, modify, distribute, display, or perform the contents; 2) you may not use any name
+* or mark of Renesas for advertising or publicity purposes or in connection with your use of the contents; 3) RENESAS
+* MAKES NO WARRANTY OR REPRESENTATIONS ABOUT THE SUITABILITY OF THE CONTENTS FOR ANY PURPOSE; THE CONTENTS ARE PROVIDED
+* "AS IS" WITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+* PARTICULAR PURPOSE, AND NON-INFRINGEMENT; AND 4) RENESAS SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, OR
+* CONSEQUENTIAL DAMAGES, INCLUDING DAMAGES RESULTING FROM LOSS OF USE, DATA, OR PROJECTS, WHETHER IN AN ACTION OF
+* CONTRACT OR TORT, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE CONTENTS. Third-party contents
+* included in this file may be subject to different terms.
+**********************************************************************************************************************/
 
-/*--------------------------------------------------------------------------
- * Created by: Alex Grutter
- *--------------------------------------------------------------------------*/
+#include "application_define.h"
+#ifdef BSP_BOARD_S7G2_SK
+#include "lcd_setup/lcd_setup.h"
+#endif
+#ifdef BSP_BOARD_S5D9_PK
+#include "lcd_setup/lcd_setup.h"
+#endif
 
-/*-------------------------------------------------------------------------*
- * Includes:
- *-------------------------------------------------------------------------*/
-#include <gui.h>
+#include "guix_gen/audio_player_resources.h"
+#include "guix_gen/audio_player_specifications.h"
 
-/*-------------------------------------------------------------------------*
- * Constants:
- *-------------------------------------------------------------------------*/
+void           gui_thread_entry (void);
 
-/*-------------------------------------------------------------------------*
- * Types:
- *-------------------------------------------------------------------------*/
+GX_WINDOW_ROOT * p_window_root = NULL;
+static GX_EVENT     g_gx_event      = { 0 };
 
-/*-------------------------------------------------------------------------*
- * Globals:
- *-------------------------------------------------------------------------*/
-static GX_EVENT 	g_gx_event		= { 0 };
-
-/*-------------------------------------------------------------------------*
- * Prototypes:
- *-------------------------------------------------------------------------*/
-static bool ssp_touch_event_to_guix_event(sf_touch_panel_v2_payload_t * p_touch_payload, GX_EVENT * g_gx_event);
-
-/*---------------------------------------------------------------------------*
- * Function: gui_thread_entry
- *---------------------------------------------------------------------------*/
-/** TODO: Description of Function
- *
- *  @param [in] p_args      TODO: Pointer to arguments provided by SSP
- *  @par Example Code:
- *  @code
- *  //TODO: provide example or remove if not needed
- *  @endcode
- */
-/*---------------------------------------------------------------------------*/
-void gui_thread_entry(void)
+/* GUI Thread entry function */
+void gui_thread_entry (void)
 {
-    ssp_err_t 					ssp_err 			= SSP_SUCCESS;
-    UINT 						gx_status 			= GX_SUCCESS;
-    GX_CONST GX_STUDIO_WIDGET 	**pp_studio_widget 	= &guix_widget_table[0];
+    UINT                    status;
+    app_message_payload_t * p_message = NULL;
 
-    /* Initializes GUIX. */
-    gx_status = gx_system_initialize ();
-    if(gx_status)
+    status = gx_system_initialize();
+    APP_ERROR_TRAP(status)
+
+    status = g_sf_el_gx.p_api->open(g_sf_el_gx.p_ctrl, g_sf_el_gx.p_cfg);
+    APP_ERROR_TRAP(status)
+
+    status = gx_studio_display_configure(0, g_sf_el_gx.p_api->setup, 0, 0, &p_window_root);
+    APP_ERROR_TRAP(status)
+
+    status = g_sf_el_gx.p_api->canvasInit(g_sf_el_gx.p_ctrl, p_window_root);
+    APP_ERROR_TRAP(status)
+
+    status = gx_studio_named_widget_create("w_bg_splash", (GX_WIDGET *) p_window_root, GX_NULL);
+    APP_ERROR_TRAP(status)
+
+    status = gx_widget_show(p_window_root);
+    APP_ERROR_TRAP(status)
+
+    status = gx_system_start();
+    APP_ERROR_TRAP(status)
+
+#ifdef BSP_BOARD_S7G2_SK
+    /** Open the SPI driver to initialize the LCD and setup ILI9341V driver **/
+    status = ILI9341V_Init(&g_spi0);
+    APP_ERROR_TRAP(status)
+#endif
+
+#ifdef BSP_BOARD_S5D9_PK
+    /** Open the SPI driver to initialize the LCD and setup ILI9341V driver **/
+    status = ILI9341V_Init(&g_spi0);
+    APP_ERROR_TRAP(status)
+#endif
+
+#ifdef BSP_BOARD_S7G2_DK
+    /** Enable the display */
+    status = g_ioport.p_api->pinWrite(IOPORT_PORT_07_PIN_10, IOPORT_LEVEL_HIGH);
+    APP_ERROR_TRAP(status)
+
+    /** Enable display backlight */
+    status = g_ioport.p_api->pinWrite(IOPORT_PORT_07_PIN_12, IOPORT_LEVEL_HIGH);
+    APP_ERROR_TRAP(status)
+#endif
+
+#ifdef BSP_BOARD_S7G2_PE_HMI1
+    /** Enable the display */
+    status = g_ioport.p_api->pinWrite(IOPORT_PORT_10_PIN_03, IOPORT_LEVEL_HIGH);
+    APP_ERROR_TRAP(status)
+
+    /** Enable display backlight */
+    ssp_err_t ssp_err = g_backlight_pwm.p_api->open(g_backlight_pwm.p_ctrl, g_backlight_pwm.p_cfg);
+    APP_ERROR_TRAP(ssp_err)
+#endif
+
+    while (1)
     {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::gx_system_initialize\r\n");
-    }
-
-    /* Initializes GUIX drivers. */
-    ssp_err = g_sf_el_gx.p_api->open (g_sf_el_gx.p_ctrl, g_sf_el_gx.p_cfg);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_sf_el_gx.p_api->open\r\n");
-    }
-
-    gx_status = gx_studio_display_configure ( DISPLAY_1, g_sf_el_gx.p_api->setup, LANGUAGE_ENGLISH,
-                                 DISPLAY_1_THEME_1, &p_window_root);
-    if(gx_status)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::gx_studio_display_configure\r\n");
-    }
-
-    ssp_err = g_sf_el_gx.p_api->canvasInit (g_sf_el_gx.p_ctrl, p_window_root);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_sf_el_gx.p_api->canvasInit\r\n");
-    }
-
-    // Create the widgets we have defined with the GUIX data structures and resources.
-    while (GX_NULL != *pp_studio_widget)
-    {
-        // We must first create the widgets according the data generated in GUIX Studio.
-
-        // Once we are working on the widget we want to see first, save the pointer for later.
-        if (0 == strcmp ("init_window", (char*) (*pp_studio_widget)->widget_name))
+        status = g_sf_message.p_api->pend(g_sf_message.p_ctrl,
+                                          &gui_thread_message_queue,
+                                          (sf_message_header_t **) &p_message,
+                                          TX_WAIT_FOREVER);
+        if (!status && (p_message->header.event_b.class_code == SF_MESSAGE_EVENT_CLASS_APP_CB))
         {
-            gx_status = gx_studio_named_widget_create ((*pp_studio_widget)->widget_name, (GX_WIDGET *) p_window_root, GX_NULL);
-            if(gx_status)
+            GX_EVENT gxe =
             {
-                // TODO: Error handling
-                debug_print("\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
+                .gx_event_type           = GX_NULL,
+                .gx_event_sender         = GX_ID_NONE,
+                .gx_event_target         = GX_ID_NONE,
+                .gx_event_display_handle = GX_ID_NONE
+            };
+
+            switch (p_message->header.event_b.code)
+            {
+                case SF_MESSAGE_EVENT_APP_CB_STATUS:
+                {
+                    gxe.gx_event_type = APP_EVENT_STATUS_CHANGED;
+
+                    break;
+                }
+
+                case SF_MESSAGE_EVENT_APP_CB_VOLUME:
+                {
+                    gxe.gx_event_type = APP_EVENT_VOLUME_CHANGED;
+
+                    break;
+                }
+
+                case SF_MESSAGE_EVENT_APP_CB_USB_IN:
+                {
+                    gxe.gx_event_type = APP_EVENT_USB_INSERTED;
+
+                    break;
+                }
+
+                case SF_MESSAGE_EVENT_APP_CB_USB_OUT:
+                {
+                    gxe.gx_event_type = APP_EVENT_USB_REMOVED;
+
+                    break;
+                }
+
+                case SF_MESSAGE_EVENT_APP_ERR_OPEN:
+                case SF_MESSAGE_EVENT_APP_ERR_PAUSE:
+                case SF_MESSAGE_EVENT_APP_ERR_RESUME:
+                case SF_MESSAGE_EVENT_APP_ERR_CLOSE:
+                case SF_MESSAGE_EVENT_APP_ERR_VOLUME:
+                case SF_MESSAGE_EVENT_APP_ERR_PLAYBACK:
+                {
+                    gxe.gx_event_type                       = APP_EVENT_ERROR;
+                    gxe.gx_event_payload.gx_event_ulongdata = p_message->header.event_b.code;
+
+                    break;
+                }
+
+                case SF_MESSAGE_EVENT_APP_ERR_HEADER:
+                {
+                    gxe.gx_event_type                       = APP_EVENT_ERROR;
+                    gxe.gx_event_payload.gx_event_ulongdata = p_message->data.error_code;
+
+                    break;
+                }
+            }
+
+            if (gxe.gx_event_type != GX_NULL)
+            {
+                status = gx_system_event_send(&gxe);
+                APP_ERROR_TRAP(status)
             }
         }
-        else
-        {
-            gx_status = gx_studio_named_widget_create ((*pp_studio_widget)->widget_name, GX_NULL, GX_NULL);
-            if(gx_status)
-            {
-                // TODO: Error handling
-                debug_print("\r\nError at gui_thread_entry::gx_studio_named_widget_create\r\n");
-            }
-        }
-        // Move to next top-level widget
-        pp_studio_widget++;
-    }
 
-    /* Shows the root window to make it and patients screen visible. */
-    gx_status = gx_widget_show(p_window_root);
-    if(gx_status)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::gx_widget_show\r\n");
+        status = g_sf_message.p_api->bufferRelease(g_sf_message.p_ctrl,
+                                                   (sf_message_header_t *) p_message,
+                                                   SF_MESSAGE_RELEASE_OPTION_ACK);
+        APP_ERROR_TRAP(status);
     }
-
-    /* Lets GUIX run. */
-    gx_status = gx_system_start ();
-    if(gx_status)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::gx_system_start\r\n");
-    }
-
-#if defined(BSP_BOARD_S7G2_SK)
-    /** Open the SPI driver to initialize the LCD (SK-S7G2) **/
-    ssp_err = g_spi_lcdc.p_api->open (g_spi_lcdc.p_ctrl, (spi_cfg_t *) g_spi_lcdc.p_cfg);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_spi_lcdc.p_api->open\r\n");
-    }
-
-    /** Setup the ILI9341V (SK-S7G2) **/
-    ILI9341V_Init ();
-#endif
-
-    /* Controls the GPIO pin for LCD ON (DK-S7G2, PE-HMI1) */
-#if defined(BSP_BOARD_S7G2_DK)
-    ssp_err = g_ioport.p_api->pinWrite(IOPORT_PORT_07_PIN_10, IOPORT_LEVEL_HIGH);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
-    }
-#elif defined(BSP_BOARD_S7G2_PE_HMI1)
-    ssp_err = g_ioport.p_api->pinWrite(IOPORT_PORT_10_PIN_03, IOPORT_LEVEL_HIGH);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_ioport.p_api->pinWrite\r\n");
-    }
-#endif
-
-    /* Opens PWM driver and controls the TFT panel back light (DK-S7G2, PE-HMI1) */
-#if defined(BSP_BOARD_S7G2_DK) || defined(BSP_BOARD_S7G2_PE_HMI1)
-    ssp_err = g_backlight_pwm.p_api->open(g_backlight_pwm.p_ctrl, g_backlight_pwm.p_cfg);
-    if(ssp_err)
-    {
-        // TODO: Error handling
-        debug_print("\r\nError at gui_thread_entry::g_backlight_pwm.p_api->open\r\n");
-    }
-#endif
-
-	/* Let thread die, with updated Synergy V2 touch, this thread is no longer needed to handle touch events */
 }
 
 void touch_callback(sf_touchpanel_v2_callback_args_t *p_args)
 {
-    UINT 		gx_status 		= GX_SUCCESS;
-    bool 		send_event 		= true;
-    GX_EVENT 	*p_gx_event 	= &g_gx_event;
+    UINT        gx_status       = GX_SUCCESS;
+    bool        send_event      = true;
+    GX_EVENT    *p_gx_event     = &g_gx_event;
     sf_touch_panel_v2_payload_t const * const p_payload = &p_args->payload;
 
     switch (p_payload->event_type)
@@ -239,10 +233,56 @@ void touch_callback(sf_touchpanel_v2_callback_args_t *p_args)
     }
 }
 
-#if defined(BSP_BOARD_S7G2_SK)
-void g_lcd_spi_callback(spi_callback_args_t * p_args)
+#ifndef BSP_BOARD_S7G2_PE_HMI1 /* Pushbuttons are only present on the SK/DK-S7G2 boards */
+
+void g_btn_down_callback (external_irq_callback_args_t * p_args)
 {
-    (void) p_args;
-    tx_semaphore_ceiling_put (&g_main_semaphore_lcdc, 1);
+    SSP_PARAMETER_NOT_USED(p_args);
+
+    app_message_payload_t  * p_message = NULL;
+    sf_message_acquire_cfg_t cfg_acquire =
+    {
+        .buffer_keep = false
+    };
+    sf_message_post_cfg_t    cfg_post    =
+    {
+        .priority = SF_MESSAGE_PRIORITY_NORMAL
+    };
+
+    g_sf_message.p_api->bufferAcquire(g_sf_message.p_ctrl, (sf_message_header_t **) &p_message, &cfg_acquire,
+                                      TX_NO_WAIT);
+
+    p_message->header.event_b.class_code          = SF_MESSAGE_EVENT_CLASS_APP_CMD;
+    p_message->header.event_b.class_instance = 0;
+    p_message->header.event_b.code           = SF_MESSAGE_EVENT_APP_VOL_DOWN;
+    p_message->data.vol_change               = 15;
+
+    g_sf_message.p_api->post(g_sf_message.p_ctrl, &p_message->header, &cfg_post, NULL, TX_NO_WAIT);
 }
+
+void g_btn_up_callback (external_irq_callback_args_t * p_args)
+{
+    SSP_PARAMETER_NOT_USED(p_args);
+
+    app_message_payload_t  * p_message = NULL;
+    sf_message_acquire_cfg_t cfg_acquire =
+    {
+        .buffer_keep = false
+    };
+    sf_message_post_cfg_t    cfg_post    =
+    {
+        .priority = SF_MESSAGE_PRIORITY_NORMAL
+    };
+
+    g_sf_message.p_api->bufferAcquire(g_sf_message.p_ctrl, (sf_message_header_t **) &p_message, &cfg_acquire,
+                                      TX_NO_WAIT);
+
+    p_message->header.event_b.class_code          = SF_MESSAGE_EVENT_CLASS_APP_CMD;
+    p_message->header.event_b.class_instance = 0;
+    p_message->header.event_b.code           = SF_MESSAGE_EVENT_APP_VOL_UP;
+    p_message->data.vol_change               = 15;
+
+    g_sf_message.p_api->post(g_sf_message.p_ctrl, &p_message->header, &cfg_post, NULL, TX_NO_WAIT);
+}
+
 #endif

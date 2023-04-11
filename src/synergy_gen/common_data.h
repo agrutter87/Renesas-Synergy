@@ -3,10 +3,18 @@
 #define COMMON_DATA_H_
 #include <stdint.h>
 #include "bsp_api.h"
+#include "r_dac.h"
+#include "r_dac_api.h"
+#include "r_gpt.h"
+#include "r_timer_api.h"
+#include "r_dtc.h"
+#include "r_transfer_api.h"
+#include "sf_audio_playback_hw_dac.h"
+#include "sf_message.h"
+#include "sf_message_payloads.h"
+#include "sf_audio_playback.h"
 #include "fx_api.h"
 #include "r_dmac.h"
-#include "r_transfer_api.h"
-#include "r_dtc.h"
 #include "r_transfer_api.h"
 #include "r_riic.h"
 #include "r_i2c_api.h"
@@ -32,6 +40,25 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/** DAC on DAC Instance. */
+extern const dac_instance_t g_audio_dac;
+/** Timer on GPT Instance. */
+extern const timer_instance_t g_audio_timer;
+#ifndef NULL
+void NULL(timer_callback_args_t *p_args);
+#endif
+/* Transfer on DTC Instance. */
+extern const transfer_instance_t g_audio_transfer;
+#ifndef NULL
+void NULL(transfer_callback_args_t *p_args);
+#endif
+extern const sf_audio_playback_hw_instance_t g_sf_audio_playback_hw;
+extern void g_message_init(void);
+
+/* SF Message on SF Message Instance. */
+extern const sf_message_instance_t g_sf_message;
+void g_sf_message_err_callback(void *p_instance, void *p_data);
+void sf_message_init0(void);
 void fx_common_init0(void);
 /* Transfer on DMAC Instance. */
 extern const transfer_instance_t g_transfer10;

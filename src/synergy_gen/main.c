@@ -9,6 +9,8 @@ extern void gui_thread_create(void);
 extern void accelerometer_thread_create(void);
 extern void usb_thread_create(void);
 extern void lidar_thread_create(void);
+extern void audio_thread_create(void);
+extern void sf_audio_dummy_create(void);
 
 uint32_t g_ssp_common_thread_count;
 bool g_ssp_common_initialized;
@@ -68,6 +70,8 @@ void tx_application_define(void *first_unused_memory) {
 	accelerometer_thread_create();
 	usb_thread_create();
 	lidar_thread_create();
+	audio_thread_create();
+	sf_audio_dummy_create();
 
 #ifdef TX_USER_ENABLE_TRACE
 					TX_USER_ENABLE_TRACE;

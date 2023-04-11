@@ -41,7 +41,7 @@ void usb_thread_create(void) {
 
 	UINT err;
 	err = tx_thread_create(&usb_thread, (CHAR*) "USB Thread", usb_thread_func,
-			(ULONG) NULL, &usb_thread_stack, 2048, 1, 1, 10, TX_AUTO_START);
+			(ULONG) NULL, &usb_thread_stack, 2048, 7, 7, 10, TX_AUTO_START);
 	if (TX_SUCCESS != err) {
 		tx_startup_err_callback(&usb_thread, 0);
 	}
