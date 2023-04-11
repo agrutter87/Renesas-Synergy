@@ -33,9 +33,9 @@ Synergy Configuration
          HOCO OScillation Enable: HOCO oscillation is disabled after reset
     
   Synergy Common
-    Main stack size (bytes): 0x1000
+    Main stack size (bytes): 0x4000
     Process stack size (bytes): 0
-    Heap size (bytes) - A minimum of 4K (0x1000) is required if standard library functions are to be used.: 0x1000
+    Heap size (bytes) - A minimum of 4K (0x1000) is required if standard library functions are to be used.: 0x4000
     MCU Vcc (mV): 3300
     MCU Analog Power Supply AVCC0 (mV): 3300
     Parameter checking: Enabled
@@ -349,7 +349,7 @@ Synergy Configuration
     Parameter Checking: Default (BSP)
     Maximum Input String Length: 128
     Maximum Write String Length: 64
-    Console print timeout value: 0xFFFFFFFF
+    Console print timeout value: 100
     
   Module "Communications Framework on sf_el_ux_comms_v2"
     Parameter Checking: Default (BSP)
@@ -381,7 +381,7 @@ Synergy Configuration
     
   Module "Touch Panel V2 Framework on sf_touch_panel_v2"
     Parameter Checking: Default (BSP)
-    Thread Stack Size: 512
+    Thread Stack Size: 1024
     
   Module "Touch_panel_chip_ft5x06"
   Module "I2C Framework Device on sf_i2c"
@@ -567,6 +567,37 @@ Synergy Configuration
   Module "Transfer Driver on r_dmac"
     Parameter Checking: Default (BSP)
     
+  Module "GUIX Source"
+    GUIX Stack Size: 
+    GUIX System Timer (Milliseconds): 
+    GUIX Timer Rate: 
+    Disable Multithread Support: No(default)
+    Disable UTF8 Support: No(default)
+    GUIX Event Queue Size: 
+    GUIX Thread Priority: 16
+    GUIX Thread Time Slice: 10
+    Use User Data Field in GX_WIDGET Structure: No(default)
+    Disable arc drawing support: No(default)
+    Disable software decoder support: No(default)
+    Disable binary resource support: No(default)
+    Repeat button initial tics: 
+    Maximum number of unique dirty list entries: 
+    Maximum nesting of context: 
+    Maximum input capture nesting: 
+    Cursor blink interval: 
+    Multi line index cache size: 
+    Multi line text button maximum lines: 
+    Maximum number of polygon edges: 
+    Numeric scroll wheel string buffer size: 
+    Circular gauge animation delay: 
+    Numeric prompt buffer size: 
+    Animation pool size: 
+    Mouse support: Disable(default)
+    Hardware mouse support: Disable(default)
+    Font kerning support: Disable(default)
+    Disable brush alpha support: No(default)
+    Maximum string length: 
+    
   HAL
     Instance "g_fmi FMI Driver on r_fmi"
       Name: g_fmi
@@ -600,7 +631,7 @@ Synergy Configuration
   Thread "Main System Thread"
     Symbol: main_system_thread
     Name: Main System Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 7
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -701,7 +732,7 @@ Synergy Configuration
   Thread "Debug Thread"
     Symbol: debug_thread
     Name: Debug Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 8
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -715,7 +746,7 @@ Synergy Configuration
   Thread "CLI Thread"
     Symbol: cli_thread
     Name: CLI Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 9
     Auto start: Enabled
     Time slicing interval (ticks): 1
@@ -795,7 +826,7 @@ Synergy Configuration
   Thread "GUI Thread"
     Symbol: gui_thread
     Name: GUI Thread
-    Stack size (bytes): 2048
+    Stack size (bytes): 4096
     Priority: 9
     Auto start: Enabled
     Time slicing interval (ticks): 10
@@ -1014,6 +1045,9 @@ Synergy Configuration
               
         Instance "D/AVE 2D Driver on dave2d"
           Instance "D/AVE 2D Port on sf_tes_2d_drw"
+      Instance "GUIX Source"
+        Show linkage warning: Disabled
+        
     Instance "g_sf_touch_panel Touch Panel V2 Framework on sf_touch_panel_v2"
       Name: g_sf_touch_panel
       Thread Priority: 3
@@ -1104,7 +1138,7 @@ Synergy Configuration
   Thread "Accelerometer Thread"
     Symbol: accelerometer_thread
     Name: Accelerometer Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 6
     Auto start: Disabled
     Time slicing interval (ticks): 1
@@ -1454,7 +1488,7 @@ Synergy Configuration
   Thread "LiDAR Thread"
     Symbol: lidar_thread
     Name: LiDAR Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 9
     Auto start: Disabled
     Time slicing interval (ticks): 1

@@ -294,6 +294,10 @@
       <description>Express Logic USBX Host Class Video: Provides=[USBX Host Class Video] , Requires=[ThreadX ,USBX]</description>
       <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
     </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="gx_src" variant="" vendor="Renesas" version="2.3.0">
+      <description>Express Logic GUIX: Provides=[GUIX] , Requires=[ThreadX]</description>
+      <originalPack>Renesas.Synergy.2.3.0.pack</originalPack>
+    </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
   <synergyMessagingConfiguration>
@@ -1057,6 +1061,9 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.priority2"/>
     </module>
+    <module id="module.el.gx_src.2014229521">
+      <property id="module.el.gx_src.linkage_warning" value="module.el.gx_src.linkage_warning.disabled"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.fmi_on_fmi.0"/>
       <stack module="module.driver.cgc_on_cgc.0"/>
@@ -1132,6 +1139,7 @@
             <stack module="module.framework.sf_tes_2d_drw.588474101" requires="module.framework.tes.dave2d.requires.sf_tes_2d_drw"/>
           </stack>
         </stack>
+        <stack module="module.el.gx_src.2014229521" requires="module.el.gx.requires.gx_src"/>
       </stack>
       <stack module="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.720543584">
         <stack module="module.external.ex_touch_panel_chip_ft5x06_on_ex_touch_panel_chip_ft5x06.2081681592" requires="module.framework.sf_touch_panel_v2_on_sf_touch_panel_v2.requires.ex_touch_chip">
@@ -1283,13 +1291,44 @@
       <property id="config.driver.cgc.subclock_at_reset_enable" value="config.driver.cgc.subclock_at_reset_enable.enabled"/>
       <property id="config.driver.cgc.low_voltage_mode" value="config.driver.cgc.low_voltage_mode.disabled"/>
     </config>
+    <config id="config.el.gx_src">
+      <property id="config.el.gx_src.stack_size" value=""/>
+      <property id="config.el.gx_src.system_timer_ms" value=""/>
+      <property id="config.el.gx_src.system_timer_ticks" value=""/>
+      <property id="config.el.gx_src.disable_multithread_support" value="config.el.gx_src.disable_multithread_support.no"/>
+      <property id="config.el.gx_src.disable_utf8_support" value="config.el.gx_src.disable_utf8_support.no"/>
+      <property id="config.el.gx_src.max_queue_events" value=""/>
+      <property id="config.el.gx_src.thread_priority" value="16"/>
+      <property id="config.el.gx_src.thread_time_slice" value="10"/>
+      <property id="config.el.gx_src.widget_user_data" value="config.el.gx_src.widget_user_data.no"/>
+      <property id="config.el.gx_src.disable_arc_drawing_support" value="config.el.gx_src.disable_arc_drawing_support.no"/>
+      <property id="config.el.gx_src.disable_software_decoder_support" value="config.el.gx_src.disable_software_decoder_support.no"/>
+      <property id="config.el.gx_src.disable_binary_resource_support" value="config.el.gx_src.disable_binary_resource_support.no"/>
+      <property id="config.el.gx_src.repeat_button_initial_tics" value=""/>
+      <property id="config.el.gx_src.max_dirty_areas" value=""/>
+      <property id="config.el.gx_src.max_context_nesting" value=""/>
+      <property id="config.el.gx_src.max_input_capture_nesting" value=""/>
+      <property id="config.el.gx_src.cursor_blink_interval" value=""/>
+      <property id="config.el.gx_src.multi_line_index_cache_size" value=""/>
+      <property id="config.el.gx_src.multi_line_text_button_max_lines" value=""/>
+      <property id="config.el.gx_src.polygon_max_edge_num" value=""/>
+      <property id="config.el.gx_src.numeric_scroll_wheel_string_buffer_size" value=""/>
+      <property id="config.el.gx_src.circular_gauge_animation_delay" value=""/>
+      <property id="config.el.gx_src.numeric_prompt_buffer_size" value=""/>
+      <property id="config.el.gx_src.animation_pool_size" value=""/>
+      <property id="config.el.gx_src.mouse_support" value="config.el.gx_src.mouse_support.no"/>
+      <property id="config.el.gx_src.hardware_mouse_support" value="config.el.gx_src.hardware_mouse_support.no"/>
+      <property id="config.el.gx_src.font_kerning_support" value="config.el.gx_src.font_kerning_support.no"/>
+      <property id="config.el.gx_src.disable_brush_alpha_support" value="config.el.gx_src.disable_brush_alpha_support.no"/>
+      <property id="config.el.gx_src.max_string_length" value=""/>
+    </config>
     <config id="config.driver.ioport">
       <property id="config.driver.ioport.checking" value="config.driver.ioport.checking.system"/>
     </config>
     <config id="config.threadx.thread"/>
     <config id="config.framework.sf_touch_panel_v2">
       <property id="config.framework.sf_touch_panel_v2.param_checking_enable" value="config.framework.sf_touch_panel_v2.param_checking_enable.bsp"/>
-      <property id="config.framework.sf_touch_panel_v2.thread_stack_size" value="512"/>
+      <property id="config.framework.sf_touch_panel_v2.thread_stack_size" value="1024"/>
     </config>
     <config id="config.driver.adc">
       <property id="config.driver.adc.param_checking_enable" value="config.driver.adc.param_checking_enable.enabled"/>
