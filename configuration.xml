@@ -994,8 +994,8 @@
     <module id="module.el.ux_host_class_hid.829478025">
       <property id="module.el.ux_host_class.name" value="g_ux_host_class_hid0"/>
       <property id="module.el.ux_host_class.keyboard_support" value="module.el.ux_host_class.keyboard_support.enable"/>
-      <property id="module.el.ux_host_class.mouse_support" value="module.el.ux_host_class.mouse_support.disable"/>
-      <property id="module.el.ux_host_class.remote_control_support" value="module.el.ux_host_class.remote_control_support.disable"/>
+      <property id="module.el.ux_host_class.mouse_support" value="module.el.ux_host_class.mouse_support.enable"/>
+      <property id="module.el.ux_host_class.remote_control_support" value="module.el.ux_host_class.remote_control_support.enable"/>
     </module>
     <module id="module.el.ux_host_class_hub.1279551116"/>
     <module id="module.el.ux_host_class_hub_src.197294882">
