@@ -23,8 +23,8 @@
  * Includes:
  *-------------------------------------------------------------------------*/
 #include <gui_thread.h>
-#include <guix_gen/guix_resources.h>
-#include <guix_gen/guix_specifications.h>
+#include <guix_gen/audio_player_resources.h>
+#include <guix_gen/audio_player_specifications.h>
 #include <main_system.h>
 
 #if defined(BSP_BOARD_S7G2_SK)
