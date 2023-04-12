@@ -32,7 +32,7 @@
 #include "audio_thread.h"
 #include "usb_thread.h"
 
-#define APP_VERSION "v1.2.0"
+#define APP_VERSION "v2.3.0"
 
 #define ENTRIES_PER_DIR 100
 #define AUDIO_BUFFER_SIZE \
