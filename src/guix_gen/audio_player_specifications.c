@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.2.1.1                                               */
-/*  Date (dd.mm.yyyy):  8. 4.2023   Time (hh:mm): 12:36                        */
+/*  Date (dd.mm.yyyy): 12. 4.2023   Time (hh:mm): 05:58                        */
 /*******************************************************************************/
 
 
@@ -939,7 +939,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_list_item_4_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {2, 381, 637, 466},                      /* widget size                    */
+    {2, 333, 637, 407},                      /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_list_item_4), /* control block */
@@ -963,7 +963,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_list_item_3_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {2, 295, 637, 380},                      /* widget size                    */
+    {2, 259, 637, 333},                      /* widget size                    */
     &w_bg_main_list_item_4_define,           /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_list_item_3), /* control block */
@@ -987,7 +987,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_list_item_2_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {2, 209, 637, 294},                      /* widget size                    */
+    {2, 185, 637, 259},                      /* widget size                    */
     &w_bg_main_list_item_3_define,           /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_list_item_2), /* control block */
@@ -1011,7 +1011,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_list_item_1_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {2, 123, 637, 208},                      /* widget size                    */
+    {2, 111, 637, 185},                      /* widget size                    */
     &w_bg_main_list_item_2_define,           /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_list_item_1), /* control block */
@@ -1035,7 +1035,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_list_item_0_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {2, 37, 637, 122},                       /* widget size                    */
+    {2, 37, 637, 111},                       /* widget size                    */
     &w_bg_main_list_item_1_define,           /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_list_item_0), /* control block */
@@ -1059,7 +1059,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_btn_vol_down_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {655, 404, 774, 465},                    /* widget size                    */
+    {655, 360, 774, 421},                    /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_btn_vol_down), /* control block */
@@ -1083,7 +1083,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_btn_vol_up_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {655, 340, 774, 401},                    /* widget size                    */
+    {655, 305, 774, 366},                    /* widget size                    */
     &w_bg_main_btn_vol_down_define,          /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_btn_vol_up), /* control block  */
@@ -1107,7 +1107,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_btn_left_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {655, 239, 774, 338},                    /* widget size                    */
+    {655, 215, 774, 314},                    /* widget size                    */
     &w_bg_main_btn_vol_up_define,            /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_btn_left), /* control block    */
@@ -1131,7 +1131,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_btn_mid_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {655, 138, 774, 237},                    /* widget size                    */
+    {655, 123, 774, 222},                    /* widget size                    */
     &w_bg_main_btn_left_define,              /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_btn_mid), /* control block     */
@@ -1155,7 +1155,7 @@ GX_CONST GX_STUDIO_WIDGET w_bg_main_btn_right_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {655, 37, 774, 136},                     /* widget size                    */
+    {655, 28, 774, 127},                     /* widget size                    */
     &w_bg_main_btn_mid_define,               /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(W_BG_MAIN_CONTROL_BLOCK, w_bg_main_btn_right), /* control block   */
