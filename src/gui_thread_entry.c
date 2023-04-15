@@ -17,20 +17,16 @@
 * included in this file may be subject to different terms.
 **********************************************************************************************************************/
 
-#include "application_define.h"
 #ifdef BSP_BOARD_S7G2_SK
 #include "lcd_setup/lcd_setup.h"
 #endif
 #ifdef BSP_BOARD_S5D9_PK
 #include "lcd_setup/lcd_setup.h"
 #endif
+#include "gx_common_include.h"
 
-#include "guix_gen/audio_player_resources.h"
-#include "guix_gen/audio_player_specifications.h"
+void gui_thread_entry (void);
 
-void           gui_thread_entry (void);
-
-GX_WINDOW_ROOT * p_window_root = NULL;
 static GX_EVENT     g_gx_event      = { 0 };
 
 /* GUI Thread entry function */
@@ -39,58 +35,7 @@ void gui_thread_entry (void)
     UINT                    status;
     app_message_payload_t * p_message = NULL;
 
-    status = gx_system_initialize();
-    APP_ERROR_TRAP(status)
-
-    status = g_sf_el_gx.p_api->open(g_sf_el_gx.p_ctrl, g_sf_el_gx.p_cfg);
-    APP_ERROR_TRAP(status)
-
-    status = gx_studio_display_configure(0, g_sf_el_gx.p_api->setup, 0, 0, &p_window_root);
-    APP_ERROR_TRAP(status)
-
-    status = g_sf_el_gx.p_api->canvasInit(g_sf_el_gx.p_ctrl, p_window_root);
-    APP_ERROR_TRAP(status)
-
-    status = gx_studio_named_widget_create("w_bg_splash", (GX_WIDGET *) p_window_root, GX_NULL);
-    APP_ERROR_TRAP(status)
-
-    status = gx_widget_show(p_window_root);
-    APP_ERROR_TRAP(status)
-
-    status = gx_system_start();
-    APP_ERROR_TRAP(status)
-
-#ifdef BSP_BOARD_S7G2_SK
-    /** Open the SPI driver to initialize the LCD and setup ILI9341V driver **/
-    status = ILI9341V_Init(&g_spi0);
-    APP_ERROR_TRAP(status)
-#endif
-
-#ifdef BSP_BOARD_S5D9_PK
-    /** Open the SPI driver to initialize the LCD and setup ILI9341V driver **/
-    status = ILI9341V_Init(&g_spi0);
-    APP_ERROR_TRAP(status)
-#endif
-
-#ifdef BSP_BOARD_S7G2_DK
-    /** Enable the display */
-    status = g_ioport.p_api->pinWrite(IOPORT_PORT_07_PIN_10, IOPORT_LEVEL_HIGH);
-    APP_ERROR_TRAP(status)
-
-    /** Enable display backlight */
-    status = g_ioport.p_api->pinWrite(IOPORT_PORT_07_PIN_12, IOPORT_LEVEL_HIGH);
-    APP_ERROR_TRAP(status)
-#endif
-
-#ifdef BSP_BOARD_S7G2_PE_HMI1
-    /** Enable the display */
-    status = g_ioport.p_api->pinWrite(IOPORT_PORT_10_PIN_03, IOPORT_LEVEL_HIGH);
-    APP_ERROR_TRAP(status)
-
-    /** Enable display backlight */
-    ssp_err_t ssp_err = g_backlight_pwm.p_api->open(g_backlight_pwm.p_ctrl, g_backlight_pwm.p_cfg);
-    APP_ERROR_TRAP(ssp_err)
-#endif
+    guix_init(); // start the gui including GUIX initialization and hardware enable/power-on
 
     while (1)
     {

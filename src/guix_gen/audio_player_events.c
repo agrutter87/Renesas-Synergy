@@ -20,16 +20,11 @@
 /***********************************************************************************************************************
  * Includes
  ***********************************************************************************************************************/
-#include "application_define.h"
-
-#include "audio_player_resources.h"
-#include "audio_player_specifications.h"
+#include "gx_common_include.h"
 
 /***********************************************************************************************************************
  * Private function prototypes
  ***********************************************************************************************************************/
-static UINT app_gx_goto_window (char * name, GX_WIDGET * p_current, GX_WIDGET * p_new, bool destroy);
-
 static UINT app_gx_refresh_file_names (UINT first_index);
 
 static UINT app_gx_set_controls (void);
@@ -39,11 +34,10 @@ static UINT app_fx_get_file_list (void);
 /***********************************************************************************************************************
  * Private global variables
  ***********************************************************************************************************************/
-static GX_CHAR             g_file_list[ENTRIES_PER_DIR][FX_MAX_SHORT_NAME_LEN + 1];
+static GX_CHAR             	g_file_list[ENTRIES_PER_DIR][FX_MAX_SHORT_NAME_LEN + 1];
 
-extern app_player_status_t g_player_status;
-extern FX_MEDIA          * gp_media;
-extern GX_WINDOW_ROOT    * p_window_root;
+extern app_player_status_t 	g_player_status;
+extern FX_MEDIA          	*gp_media;
 
 /** Splash Screen Event Handler */
 UINT w_splash_event (GX_WINDOW * widget, GX_EVENT * event_ptr)
@@ -68,12 +62,12 @@ UINT w_splash_event (GX_WINDOW * widget, GX_EVENT * event_ptr)
         {
             if (usb_detected)
             {
-                status = app_gx_goto_window("w_bg_main", (GX_WIDGET *) widget, (GX_WIDGET *) &w_bg_main, true);
+                status = guix_show_window((GX_WINDOW*)&w_bg_main, (GX_WIDGET *) widget, true);
                 APP_ERROR_TRAP(status)
             }
             else
             {
-                status = app_gx_goto_window("w_bg_usb", (GX_WIDGET *) widget, (GX_WIDGET *) &w_bg_usb, true);
+                status = guix_show_window((GX_WINDOW*)&w_bg_usb, (GX_WIDGET *) widget, true);
             }
 
             APP_ERROR_TRAP(status)
@@ -113,7 +107,7 @@ UINT w_usb_event (GX_WINDOW * widget, GX_EVENT * event_ptr)
 
         case APP_EVENT_USB_INSERTED:
         {
-            status = app_gx_goto_window("w_bg_main", (GX_WIDGET *) widget, (GX_WIDGET *) &w_bg_main, true);
+            status = guix_show_window((GX_WINDOW *)&w_bg_main, (GX_WIDGET *) widget, true);
             APP_ERROR_TRAP(status)
             break;
         }
@@ -159,7 +153,7 @@ UINT w_main_event (GX_WINDOW * widget, GX_EVENT * event_ptr)
 
         case APP_EVENT_USB_REMOVED:
         {
-            app_gx_goto_window("w_bg_usb", (GX_WIDGET *) widget, (GX_WIDGET *) &w_bg_usb, true);
+            guix_show_window((GX_WINDOW *)&w_bg_usb, (GX_WIDGET *) widget, true);
 
             break;
         }
@@ -624,32 +618,6 @@ UINT w_main_event (GX_WINDOW * widget, GX_EVENT * event_ptr)
 /***********************************************************************************************************************
  * Functions
  ***********************************************************************************************************************/
-
-static UINT app_gx_goto_window (char * name, GX_WIDGET * p_current, GX_WIDGET * p_new, bool destroy)
-{
-    UINT status;
-
-    status = gx_studio_named_widget_create(name, GX_NULL, GX_NULL);
-    if(GX_ALREADY_CREATED != status)
-        APP_ERROR_RETURN(status)
-
-    if (destroy)
-    {
-        status = gx_widget_detach(p_current);
-        APP_ERROR_RETURN(status)
-    }
-
-    if (p_window_root->gx_widget_first_child == GX_NULL)
-    {
-        status = gx_widget_attach(p_window_root, p_new);
-        APP_ERROR_RETURN(status)
-    }
-
-    status = gx_system_focus_claim(p_new);
-    APP_ERROR_RETURN(status)
-
-    return GX_SUCCESS;
-}
 
 static UINT app_gx_refresh_file_names (UINT first_index)
 {

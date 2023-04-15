@@ -22,10 +22,7 @@
 /*-------------------------------------------------------------------------*
  * Includes:
  *-------------------------------------------------------------------------*/
-#include <gui_thread.h>
-#include <guix_gen/audio_player_resources.h>
-#include <guix_gen/audio_player_specifications.h>
-#include <main_system.h>
+#include "gx_common_include.h"
 
 #if defined(BSP_BOARD_S7G2_SK)
 #include <lcd/ILI9341V/lcd.h>
@@ -34,8 +31,7 @@
 /*-------------------------------------------------------------------------*
  * Constants:
  *-------------------------------------------------------------------------*/
-extern GX_WINDOW_ROOT * p_window_root;
-extern GX_CONST GX_STUDIO_WIDGET *guix_widget_table[];
+#define MEMORY_POOL_SIZE_BYTES (15000000)
 
 /*-------------------------------------------------------------------------*
  * Types:
@@ -44,6 +40,29 @@ extern GX_CONST GX_STUDIO_WIDGET *guix_widget_table[];
 /*-------------------------------------------------------------------------*
  * Prototypes:
  *-------------------------------------------------------------------------*/
+/** TODO: Description, one for each prototype
+ *
+ *  @param [in] val1        TODO: param1
+ *  @param [in] val2        TODO: param1
+ *  @return                 TODO: Return Value
+ */
+void guix_init(void);
+
+/** TODO: Description, one for each prototype
+ *
+ *  @param [in] val1        TODO: param1
+ *  @param [in] val2        TODO: param1
+ *  @return                 TODO: Return Value
+ */
+void guix_init(void);
+
+/** TODO: Description, one for each prototype
+ *
+ *  @param [in] val1        TODO: param1
+ *  @param [in] val2        TODO: param1
+ *  @return                 TODO: Return Value
+ */
+UINT guix_show_window(GX_WINDOW * p_new, GX_WIDGET * p_widget, bool detach_old);
 
 #ifdef __cplusplus
 }
